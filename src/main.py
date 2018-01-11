@@ -23,8 +23,8 @@ BaltImg = pygame.image.load('baltazar.png')
 img_width2, img_heigth2 = BaltImg.get_rect().size
 BaltImg = pygame.transform.scale(BaltImg, (img_width2 // 5, img_heigth2 // 5))
 Hitbox = pygame.image.load('hitbox.png')
-Hitbox1 = pygame.transform.scale(Hitbox, (img_width1 // 5, img_heigth1 // 5))
-Hitbox2 = pygame.transform.scale(Hitbox, (img_width2 // 5, img_heigth2 // 5))
+Hitbox1 = pygame.transform.scale(Hitbox, (img_width1 // 6, img_heigth1 // 6))
+Hitbox2 = pygame.transform.scale(Hitbox, (img_width2 // 6, img_heigth2 // 6))
 curr1 = JackImg
 curr2 = BaltImg
 
@@ -58,10 +58,27 @@ x2 =  (display_width * 0.75)
 y2 = (display_height * 0.5)
 #x, y = 0, 0
 
+i = 0
+bomb = 0
 while not crashed:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             crashed = True
+    i += 1
+    if i == 100:
+        JackImg = pygame.image.load('jack_injured.png')
+        img_width1, img_heigth1 = JackImg.get_rect().size
+        JackImg = pygame.transform.scale(JackImg, (img_width1 // 5, img_heigth1 // 5))
+        BaltImg = pygame.image.load('baltazar_injured.png')
+        img_width2, img_heigth2 = BaltImg.get_rect().size
+        BaltImg = pygame.transform.scale(BaltImg, (img_width2 // 5, img_heigth2 // 5))
+    if i == 200:
+        JackImg = pygame.image.load('jack_dead.png')
+        img_width1, img_heigth1 = JackImg.get_rect().size
+        JackImg = pygame.transform.scale(JackImg, (img_width1 // 5, img_heigth1 // 5))
+        BaltImg = pygame.image.load('baltazar_dead.png')
+        img_width2, img_heigth2 = BaltImg.get_rect().size
+        BaltImg = pygame.transform.scale(BaltImg, (img_width2 // 5, img_heigth2 // 5))
 
     gameDisplay.blit(background, (0, 0))
 
@@ -115,11 +132,25 @@ while not crashed:
         x2, y2 = x2 + newx2, y2 + newy2
     if key2:
         curr2 = pygame.transform.rotate(BaltImg, rot2 // key2)
+    if pressed[pygame.K_b]:
+        bomb = 10
+    elif bomb and bomb % 2:
+        x1 -= 9
+        y1 -= 9
+        x2 -= 9
+        y2 -= 9
+        bomb -= 1
+    elif bomb and not bomb % 2:
+        x1 += 9
+        y1 += 9
+        x2 += 9
+        y2 += 9
+        bomb -= 1
         
     jack(x1,y1, curr1, key1)
     baltazar(x2,y2, curr2, key2)
     pygame.display.update()
-    clock.tick(40)
+    clock.tick(30)
 
 pygame.quit()
 quit()
