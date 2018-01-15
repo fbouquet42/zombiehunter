@@ -9,19 +9,19 @@ import events
 
 #initialization
 pygame.init()
-env = Env(width=1366, heigth=768, img_src='src/', debug=True)
+env = Env(width=1366, height=768, img_src='src/', debug=False)
 
-env.GameManager = pygame.display.set_mode((env.width,env.heigth))
+env.GameManager = pygame.display.set_mode((env.width,env.height))
 pygame.display.set_caption('Zombie Hunters')
 
-background = pygame.image.load(env.img_src + 'background.png')
+env.background = pygame.image.load(env.img_src + 'background_basic.png')
 
 clock = pygame.time.Clock()
 
 #players initialization
 env.players = []
-env.players.append(Player(env=env, x=0.25, y=0.5, dimensions=60, name='jack', keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_SPACE)))
-env.players.append(Player(env=env, x=0.75, y=0.5, dimensions=60, name='baltazar', keys=(pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT, pygame.K_RETURN)))
+env.players.append(Player(env=env, x=0.25, y=0.5, dimensions=180, name='jack', keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_SPACE)))
+env.players.append(Player(env=env, x=0.75, y=0.5, dimensions=180, name='baltazar', keys=(pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT, pygame.K_RETURN)))
 
 env.start()
 #loop game
@@ -34,7 +34,7 @@ while not crashed:
     if env.pressed[pygame.K_ESCAPE]:
         env.pause = not env.pause
     elif not env.pause:
-        env.GameManager.blit(background, (0, 0))
+        env.GameManager.blit(env.background, (0, 0))
         events.update(env)
         pygame.display.update()
     clock.tick(60)
