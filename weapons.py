@@ -1,62 +1,100 @@
 import tools
 import pygame
-
-class HitboxBullet:
-    def update_coords(self, player):
-        self.x = int(player.x + player.dimensions * 0.44)
-        self.y = int(player.y + player.dimensions * 0.44)
-
-    def __init__(self, player, dimensions):
-        self.update_coords(player)
-        self.dimensions = dimensions
-
-def set_hitbox_bullet(env, bullet):
-    hitbox = HitboxBullet(bullet, int(bullet.dimensions * 0.12))
-    img = pygame.image.load(env.img_src + "hitbox.png")
-    img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
-    hitbox.img = img
-    return hitbox
-
-class   BulletType:
-    def __init__(self, env, player, name, rapidity):
-        self.dimensions = player.dimensions
-        self.name = name
-        self.img = []
-        tools.set_imgs(env, self.dimensions, self.name, self.img, 'bullets/')
-        self.rapidity = rapidity
-
-def set_bullet(env, player, weapon):
-    bullet_type = None
-    if weapon.name == "crossbow_unloaded":
-        bullet_type = BulletType(env=env, player=player, name="arrow", rapidity=22)
-    elif weapon.name == "submachine_gun_3":
-        bullet_type = BulletType(env=env, player=player, name="bullet", rapidity=28)
-    return bullet_type
+import bullets
 
 class   Weapon:
+    def __init__(self, dimensions):
+        self.dimensions = dimensions
+
+    def update(self, **kwargs):
+        pass
+
+    def not_pressed(self, **kwargs):
+        pass
+
+class   SubmachineGun(Weapon):
     def __init__(self, env, player):
-        self.dimensions = player.dimensions
-        #self.img = []
-        #tools.set_imgs(env, self.dimensions, self.name, self.img, 'weapons/')
-        #self.bullet_type = set_bullet(env, player, self)
+        super().__init__(player.dimensions)
+        self.delay = 16
+        self.heatup = self.delay * 4.5
+        self.heatmax = self.heatup * 10 - self.delay * 9
+        self.degree_1 = self.heatup * 4 - self.delay * 4
+        self.degree_2 = self.heatmax - self.heatup * 2
         self.cooldown = 0
-        #self.cadence = cadence
+        self.overheating = False
+        self.temperature = 0
+        self.img = []
+        self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_0", self.dimensions))
+        self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_1", self.dimensions))
+        self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_2", self.dimensions))
+        self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_3", self.dimensions))
+        self.bullet = bullets.Bullet.build_class(env, player)
+
+    def display(self, env, direction, x, y, fitting):
+        if not self.overheating:
+            if self.temperature < self.degree_1:
+                img = self.img[3][direction]
+            elif self.temperature < self.degree_2:
+                img = self.img[2][direction]
+            else:
+                img = self.img[1][direction]
+        else:
+            img = self.img[0][direction]
+        tools.display(env, img, x, y, fitting)
+
+    def pressed(self, env, player):
+        if self.cooldown:
+            return
+        self.temperature += self.heatup
+        if self.temperature > self.heatmax:
+            self.temperature += (self.heatup // 2)
+            self.cooldown += self.temperature + 4
+            self.overheating = True
+        else:
+            self.cooldown += self.delay
+        env.bullets.append(self.bullet(player.x, player.y, player.direction))
+
+    def update(self):
+        if self.temperature:
+            self.temperature -= 1
+        else:
+            self.overheating = False
+        if self.cooldown:
+            self.cooldown -= 1
+            
 
 class   Crossbow(Weapon):
     def __init__(self, env, player):
-        super().__init__(self, player.dimensions)
-        self.cadence = 45
-        ##here
+        super().__init__(player.dimensions)
+        self.loading = 0
+        self.loaded = 34
+        self.overloaded = 229
+        self.img_unloaded = tools.set_imgs(env.img_src + 'weapons/', "crossbow_unloaded", self.dimensions)
+        self.img_loaded = tools.set_imgs(env.img_src + 'weapons/', "crossbow_loaded", self.dimensions)
+        self.img_overloaded = tools.set_imgs(env.img_src + 'weapons/', "crossbow_overloaded", self.dimensions)
+        self.arrow = bullets.Arrow.build_class(env, player)
+        self.rocket = bullets.Rocket.build_class(env, player)
+
+    def display(self, env, direction, x, y, fitting):
+        if self.loading > self.overloaded:
+            img = self.img_overloaded[direction]
+        elif self.loading > self.loaded:
+            img = self.img_loaded[direction]
+        else:
+            img = self.img_unloaded[direction]
+        tools.display(env, img, x, y, fitting)
+
+    def pressed(self, env, player):
+        self.loading += 1
+
+    def not_pressed(self, env, player):
+        if self.loading > self.overloaded:
+            env.bullets.append(self.rocket(player.x, player.y, player.direction))
+        elif self.loading > self.loaded:
+            env.bullets.append(self.arrow(player.x, player.y, player.direction))
+        self.loading = 0
 
 weapons = {'jack' : Crossbow, 'baltazar' : SubmachineGun}
 
 def set_weapon(env, player):
-    weapon = weapons[player.name](env=env, player=player)
-    return weapon
-
-    weapon = None
-    if player.name == "jack":
-        weapon = Weapon(env=env, player=player, name="crossbow_unloaded", cadence=45)
-    elif player.name == "baltazar":
-        weapon = Weapon(env=env, player=player, name="submachine_gun_3", cadence=20)
-    return weapon
+    return weapons[player.name](env=env, player=player)

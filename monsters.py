@@ -2,43 +2,38 @@ import tools
 import pygame
 import weapons
 
-class HitboxPlayer:
-    def update_coords(self, player):
-        self.x = int(player.x + self.resize)
-        self.y = int(player.y + self.resize)
+class HitboxMonster:
+    def update_coords(self, monster):
+        self.x = int(monster.x + self.resize)
+        self.y = int(monster.y + self.resize)
 
-    def __init__(self, player, resize):
-        self.resize = int(player.dimensions * ((1.00 - resize) / 2))
-        self.update_coords(player)
-        self.dimensions = int(player.dimensions * resize)
+    def __init__(self, monster, resize):
+        self.resize = int(monster.dimensions * ((1.00 - resize) / 2))
+        self.update_coords(monster)
+        self.dimensions = int(monster.dimensions * resize)
 
-def set_hitbox_player(env, player, resize=0.24):
-    hitbox = HitboxPlayer(player, resize)
+def set_hitbox_monster(env, monster, resize=0.24):
+    hitbox = HitboxPlayer(monster, resize)
     img = pygame.image.load(env.img_src + "hitbox.png")
     img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
     hitbox.img = img
     return hitbox
 
-class Player:
-    def __init__(self, env, x, y, dimensions, name, keys):
+class Zombie:
+    def __init__(self, env, x, y, weapon=None):
         self.x = env.width * x
         self.y = env.height * y
-        self.dimensions = dimensions
+        self.dimensions = env.player_dimensions
         self.half = self.dimensions // 2
-        self.limitx = env.width - self.half
-        self.limity = env.height - self.half
-        self.up, self.left, self.down, self.right, self.shoot = keys
 
-        self.lives = 4
+        self.lives = 2
         self.direction = 0
-        self.rapidity = 9
+        self.rapidity = 7
         self.injured = 0
 
-        self.name = name
-
-        self.img = tools.set_imgs(env.img_src + 'players/', self.name, self.dimensions)
+        self.img = tools.set_imgs(env.img_src + 'players/', "zombie", self.dimensions)
         self.hitbox = set_hitbox_player(env, self)
-        self.weapon = weapons.set_weapon(env, self)
+        self.weapon = weapon(env, self)
         self.img_injured = tools.set_imgs(env.img_src + 'players/', self.name + '_injured', self.dimensions)
         self.img_dead = tools.set_imgs(env.img_src + 'players/', self.name + '_dead', self.dimensions)
 
