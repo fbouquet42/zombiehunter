@@ -1,6 +1,7 @@
 import tools
 import pygame
 import bullets
+from threading import Thread
 
 class   Weapon:
     def __init__(self, dimensions):
@@ -52,7 +53,11 @@ class   SubmachineGun(Weapon):
             self.overheating = True
         else:
             self.cooldown += self.delay
-        env.bullets.append(self.bullet(player.x, player.y, player.direction))
+        bullet = self.bullet(player.x, player.y, player.direction)
+        t = Thread(target=bullet.move, args=())
+        t.daemon = True
+        env.bullets.append(bullet)
+        t.start()
 
     def update(self):
         if self.temperature:
@@ -89,9 +94,17 @@ class   Crossbow(Weapon):
 
     def not_pressed(self, env, player):
         if self.loading > self.overloaded:
-            env.bullets.append(self.rocket(player.x, player.y, player.direction))
+            rocket = self.rocket(player.x, player.y, player.direction)
+            t = Thread(target=rocket.move, args=())
+            t.daemon = True
+            env.bullets.append(rocket)
+            t.start()
         elif self.loading > self.loaded:
-            env.bullets.append(self.arrow(player.x, player.y, player.direction))
+            arrow = self.arrow(player.x, player.y, player.direction)
+            t = Thread(target=arrow.move, args=())
+            t.daemon = True
+            env.bullets.append(arrow)
+            t.start()
         self.loading = 0
 
 weapons = {'jack' : Crossbow, 'baltazar' : SubmachineGun}

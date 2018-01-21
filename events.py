@@ -1,8 +1,10 @@
 import time
 import pygame
 import tools
+import numpy as np
+randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
-def update(env):
+def keys_manager(env):
     for player in env.players:
         if not player.lives:
             continue
@@ -14,21 +16,38 @@ def update(env):
         else:
             player.weapon.not_pressed(env=env, player=player)
 
-def auto(env):
+def display(env):
+    keys_manager(env)
+    for player in env.players:
+        player.display(env)
+    for monster in env.monsters:
+        monster.display(env)
+    i = 0
+    while i != len(env.bullets):
+        if not env.bullets[i].alive:
+            del env.bullets[i]
+        else:
+            env.bullets[i].display(env)
+            i += 1
+
+def update_tick(env):
     while True:
         for player in env.players:
-            player.display(env)
             player.update()
-        #for monster in env.monsters:
-        #    monster.move()
-        i = 0
-        while i != len(env.bullets):
-            if not env.bullets[i].move():
-                del env.bullets[i]
-            else:
-                env.bullets[i].display(env)
-                i += 1
+        for monster in env.monsters:
+            monster.update()
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
 
+def spawner(env):
+    rand = 0
+    while True:
+        if not rand:
+            rand = randint(120, 220)
+            env.spawn(randint(-200, 0), randint(-200, 0))
+            print("Zombie spawns")
+        rand -= 1
         time.sleep(0.01)
         while env.pause:
             time.sleep(0.01)

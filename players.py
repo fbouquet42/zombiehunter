@@ -44,6 +44,16 @@ class Player:
 
         env.players.append(self)
 
+    def affected(self, bullet):
+        if self.x <= (bullet.x + bullet.hitbox.dimensions) and bullet.x <= (self.x + self.hitbox.dimensions) and self.y <= (bullet.y + bullet.hitbox.dimensions) and bullet.y <= (self.y + self.hitbox.dimensions):
+            return True
+        return False
+
+    def hitted(self):
+        if self.lives and not self.injured:
+            self.injured += 20
+            self.lives -= 1
+
     def move(self, direction):
         tools.move(self, direction)
         if self.x > self.limitx:

@@ -9,7 +9,7 @@ import events
 
 #initialization
 pygame.init()
-env = Env(width=1366, height=768, img_src='src/', player_dimensions=180, debug=True)
+env = Env(width=1366, height=768, img_src='src/', player_dimensions=180, debug=False)
 
 env.GameManager = pygame.display.set_mode((env.width,env.height))
 pygame.display.set_caption('Zombie Hunters')
@@ -34,9 +34,8 @@ while not crashed:
         env.pause = not env.pause
     elif not env.pause:
         env.GameManager.blit(env.background, (0, 0))
-        events.update(env)
+        events.display(env)
         pygame.display.update()
-        clock.tick(50)
-
+        clock.tick(40)
 pygame.quit()
 quit()

@@ -1,5 +1,7 @@
+import multiprocessing as mp
 from threading import Thread
 import events
+import monsters
 
 class Env:
     def __init__(self, width, height, img_src, player_dimensions, debug=False):
@@ -13,8 +15,19 @@ class Env:
         self.players =[]
         self.monsters = []
         self.bullets = []
+        self.zombie = monsters.Zombie.build_class(self)
 
     def start(self):
-        t = Thread(target=events.auto, args=(self, ))
+        update_tick = Thread(target=events.update_tick, args=(self, ))
+        update_tick.daemon = True
+        spawner = Thread(target=events.spawner, args=(self, ))
+        spawner.daemon = True
+        update_tick.start()
+        spawner.start()
+
+    def spawn(self, x, y):
+        zombie = monsters.Zombie(self, x, y)
+        t = Thread(target=zombie.move, args=())
         t.daemon = True
+        self.monsters.append(zombie)
         t.start()

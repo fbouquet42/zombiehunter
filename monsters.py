@@ -1,6 +1,7 @@
 import tools
 import pygame
 import weapons
+import time
 
 class HitboxMonster:
     def update_coords(self, monster):
@@ -13,43 +14,98 @@ class HitboxMonster:
         self.dimensions = int(monster.dimensions * resize)
 
 def set_hitbox_monster(env, monster, resize=0.24):
-    hitbox = HitboxPlayer(monster, resize)
+    hitbox = HitboxMonster(monster, resize)
     img = pygame.image.load(env.img_src + "hitbox.png")
     img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
     hitbox.img = img
     return hitbox
 
 class Zombie:
-    def __init__(self, env, x, y, weapon=None):
-        self.x = env.width * x
-        self.y = env.height * y
-        self.dimensions = env.player_dimensions
-        self.half = self.dimensions // 2
+    rapidity = 4
+    lives = 2
+    injured = 0
+    direction = 0
+    name = "zombie"
 
-        self.lives = 2
-        self.direction = 0
-        self.rapidity = 7
-        self.injured = 0
+    def build_class(env):
+        Zombie.env = env
+        Zombie.dimensions = env.player_dimensions
+        Zombie.half = Zombie.dimensions // 2
+        Zombie.img = tools.set_imgs(env.img_src + 'monsters/', Zombie.name, Zombie.dimensions)
+        Zombie.img_injured = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_injured', Zombie.dimensions)
+        Zombie.img_dead = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_dead', Zombie.dimensions)
+        return Zombie
 
-        self.img = tools.set_imgs(env.img_src + 'players/', "zombie", self.dimensions)
-        self.hitbox = set_hitbox_player(env, self)
-        self.weapon = weapon(env, self)
-        self.img_injured = tools.set_imgs(env.img_src + 'players/', self.name + '_injured', self.dimensions)
-        self.img_dead = tools.set_imgs(env.img_src + 'players/', self.name + '_dead', self.dimensions)
+    def __init__(self, env, x, y):
+        self.x = x + env.width + 200 if x > -100 else x
+        self.y = y + env.height + 200 if y > -100 else y
 
-        env.players.append(self)
+        self.hitbox = set_hitbox_monster(env, self)
+        #self.weapon = weapon(env, self)
 
-    def move(self, direction):
-        tools.move(self, direction)
-        if self.x > self.limitx:
-            self.x = self.limitx
-        if self.y > self.limity:
-            self.y = self.limity
-        if self.x < -self.half:
-            self.x = -self.half
-        if self.y < -self.half:
-            self.y = -self.half
-        self.hitbox.update_coords(self)
+    def affected(self, bullet):
+        if self.x <= (bullet.x + bullet.hitbox.dimensions) and bullet.x <= (self.x + self.hitbox.dimensions) and self.y <= (bullet.y + bullet.hitbox.dimensions) and bullet.y <= (self.y + self.hitbox.dimensions):
+            return True
+        return False
+
+    def hitted(self):
+        if self.lives and not self.injured:
+            self.injured += 10
+            self.lives -= 1
+    
+    def sniff_fresh_flesh(self):
+        d_objective = -1
+        for player in self.env.players:
+            if not player.lives:
+                continue
+            x = (player.x + player.half) - (self.x + self.half)
+            y = (player.y + player.half) - (self.y + self.half)
+            distance = int((x ** 2 + y ** 2) ** 0.5)
+            if d_objective < 0 or d_objective > distance:
+                if not x and not y:
+                    return None
+                d_objective = distance
+                x_objective = x
+                y_objective = y
+        if d_objective < 0:
+            return None
+        if not y_objective or abs(x_objective / y_objective) > 0.66:
+            if x < 0:
+                direction = 2
+            else:
+                direction = 6
+        elif abs(x_objective / y_objective) < 0.33:
+            if y < 0:
+                direction = 0
+            else:
+                direction = 4
+        else:
+            if x < 0 and y < 0:
+                direction = 1
+            elif x < 0:
+                direction = 3
+            elif y > 0:
+                direction = 5
+            else:
+                direction = 7
+        return direction
+
+    def target_hitted(self):
+        for player in self.env.players:
+            if player.affected(self):
+                player.hitted()
+
+    def move(self):
+        while True:
+            if not self.lives:
+                return
+            direction = self.sniff_fresh_flesh()
+            if direction is not None:
+                self.direction = direction
+                tools.move(self, direction)
+                self.hitbox.update_coords(self)
+            self.target_hitted()
+            time.sleep(0.01)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -60,12 +116,12 @@ class Zombie:
         else:
             img = self.img[self.direction]
         tools.display(env, img, self.x, self.y, fitting)
-        if self.lives:
-            self.weapon.display(env, self.direction, self.x, self.y, fitting)
+        #if self.lives:
+        #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
         if env.debug:
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
     def update(self):
         if self.injured:
             self.injured -= 1
-        self.weapon.update()
+        #self.weapon.update()

@@ -1,5 +1,7 @@
 import tools
 import pygame
+import time
+from threading import Thread
 
 class HitboxBullet:
     def update_coords(self, bullet):
@@ -32,6 +34,7 @@ class   Bullet:
     def __init__(self, x, y, direction):
         self.x = x
         self.y = y
+        self.alive = True
         self.direction = direction
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         self.hitbox = set_hitbox_bullet(self.env, self)
@@ -50,21 +53,27 @@ class   Bullet:
     def target_hitted(self):
         ret = False
         for player in self.env.players:
-            if player is not self.player and player.x <= (self.x + self.hitbox.dimensions) and self.x <= (player.x + player.hitbox.dimensions) and player.y <= (self.y + self.hitbox.dimensions) and self.y <= (player.y + player.hitbox.dimensions):
-                if not player.injured and player.lives:
-                    player.injured += 20
-                    player.lives -= 1
+            if player is not self.player and player.affected(self):
+                player.hitted()
+                ret = True
+        for monster in self.env.monsters:
+            if monster.affected(self):
+                monster.hitted()
                 ret = True
         return ret
 
+    def dead(self):
+        self.alive = False
+
     def move(self):
-        tools.move(self, self.direction)
-        if self.limits_reached():
-            return False
-        self.hitbox.update_coords(self)
-        if self.target_hitted():
-            return False
-        return True
+        while True:
+            tools.move(self, self.direction)
+            if self.limits_reached():
+                return self.dead()
+            self.hitbox.update_coords(self)
+            if self.target_hitted():
+                return self.dead()
+            time.sleep(0.01)
 
 class   Arrow:
     rapidity = 22
@@ -80,6 +89,7 @@ class   Arrow:
     def __init__(self, x, y, direction):
         self.x = x
         self.y = y
+        self.alive = True
         self.direction = direction
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         self.hitbox = set_hitbox_bullet(self.env, self)
@@ -98,21 +108,27 @@ class   Arrow:
     def target_hitted(self):
         ret = False
         for player in self.env.players:
-            if player is not self.player and player.x <= (self.x + self.hitbox.dimensions) and self.x <= (player.x + player.hitbox.dimensions) and player.y <= (self.y + self.hitbox.dimensions) and self.y <= (player.y + player.hitbox.dimensions):
-                if not player.injured and player.lives:
-                    player.injured += 20
-                    player.lives -= 1
+            if player is not self.player and player.affected(self):
+                player.hitted()
+                ret = True
+        for monster in self.env.monsters:
+            if monster.affected(self):
+                monster.hitted()
                 ret = True
         return ret
 
+    def dead(self):
+        self.alive = False
+
     def move(self):
-        tools.move(self, self.direction)
-        if self.limits_reached():
-            return False
-        self.hitbox.update_coords(self)
-        if self.target_hitted():
-            return False
-        return True
+        while True:
+            tools.move(self, self.direction)
+            if self.limits_reached():
+                return self.dead()
+            self.hitbox.update_coords(self)
+            if self.target_hitted():
+                return self.dead()
+            time.sleep(0.01)
 
 class   Explosion:
     lifetime = 25
@@ -126,6 +142,7 @@ class   Explosion:
     def __init__(self, x, y, direction):
         self.x = x
         self.y = y
+        self.alive = True
         self.direction = direction
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         self.hitbox = set_hitbox_bullet(self.env, self, 0.8)
@@ -135,24 +152,27 @@ class   Explosion:
         if env.debug:
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
+    def dead(self):
+        self.alive = False
+
     def target_hitted(self):
         for player in self.env.players:
-            if player is not self.player and player.x <= (self.x + self.hitbox.dimensions) and self.x <= (player.x + player.hitbox.dimensions) and player.y <= (self.y + self.hitbox.dimensions) and self.y <= (player.y + player.hitbox.dimensions):
-                ret = True
-                if not player.injured and player.lives:
-                    player.injured += 20
-                    player.lives -= 1
+            if player.affected(self):
+                player.hitted()
+        for monster in self.env.monsters:
+            if monster.affected(self):
+                monster.hitted()
 
-    def move(self):
-        self.lifetime -= 1
-        if not self.lifetime % 5:
-            self.env.jerk = not self.env.jerk
-        if not self.lifetime:
-            self.env.jerk = False
-            return False
-        self.hitbox.update_coords(self)
-        self.target_hitted()
-        return True
+    def explose(self):
+        while True:
+            self.lifetime -= 1
+            if not self.lifetime % 5:
+                self.env.jerk = not self.env.jerk
+            if not self.lifetime:
+                self.env.jerk = False
+                return self.dead()
+            self.target_hitted()
+            time.sleep(0.01)
 
 class   Rocket:
     rapidity = 20
@@ -169,6 +189,7 @@ class   Rocket:
     def __init__(self, x, y, direction):
         self.x = x
         self.y = y
+        self.alive = True
         self.direction = direction
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         self.hitbox = set_hitbox_bullet(self.env, self, 0.14)
@@ -185,25 +206,34 @@ class   Rocket:
         return False
 
     def explose(self):
-        self.env.bullets.append(self.explosion(self.x, self.y, self.direction))
+        explosion = self.explosion(self.x, self.y, self.direction)
+        t = Thread(target=explosion.explose, args=())
+        t.daemon = True
+        self.env.bullets.append(explosion)
+        t.start()
 
     def target_hitted(self):
-        ret = False
         for player in self.env.players:
-            if player is not self.player and player.x <= (self.x + self.hitbox.dimensions) and self.x <= (player.x + player.hitbox.dimensions) and player.y <= (self.y + self.hitbox.dimensions) and self.y <= (player.y + player.hitbox.dimensions):
-                ret = True
-                if not player.injured and player.lives:
-                    self.explose()
-                    break
-        return ret
+            if player is not self.player and player.affected(self):
+                self.explose()
+                return True
+        for monster in self.env.monsters:
+            if monster.affected(self):
+                self.explose()
+                return True
+        return False
+
+    def dead(self):
+        self.alive = False
 
     def move(self):
-        tools.move(self, self.direction)
-        if self.rapidity < 34:
-            self.rapidity += 1
-        if self.limits_reached():
-            return False
-        self.hitbox.update_coords(self)
-        if self.target_hitted():
-            return False
-        return True
+        while True:
+            tools.move(self, self.direction)
+            if self.rapidity < 34:
+                self.rapidity += 1
+            if self.limits_reached():
+                return self.dead()
+            self.hitbox.update_coords(self)
+            if self.target_hitted():
+                return self.dead()
+            time.sleep(0.01)
