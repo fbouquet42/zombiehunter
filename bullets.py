@@ -74,6 +74,8 @@ class   Bullet:
             if self.target_hitted():
                 return self.dead()
             time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
 
 class   Arrow:
     rapidity = 22
@@ -129,6 +131,8 @@ class   Arrow:
             if self.target_hitted():
                 return self.dead()
             time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
 
 class   Explosion:
     lifetime = 25
@@ -173,6 +177,8 @@ class   Explosion:
                 return self.dead()
             self.target_hitted()
             time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
 
 class   Rocket:
     rapidity = 20
@@ -237,3 +243,5 @@ class   Rocket:
             if self.target_hitted():
                 return self.dead()
             time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)

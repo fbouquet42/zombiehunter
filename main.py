@@ -32,11 +32,16 @@ while not crashed:
             crashed = True
     env.pressed = pygame.key.get_pressed()
     if env.pressed[pygame.K_ESCAPE]:
-        env.pause = not env.pause
+        menu.pausemenu(env, clock)
     elif not env.pause:
         env.GameManager.blit(env.background, (0, 0))
         events.display(env)
         pygame.display.update()
+        if not env.players_alive:
+            break
         clock.tick(40)
+
+if not crashed:
+    menu.endmenu(env, clock)
 pygame.quit()
 quit()

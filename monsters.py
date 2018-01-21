@@ -115,6 +115,8 @@ class Zombie:
                 self.hitbox.update_coords(self)
             self.target_hitted()
             time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
