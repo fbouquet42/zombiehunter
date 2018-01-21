@@ -58,7 +58,7 @@ class   Bullet:
                 ret = True
         for monster in self.env.monsters:
             if monster.affected(self):
-                monster.hitted()
+                self.player.score += monster.hitted()
                 ret = True
         return ret
 
@@ -113,7 +113,7 @@ class   Arrow:
                 ret = True
         for monster in self.env.monsters:
             if monster.affected(self):
-                monster.hitted()
+                self.player.score += monster.hitted()
                 ret = True
         return ret
 
@@ -161,7 +161,7 @@ class   Explosion:
                 player.hitted()
         for monster in self.env.monsters:
             if monster.affected(self):
-                monster.hitted()
+                self.player.score += monster.hitted()
 
     def explose(self):
         while True:

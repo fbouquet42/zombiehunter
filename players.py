@@ -20,29 +20,31 @@ def set_hitbox_player(env, player, resize=0.24):
     return hitbox
 
 class Player:
-    def __init__(self, env, x, y, dimensions, name, keys):
-        self.x = env.width * x
-        self.y = env.height * y
+    lives = 4
+    direction = 0
+    rapidity = 17
+    injured = 0
+    score = 0
+
+    def __init__(self, env, dimensions, name):
         self.dimensions = dimensions
         self.half = self.dimensions // 2
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
-        self.up, self.left, self.down, self.right, self.shoot = keys
-
-        self.lives = 4
-        self.direction = 0
-        self.rapidity = 9
-        self.injured = 0
 
         self.name = name
 
         self.img = tools.set_imgs(env.img_src + 'players/', self.name, self.dimensions)
-        self.hitbox = set_hitbox_player(env, self)
-        self.weapon = weapons.set_weapon(env, self)
         self.img_injured = tools.set_imgs(env.img_src + 'players/', self.name + '_injured', self.dimensions)
         self.img_dead = tools.set_imgs(env.img_src + 'players/', self.name + '_dead', self.dimensions)
 
-        env.players.append(self)
+    def selected(self, env, title, keys, x, y):
+        self.up, self.left, self.down, self.right, self.shoot = keys
+        self.x = x
+        self.y = y
+        self.title = title
+        self.hitbox = set_hitbox_player(env, self)
+        self.weapon = weapons.set_weapon(env, self)
 
     def affected(self, bullet):
         if self.x <= (bullet.x + bullet.hitbox.dimensions) and bullet.x <= (self.x + self.hitbox.dimensions) and self.y <= (bullet.y + bullet.hitbox.dimensions) and bullet.y <= (self.y + self.hitbox.dimensions):

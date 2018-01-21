@@ -5,6 +5,7 @@ import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 def keys_manager(env):
+    players_alive = 0
     for player in env.players:
         if not player.lives:
             continue
@@ -15,13 +16,20 @@ def keys_manager(env):
             player.weapon.pressed(env, player)
         else:
             player.weapon.not_pressed(env=env, player=player)
+        players_alive += 1
+    env.players_alive = players_alive
 
 def display(env):
     keys_manager(env)
     for player in env.players:
         player.display(env)
-    for monster in env.monsters:
-        monster.display(env)
+    i = 0
+    while i != len(env.monsters):
+        if not env.monsters[i].degeneration:
+            del env.monsters[i]
+        else:
+            env.monsters[i].display(env)
+            i += 1
     i = 0
     while i != len(env.bullets):
         if not env.bullets[i].alive:

@@ -26,6 +26,7 @@ class Zombie:
     injured = 0
     direction = 0
     name = "zombie"
+    degeneration = 400
 
     def build_class(env):
         Zombie.env = env
@@ -34,6 +35,7 @@ class Zombie:
         Zombie.img = tools.set_imgs(env.img_src + 'monsters/', Zombie.name, Zombie.dimensions)
         Zombie.img_injured = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_injured', Zombie.dimensions)
         Zombie.img_dead = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_dead', Zombie.dimensions)
+        Zombie.value = 1
         return Zombie
 
     def __init__(self, env, x, y):
@@ -41,6 +43,7 @@ class Zombie:
         self.y = y + env.height + 200 if y > -100 else y
 
         self.hitbox = set_hitbox_monster(env, self)
+        self.target = env.players[0]
         #self.weapon = weapon(env, self)
 
     def affected(self, bullet):
@@ -52,23 +55,29 @@ class Zombie:
         if self.lives and not self.injured:
             self.injured += 10
             self.lives -= 1
+            if not self.lives:
+                return self.value
+        return 0
     
     def sniff_fresh_flesh(self):
         d_objective = -1
+        target = None
         for player in self.env.players:
             if not player.lives:
                 continue
             x = (player.x + player.half) - (self.x + self.half)
             y = (player.y + player.half) - (self.y + self.half)
             distance = int((x ** 2 + y ** 2) ** 0.5)
-            if d_objective < 0 or d_objective > distance:
+            if target is None or d_objective > distance:
                 if not x and not y:
                     return None
                 d_objective = distance
                 x_objective = x
                 y_objective = y
-        if d_objective < 0:
+                target = player
+        if target is None:
             return None
+        self.target = target
         if not y_objective or abs(x_objective / y_objective) > 0.66:
             if x < 0:
                 direction = 2
@@ -98,7 +107,6 @@ class Zombie:
     def move(self):
         while True:
             if not self.lives:
-                self.env.score += 1
                 return
             direction = self.sniff_fresh_flesh()
             if direction is not None:
@@ -120,9 +128,13 @@ class Zombie:
         #if self.lives:
         #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
         if env.debug:
+            if self.lives:
+                pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
     def update(self):
         if self.injured:
             self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
         #self.weapon.update()

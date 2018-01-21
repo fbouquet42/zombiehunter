@@ -16,7 +16,7 @@ class   Weapon:
 class   SubmachineGun(Weapon):
     def __init__(self, env, player):
         super().__init__(player.dimensions)
-        self.delay = 16
+        self.delay = 8
         self.heatup = self.delay * 4.5
         self.heatmax = self.heatup * 10 - self.delay * 9
         self.degree_1 = self.heatup * 4 - self.delay * 4
@@ -72,8 +72,8 @@ class   Crossbow(Weapon):
     def __init__(self, env, player):
         super().__init__(player.dimensions)
         self.loading = 0
-        self.loaded = 34
-        self.overloaded = 229
+        self.loaded = 17
+        self.overloaded = 114
         self.img_unloaded = tools.set_imgs(env.img_src + 'weapons/', "crossbow_unloaded", self.dimensions)
         self.img_loaded = tools.set_imgs(env.img_src + 'weapons/', "crossbow_loaded", self.dimensions)
         self.img_overloaded = tools.set_imgs(env.img_src + 'weapons/', "crossbow_overloaded", self.dimensions)

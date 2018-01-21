@@ -6,7 +6,6 @@ import monsters
 class Env:
     def __init__(self, width, height, img_src, player_dimensions, debug=False):
         self.debug = debug
-        self.score = 0
         self.width = width
         self.height = height
         self.player_dimensions = player_dimensions
