@@ -98,6 +98,7 @@ class Zombie:
     def move(self):
         while True:
             if not self.lives:
+                self.env.score += 1
                 return
             direction = self.sniff_fresh_flesh()
             if direction is not None:

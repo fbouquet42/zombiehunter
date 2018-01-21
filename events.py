@@ -46,7 +46,6 @@ def spawner(env):
         if not rand:
             rand = randint(120, 220)
             env.spawn(randint(-200, 0), randint(-200, 0))
-            print("Zombie spawns")
         rand -= 1
         time.sleep(0.01)
         while env.pause:
