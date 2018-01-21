@@ -72,7 +72,7 @@ class Player:
         tools.display(env, img, self.x, self.y, fitting)
         if self.lives:
             self.weapon.display(env, self.direction, self.x, self.y, fitting)
-        if env.debug:
+        if env.debug and self.lives:
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
     def update(self):

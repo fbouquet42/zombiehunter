@@ -3,6 +3,8 @@ from threading import Thread
 import events
 import monsters
 import pygame
+import numpy as np
+randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 class Env:
     def __init__(self, width, height, img_src, player_dimensions, debug=False):
@@ -31,9 +33,13 @@ class Env:
         update_tick.start()
         spawner.start()
 
-    def spawn(self, x, y, monster):
-        monster = self.monster_type[monster](self, x, y)
-        t = Thread(target=monster.move, args=())
-        t.daemon = True
-        self.monsters.append(monster)
-        t.start()
+    def spawn(self, name, nb=1):
+        while nb:
+            x = randint(-200, 0)
+            y = randint(-200, 0)
+            monster = self.monster_type[name](self, x, y)
+            t = Thread(target=monster.move, args=())
+            t.daemon = True
+            self.monsters.append(monster)
+            t.start()
+            nb -= 1

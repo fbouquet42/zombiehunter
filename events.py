@@ -49,17 +49,24 @@ def update_tick(env):
             time.sleep(0.01)
 
 def spawner(env):
+    spawn = 100
     zombie = 0
-    cyclops = randint(600, 1040)
+    wave = randint(spawn * 10, spawn * 20)
+    wave_nb = (5, 13)
+    cyclops = randint(spawn * 5, spawn * 12)
     while True:
         if not zombie:
-            zombie = randint(120, 220)
-            env.spawn(randint(-200, 0), randint(-200, 0), 'zombie')
+            zombie = randint(spawn, spawn * 2)
+            env.spawn('zombie')
         if not cyclops:
-            cyclops = randint(600, 1040)
-            env.spawn(randint(-200, 0), randint(-200, 0), 'cyclops')
+            cyclops = randint(spawn * 5, spawn * 12)
+            env.spawn('cyclops')
+        if not wave:
+            wave = randint(spawn * 10, spawn * 20)
+            env.spawn('zombie', randint(wave_nb[0], wave_nb[1] + 1))
         zombie -= 1
         cyclops -= 1
+        wave -= 1
         time.sleep(0.01)
         while env.pause:
             time.sleep(0.01)

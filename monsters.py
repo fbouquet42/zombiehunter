@@ -23,7 +23,6 @@ def set_hitbox_monster(env, monster, resize=0.24):
     return hitbox
 
 class Zombie:
-    rapidity = 4
     lives = 2
     injured = 0
     direction = 0
@@ -44,6 +43,8 @@ class Zombie:
         self.x = x + env.width + 200 if x > -100 else x
         self.y = y + env.height + 200 if y > -100 else y
 
+        self.rapidity = randint(2, 8)
+        self.rapidity = 5 if self.rapidity > 5 else self.rapidity
         self.hitbox = set_hitbox_monster(env, self)
         self.target = env.players[0]
         #self.weapon = weapon(env, self)
@@ -131,9 +132,8 @@ class Zombie:
         tools.display(env, img, self.x, self.y, fitting)
         #if self.lives:
         #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
-        if env.debug:
-            if self.lives:
-                pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+        if env.debug and self.lives:
+            pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
     def update(self):
@@ -144,11 +144,11 @@ class Zombie:
         #self.weapon.update()
 
 class   Cyclops(Zombie):
-    rapidity = 3
-    lives = 25
-    eyeless = 10
+    lives = 11
+    eyeless = 6
     name = "cyclops"
     turn = 30
+    hunt = True
 
     def build_class(env):
         Cyclops.sniff = int(Cyclops.dimensions * 1.5)
@@ -165,26 +165,22 @@ class   Cyclops(Zombie):
         self.y = y + env.height + 200 if y > -100 else y
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
-        
+
+        self.rapidity = randint(2, 5)
+
         self.hitbox = set_hitbox_monster(env, self, 0.46)
         self.target = env.players[0]
         self.wait = self.turn
         #self.weapon = weapon(env, self)
-
-    def hitted(self):
-        if self.lives and not self.injured:
-            self.injured += 10
-            self.lives -= 1
-            if not self.lives:
-                return self.value
-        return 0
 
     def move(self):
         while True:
             if not self.lives:
                 return
             direction, distance = self.sniff_fresh_flesh()
-            if self.lives <= self.eyeless and distance > self.sniff:
+            if direction is not None:
+                self.hunt = distance < self.sniff
+            if self.lives <= self.eyeless and not self.hunt:
                 if not self.wait:
                     direction = randint(0, 12)
                     self.wait = self.turn
@@ -217,8 +213,8 @@ class   Cyclops(Zombie):
         tools.display(env, img, self.x, self.y, fitting)
         #if self.lives:
         #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
-        if env.debug:
-            if self.lives > self.eyeless:
+        if env.debug and self.lives:
+            if self.lives > self.eyeless or self.hunt:
                 pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
