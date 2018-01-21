@@ -4,7 +4,7 @@ import tools
 import time
 
 def endmenu(env, clock):
-    myfont = pygame.font.SysFont('Comic Sans MS', 30)
+    myfont = pygame.font.SysFont('Comic Sans MS', 40)
     score_player_one = myfont.render(str(env.players[0].score), False, (8, 0, 107))
     score_player_two = myfont.render(str(env.players[1].score), False, (8, 0, 107))
     x1 = 0.25 * env.width - env.player_dimensions // 2

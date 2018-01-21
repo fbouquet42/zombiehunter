@@ -2,6 +2,8 @@ import tools
 import pygame
 import weapons
 import time
+import numpy as np
+randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 class HitboxMonster:
     def update_coords(self, monster):
@@ -47,7 +49,7 @@ class Zombie:
         #self.weapon = weapon(env, self)
 
     def affected(self, bullet):
-        if self.x <= (bullet.x + bullet.hitbox.dimensions) and bullet.x <= (self.x + self.hitbox.dimensions) and self.y <= (bullet.y + bullet.hitbox.dimensions) and bullet.y <= (self.y + self.hitbox.dimensions):
+        if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
             return True
         return False
 
@@ -131,6 +133,89 @@ class Zombie:
         #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
         if env.debug:
             if self.lives:
+                pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        #self.weapon.update()
+
+class   Cyclops(Zombie):
+    rapidity = 3
+    lives = 25
+    name = "cyclops"
+    turn = 30
+
+    def build_class(env):
+        Cyclops.img = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name, Cyclops.dimensions)
+        Cyclops.img_injured = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_injured', Cyclops.dimensions)
+        Cyclops.img_eyeless = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
+        Cyclops.img_eyeless_injured = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless_injured', Cyclops.dimensions)
+        Cyclops.img_dead = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_dead', Cyclops.dimensions)
+        Cyclops.value = 5
+        return Cyclops
+
+    def __init__(self, env, x, y):
+        self.x = x + env.width + 200 if x > -100 else x
+        self.y = y + env.height + 200 if y > -100 else y
+        self.limitx = env.width - self.half
+        self.limity = env.height - self.half
+        
+        self.hitbox = set_hitbox_monster(env, self, 0.46)
+        self.target = env.players[0]
+        #self.weapon = weapon(env, self)
+
+    def hitted(self):
+        if self.lives and not self.injured:
+            self.injured += 10
+            self.lives -= 1
+            if not self.lives:
+                return self.value
+        return 0
+
+    def move(self):
+        while True:
+            if not self.lives:
+                return
+            if self.lives > 10:
+                direction = self.sniff_fresh_flesh()
+            elif not self.turn:
+                direction = randint(0, 9)
+                self.turn = 30
+            else:
+                self.turn -= 1
+                direction = self.direction
+            if direction is not None and direction < 8:
+                self.direction = direction
+                tools.move(self, direction)
+                self.hitbox.update_coords(self)
+            if self.lives > 10:
+                tools.limits(self, self.limitx, self.limity)
+            self.target_hitted()
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if not self.lives:
+            img = self.img_dead[self.direction]
+        elif self.lives > 10 and self.injured:
+            img = self.img_injured[self.direction]
+        elif self.lives > 10:
+            img = self.img[self.direction]
+        elif self.injured:
+            img = self.img_eyeless_injured[self.direction]
+        else:
+            img = self.img_eyeless[self.direction]
+        tools.display(env, img, self.x, self.y, fitting)
+        #if self.lives:
+        #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
+        if env.debug:
+            if self.lives > 10:
                 pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 

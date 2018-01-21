@@ -16,7 +16,9 @@ class Env:
         self.players =[]
         self.monsters = []
         self.bullets = []
-        self.zombie = monsters.Zombie.build_class(self)
+        self.monster_type = {}
+        self.monster_type['zombie'] = monsters.Zombie.build_class(self)
+        self.monster_type['cyclops'] = monsters.Cyclops.build_class(self)
         self.main_title = pygame.image.load(self.img_src + "main_title.png")
         self.main_title = pygame.transform.scale(self.main_title, (self.player_dimensions * 4, self.player_dimensions * 4))
         self.title_position = (0.2 * self.width, 0.05 * self.height)
@@ -29,9 +31,9 @@ class Env:
         update_tick.start()
         spawner.start()
 
-    def spawn(self, x, y):
-        zombie = monsters.Zombie(self, x, y)
-        t = Thread(target=zombie.move, args=())
+    def spawn(self, x, y, monster):
+        monster = self.monster_type[monster](self, x, y)
+        t = Thread(target=monster.move, args=())
         t.daemon = True
-        self.monsters.append(zombie)
+        self.monsters.append(monster)
         t.start()

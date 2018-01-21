@@ -49,12 +49,17 @@ def update_tick(env):
             time.sleep(0.01)
 
 def spawner(env):
-    rand = 0
+    zombie = 0
+    cyclops = randint(600, 1040)
     while True:
-        if not rand:
-            rand = randint(120, 220)
-            env.spawn(randint(-200, 0), randint(-200, 0))
-        rand -= 1
+        if not zombie:
+            #zombie = randint(120, 220)
+            env.spawn(randint(-200, 0), randint(-200, 0), 'zombie')
+        if not cyclops:
+            #cyclops = randint(600, 1040)
+            env.spawn(randint(-200, 0), randint(-200, 0), 'cyclops')
+        zombie -= 1
+        cyclops -= 1
         time.sleep(0.01)
         while env.pause:
             time.sleep(0.01)

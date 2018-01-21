@@ -47,7 +47,7 @@ class Player:
         self.weapon = weapons.set_weapon(env, self)
 
     def affected(self, bullet):
-        if self.x <= (bullet.x + bullet.hitbox.dimensions) and bullet.x <= (self.x + self.hitbox.dimensions) and self.y <= (bullet.y + bullet.hitbox.dimensions) and bullet.y <= (self.y + self.hitbox.dimensions):
+        if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
             return True
         return False
 
@@ -58,14 +58,7 @@ class Player:
 
     def move(self, direction):
         tools.move(self, direction)
-        if self.x > self.limitx:
-            self.x = self.limitx
-        if self.y > self.limity:
-            self.y = self.limity
-        if self.x < -self.half:
-            self.x = -self.half
-        if self.y < -self.half:
-            self.y = -self.half
+        tools.limits(self, self.limitx, self.limity)
         self.hitbox.update_coords(self)
 
     def display(self, env):

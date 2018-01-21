@@ -17,6 +17,16 @@ def set_direction(pressed, player):
         direction = -1
     return direction
 
+def limits(obj, limitx, limity):
+    if obj.x > limitx:
+        obj.x = limitx
+    if obj.y > limity:
+        obj.y = limity
+    if obj.x < -obj.half:
+        obj.x = -obj.half
+    if obj.y < -obj.half:
+        obj.y = -obj.half
+
 def display(env, img, x, y, fitting=0):
     if env.jerk:
         fitting += 20
