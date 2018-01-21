@@ -53,10 +53,10 @@ def spawner(env):
     cyclops = randint(600, 1040)
     while True:
         if not zombie:
-            #zombie = randint(120, 220)
+            zombie = randint(120, 220)
             env.spawn(randint(-200, 0), randint(-200, 0), 'zombie')
         if not cyclops:
-            #cyclops = randint(600, 1040)
+            cyclops = randint(600, 1040)
             env.spawn(randint(-200, 0), randint(-200, 0), 'cyclops')
         zombie -= 1
         cyclops -= 1

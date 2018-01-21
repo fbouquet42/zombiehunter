@@ -72,13 +72,13 @@ class Zombie:
             distance = int((x ** 2 + y ** 2) ** 0.5)
             if target is None or d_objective > distance:
                 if not x and not y:
-                    return None
+                    return None, None
                 d_objective = distance
                 x_objective = x
                 y_objective = y
                 target = player
         if target is None:
-            return None
+            return None, None
         self.target = target
         if not y_objective or abs(x_objective / y_objective) > 0.66:
             if x < 0:
@@ -99,7 +99,7 @@ class Zombie:
                 direction = 5
             else:
                 direction = 7
-        return direction
+        return direction, d_objective
 
     def target_hitted(self):
         for player in self.env.players:
@@ -110,7 +110,7 @@ class Zombie:
         while True:
             if not self.lives:
                 return
-            direction = self.sniff_fresh_flesh()
+            direction, _ = self.sniff_fresh_flesh()
             if direction is not None:
                 self.direction = direction
                 tools.move(self, direction)
@@ -146,10 +146,12 @@ class Zombie:
 class   Cyclops(Zombie):
     rapidity = 3
     lives = 25
+    eyeless = 10
     name = "cyclops"
     turn = 30
 
     def build_class(env):
+        Cyclops.sniff = int(Cyclops.dimensions * 1.5)
         Cyclops.img = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name, Cyclops.dimensions)
         Cyclops.img_injured = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_injured', Cyclops.dimensions)
         Cyclops.img_eyeless = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
@@ -166,6 +168,7 @@ class   Cyclops(Zombie):
         
         self.hitbox = set_hitbox_monster(env, self, 0.46)
         self.target = env.players[0]
+        self.wait = self.turn
         #self.weapon = weapon(env, self)
 
     def hitted(self):
@@ -180,19 +183,19 @@ class   Cyclops(Zombie):
         while True:
             if not self.lives:
                 return
-            if self.lives > 10:
-                direction = self.sniff_fresh_flesh()
-            elif not self.turn:
-                direction = randint(0, 9)
-                self.turn = 30
-            else:
-                self.turn -= 1
-                direction = self.direction
+            direction, distance = self.sniff_fresh_flesh()
+            if self.lives <= self.eyeless and distance > self.sniff:
+                if not self.wait:
+                    direction = randint(0, 12)
+                    self.wait = self.turn
+                else:
+                    self.wait -= 1
+                    direction = self.direction
             if direction is not None and direction < 8:
                 self.direction = direction
                 tools.move(self, direction)
                 self.hitbox.update_coords(self)
-            if self.lives > 10:
+            if self.lives <= self.eyeless:
                 tools.limits(self, self.limitx, self.limity)
             self.target_hitted()
             time.sleep(0.01)
@@ -203,9 +206,9 @@ class   Cyclops(Zombie):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
             img = self.img_dead[self.direction]
-        elif self.lives > 10 and self.injured:
+        elif self.lives > self.eyeless and self.injured:
             img = self.img_injured[self.direction]
-        elif self.lives > 10:
+        elif self.lives > self.eyeless:
             img = self.img[self.direction]
         elif self.injured:
             img = self.img_eyeless_injured[self.direction]
@@ -215,7 +218,7 @@ class   Cyclops(Zombie):
         #if self.lives:
         #    self.weapon.display(env, self.direction, self.x, self.y, fitting)
         if env.debug:
-            if self.lives > 10:
+            if self.lives > self.eyeless:
                 pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
