@@ -51,10 +51,11 @@ class Player:
             return True
         return False
 
-    def hitted(self):
+    def hitted(self, attack=1):
         if self.lives and not self.injured:
-            self.injured += 20
-            self.lives -= 1
+            self.injured += 25
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
 
     def move(self, direction):
         tools.move(self, direction)

@@ -21,7 +21,7 @@ def set_hitbox_bullet(env, bullet, resize=0.12):
     return hitbox
 
 class   Bullet:
-    rapidity = 28
+    rapidity = 29
     def build_class(env, player):
         Bullet.dimensions = player.dimensions
         Bullet.img = tools.set_imgs(env.img_src + "bullets/", "bullet", player.dimensions)
@@ -111,11 +111,11 @@ class   Arrow:
         ret = False
         for player in self.env.players:
             if player is not self.player and player.affected(self):
-                player.hitted()
+                player.hitted(attack=2)
                 ret = True
         for monster in self.env.monsters:
             if monster.affected(self):
-                self.player.score += monster.hitted()
+                self.player.score += monster.hitted(attack=2)
                 ret = True
         return ret
 
@@ -135,7 +135,7 @@ class   Arrow:
                 time.sleep(0.01)
 
 class   Explosion:
-    lifetime = 25
+    lifetime = 37
     def build_class(env, player):
         Explosion.dimensions = player.dimensions
         Explosion.img = tools.set_imgs(env.img_src + "bullets/", "explosion", player.dimensions)
@@ -164,7 +164,7 @@ class   Explosion:
             if player.affected(self):
                 player.hitted()
         for monster in self.env.monsters:
-            if monster.affected(self):
+            if not monster.injured and monster.affected(self):
                 self.player.score += monster.hitted()
 
     def explose(self):

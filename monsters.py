@@ -43,8 +43,8 @@ class Zombie:
         self.x = x + env.width + 200 if x > -100 else x
         self.y = y + env.height + 200 if y > -100 else y
 
-        self.rapidity = randint(2, 8)
-        self.rapidity = 5 if self.rapidity > 5 else self.rapidity
+        self.rapidity = randint(2, 7)
+        self.rapidity = 4 if self.rapidity > 4 else self.rapidity
         self.hitbox = set_hitbox_monster(env, self)
         self.target = env.players[0]
         #self.weapon = weapon(env, self)
@@ -54,10 +54,11 @@ class Zombie:
             return True
         return False
 
-    def hitted(self):
-        if self.lives and not self.injured:
-            self.injured += 10
-            self.lives -= 1
+    def hitted(self, attack=1):
+        if self.lives:
+            self.injured += 12
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
                 return self.value
         return 0
@@ -166,7 +167,7 @@ class   Cyclops(Zombie):
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
 
-        self.rapidity = randint(2, 5)
+        self.rapidity = randint(2, 4)
 
         self.hitbox = set_hitbox_monster(env, self, 0.46)
         self.target = env.players[0]
