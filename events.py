@@ -51,8 +51,26 @@ def update_tick(env):
             time.sleep(0.01)
 
 
-def wave_1(env):
+def wave_debug(env):
+    title = pygame.image.load(env.img_src + "wave_1.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
 
+    monsters = ['jack_lantern', 'zombie', 'cyclops']
+    while True:
+        for monster in monsters:
+            env.spawn(monster)
+        while len(env.monsters):
+            time.sleep(0.1)
+        while env.pause:
+            time.sleep(0.01)
+
+def wave_1(env):
+    if env.debug:
+        wave_debug(env)
+        return
     title = pygame.image.load(env.img_src + "wave_1.png")
     title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
     env.titles.append(title)

@@ -25,7 +25,7 @@ def endmenu(env, clock):
         clock.tick(3)
 
 
-def pausemenu(env, clock):
+def pausemenu(env):
     if not hasattr(pausemenu, 'time'):
         env.pause = True
         pausemenu.time = time.time()

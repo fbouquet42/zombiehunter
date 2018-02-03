@@ -9,7 +9,7 @@ import menu
 
 #initialization
 pygame.init()
-env = Env(width=1366, height=768, img_src='src/', player_dimensions=180, debug=False)
+env = Env(width=1366, height=768, img_src='src/', player_dimensions=180, debug=True)
 
 env.GameManager = pygame.display.set_mode((env.width,env.height))
 pygame.display.set_caption('Zombie Hunters')
@@ -32,7 +32,7 @@ while not crashed:
             crashed = True
     env.pressed = pygame.key.get_pressed()
     if env.pressed[pygame.K_ESCAPE]:
-        menu.pausemenu(env, clock)
+        menu.pausemenu(env)
     elif not env.pause:
         env.GameManager.blit(env.background, (0, 0))
         events.display(env)
