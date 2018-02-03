@@ -18,9 +18,11 @@ class Env:
         self.players =[]
         self.monsters = []
         self.bullets = []
+        self.titles = []
         self.monster_type = {}
         self.monster_type['zombie'] = monsters.Zombie.build_class(self)
         self.monster_type['cyclops'] = monsters.Cyclops.build_class(self)
+        self.monster_type['jack_lantern'] = monsters.JackLantern.build_class(self)
         self.main_title = pygame.image.load(self.img_src + "main_title.png")
         self.main_title = pygame.transform.scale(self.main_title, (self.player_dimensions * 4, self.player_dimensions * 4))
         self.title_position = (0.2 * self.width, 0.05 * self.height)
@@ -28,7 +30,7 @@ class Env:
     def start(self):
         update_tick = Thread(target=events.update_tick, args=(self, ))
         update_tick.daemon = True
-        spawner = Thread(target=events.spawner, args=(self, ))
+        spawner = Thread(target=events.wave_1, args=(self, ))
         spawner.daemon = True
         update_tick.start()
         spawner.start()

@@ -1,6 +1,7 @@
 import tools
 import pygame
-import weapons
+import bullets
+from threading import Thread
 import time
 import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
@@ -28,6 +29,7 @@ class Zombie:
     direction = 0
     name = "zombie"
     degeneration = 400
+    value = 1
 
     def build_class(env):
         Zombie.env = env
@@ -36,7 +38,6 @@ class Zombie:
         Zombie.img = tools.set_imgs(env.img_src + 'monsters/', Zombie.name, Zombie.dimensions)
         Zombie.img_injured = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_injured', Zombie.dimensions)
         Zombie.img_dead = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_dead', Zombie.dimensions)
-        Zombie.value = 1
         return Zombie
 
     def __init__(self, env, x, y):
@@ -144,12 +145,71 @@ class Zombie:
             self.degeneration -= 1
         #self.weapon.update()
 
+class   JackLantern(Zombie):
+    name = "jack_lantern"
+    lives = 3
+    value = 3
+
+    def build_class(env):
+        JackLantern.img = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name, JackLantern.dimensions)
+        JackLantern.img_injured = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name + '_injured', JackLantern.dimensions)
+        JackLantern.img_dead = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name + '_dead', JackLantern.dimensions)
+        JackLantern.bullet = bullets.DoubleBullet.build_class(env)
+        return JackLantern
+
+    def __init__(self, env, x, y):
+        self.x = x + env.width + 200 if x > -100 else x
+        self.y = y + env.height + 200 if y > -100 else y
+
+        self.rapidity = randint(2, 3)
+        self.hitbox = set_hitbox_monster(env, self)
+        self.target = env.players[0]
+
+        self.next_shoot = randint(120, 300)
+
+    def target_hitted(self):
+        for player in self.env.players:
+            if player.affected(self):
+                player.hitted()
+
+    def move(self):
+        while True:
+            if not self.lives:
+                return
+            direction, _ = self.sniff_fresh_flesh()
+            if direction is not None:
+                self.direction = direction
+                tools.move(self, direction)
+                self.hitbox.update_coords(self)
+            self.target_hitted()
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if self.next_shoot:
+            self.next_shoot -= 1
+        elif self.lives:
+            bullet = self.bullet(self.x, self.y, self.direction, self)
+            t = Thread(target=bullet.move, args=())
+            t.daemon = True
+            self.env.bullets.append(bullet)
+            t.start()
+            self.next_shoot = randint(120, 300)
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+
+
+
 class   Cyclops(Zombie):
-    lives = 11
-    eyeless = 6
+    lives = 7
+    eyeless = 3
     name = "cyclops"
     turn = 30
     hunt = True
+    value = 5
 
     def build_class(env):
         Cyclops.sniff = int(Cyclops.dimensions * 1.5)
@@ -158,7 +218,6 @@ class   Cyclops(Zombie):
         Cyclops.img_eyeless = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
         Cyclops.img_eyeless_injured = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless_injured', Cyclops.dimensions)
         Cyclops.img_dead = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_dead', Cyclops.dimensions)
-        Cyclops.value = 5
         return Cyclops
 
     def __init__(self, env, x, y):
