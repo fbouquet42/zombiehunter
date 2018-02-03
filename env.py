@@ -15,6 +15,8 @@ class Env:
         self.pause = False
         self.img_src = img_src
         self.jerk = False
+        self.furious = 0
+        self.fire_star = 0
         self.players =[]
         self.monsters = []
         self.bullets = []
@@ -23,6 +25,7 @@ class Env:
         self.monster_type['zombie'] = monsters.Zombie.build_class(self)
         self.monster_type['cyclops'] = monsters.Cyclops.build_class(self)
         self.monster_type['jack_lantern'] = monsters.JackLantern.build_class(self)
+        self.monster_type['minion'] = monsters.Minion.build_class(self)
         self.main_title = pygame.image.load(self.img_src + "main_title.png")
         self.main_title = pygame.transform.scale(self.main_title, (self.player_dimensions * 4, self.player_dimensions * 4))
         self.title_position = (0.2 * self.width, 0.05 * self.height)
@@ -34,6 +37,16 @@ class Env:
         spawner.daemon = True
         update_tick.start()
         spawner.start()
+
+    def spawn_boss(self):
+        x = randint(-200, 0)
+        y = randint(-200, 0)
+        boss = monsters.Daemon(self, x, y)
+        t = Thread(target=boss.move, args=())
+        t.daemon = True
+        self.monsters.append(boss)
+        t.start()
+        return boss
 
     def spawn(self, name, nb=1):
         while nb:

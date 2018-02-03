@@ -14,7 +14,9 @@ env = Env(width=1366, height=768, img_src='src/', player_dimensions=180, debug=T
 env.GameManager = pygame.display.set_mode((env.width,env.height))
 pygame.display.set_caption('Zombie Hunters')
 
-env.background = pygame.image.load(env.img_src + 'background_basic.png')
+env.background_basic = pygame.image.load(env.img_src + 'background_basic.png')
+env.background_hell = pygame.image.load(env.img_src + 'background_hell.png')
+env.background = env.background_basic
 
 clock = pygame.time.Clock()
 
