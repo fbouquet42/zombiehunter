@@ -78,57 +78,55 @@ class   Bullet:
                 time.sleep(0.01)
 
 class   HellStar:
-    def build_class(env, player):
-        Bullet.dimensions = player.dimensions
-        Bullet.img = tools.set_imgs(env.img_src + "bullets/", "bullet", player.dimensions)
-        Bullet.player = player
-        Bullet.env = env
-        Bullet.limitx = env.width + 100
-        Bullet.limity = env.height + 100
-        return Bullet
+    def build_class(env, monster):
+        HellStar.dimensions = monster.dimensions
+        HellStar.img = tools.set_imgs(env.img_src + "bullets/", "hell_star", monster.dimensions)
+        HellStar.img_off = tools.set_imgs(env.img_src + "bullets/", "hell_star_off", monster.dimensions)
+        HellStar.monster = monster
+        HellStar.env = env
+        return HellStar
 
     def __init__(self, x, y, direction):
         self.x = x
         self.y = y
         self.alive = True
         self.direction = direction
+        self.summoning = 0
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
-        self.hitbox = set_hitbox_bullet(self.env, self)
-        tools.move(self, self.direction)
+        self.hitbox = set_hitbox_bullet(self.env, self, 0.40)
 
     def display(self, env):
-        tools.display(env, self.img[self.direction], self.x, self.y, self.fitting)
+        if self.summoning and not self.monster.fire_star:
+            tools.display(env, self.img[self.direction], self.x, self.y, self.fitting)
+        else:
+            tools.display(env, self.img_off[self.direction], self.x, self.y, self.fitting)
         if env.debug:
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
-
-    def limits_reached(self):
-        if self.x < -100 or self.y < -100 or self.y > self.limity or self.x > self.limitx:
-            return True
-        return False
     
     def target_hitted(self):
-        ret = False
         for player in self.env.players:
-            if player is not self.player and player.affected(self):
+            if player.affected(self):
                 player.hitted()
-                ret = True
-        for monster in self.env.monsters:
-            if monster.affected(self):
-                self.player.score += monster.hitted()
-                ret = True
-        return ret
 
     def dead(self):
         self.alive = False
 
     def move(self):
         while True:
-            tools.move(self, self.direction)
-            if self.limits_reached():
+            if self.monster.fire_star:
+                self.summoning = 600
+            if not self.monster.fire_star and self.summoning:
+                self.target_hitted()
+            if not (self.summoning + 100) % 220:
+                monster = self.env.monster_type['minion'](self.env, self.x, self.y)
+                t = Thread(target=monster.move, args=())
+                t.daemon = True
+                self.env.monsters.append(monster)
+                t.start()
+            if not self.monster.lives:
                 return self.dead()
-            self.hitbox.update_coords(self)
-            if self.target_hitted():
-                return self.dead()
+            if self.summoning:
+                self.summoning -= 1
             time.sleep(0.01)
             while self.env.pause:
                 time.sleep(0.01)

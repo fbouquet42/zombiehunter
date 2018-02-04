@@ -213,6 +213,12 @@ class FireBall(Zombie):
             self.ultimatum -= 1
             if not self.ultimatum or not self.target.lives:
                 self.fire = False
+        while self.alive:
+            if self.degeneration:
+                self.degeneration -= 1
+            else:
+                self.alive = False
+            time.sleep(0.01)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -224,12 +230,6 @@ class FireBall(Zombie):
         if env.debug and self.fire:
             pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
-
-    def update(self):
-        if not self.fire and self.degeneration:
-            self.degeneration -= 1
-        elif not self.fire and not self.degeneration:
-            self.alive = False
 
 class Daemon(Zombie):
     lives = 135
@@ -253,7 +253,7 @@ class Daemon(Zombie):
         self.spell = randint(250, 400)
         self.spell_type = [self.fire_spell , self.star_spell]
         self.fire_ball = FireBall.build_class(env)
-        self.hell_star = bullets.HellStar.build_class(env)
+        self.hell_star = bullets.HellStar.build_class(env, self)
         self.shooting = -1
         self.fire_star = 0
         self.summoning = 4
@@ -284,7 +284,7 @@ class Daemon(Zombie):
             direction, _ = self.sniff_fresh_flesh()
             if direction is not None:
                 self.direction = direction
-                if not self.spelling:
+                if int(self.shooting) == -1:
                     tools.move(self, direction, self.rapidity + self.env.furious)
                 self.hitbox.update_coords(self)
             self.target_hitted()
@@ -298,14 +298,14 @@ class Daemon(Zombie):
             img = self.img_dead[self.direction]
         elif self.furious:
             img = self.img_furious[self.direction]
-        elif self.spelling:
-            img = self.img_spelling[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
+        elif self.spelling:
+            img = self.img_spelling[self.direction]
         else:
             img = self.img[self.direction]
         tools.display(env, img, self.x, self.y, fitting)
-        if self.spelling:
+        if int(self.shooting) != -1:
             tools.display(env, self.img_shooting[int(self.shooting) % 8], self.x, self.y, 0.23 * self.dimensions if int(self.shooting) % 2 else 0)
         if env.debug and self.lives:
             pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
@@ -328,10 +328,10 @@ class Daemon(Zombie):
         self.shooting = 0.0
 
     def star_spell(self):
-        self.fire_star = 1000
+        self.fire_star = 150
         if self.summoning:
             x, y = self.get_coords(self.summoning)
-            hell_star = self.hell_star(self.env, x, y, self.env.players[randint(0, len(self.env.players))])
+            hell_star = self.hell_star(x, y, self.direction)
             t = Thread(target=hell_star.move, args=())
             t.daemon = True
             self.env.bullets.append(hell_star)
@@ -350,7 +350,7 @@ class Daemon(Zombie):
         elif int(self.shooting) != -1:
             self.shooting = -1
             for i in range(1, 5):
-                x, y = get_coords(i)
+                x, y = self.get_coords(i)
                 fire_ball = self.fire_ball(self.env, x, y, self.env.players[randint(0, len(self.env.players))])
                 t = Thread(target=fire_ball.move, args=())
                 t.daemon = True
@@ -359,9 +359,13 @@ class Daemon(Zombie):
             self.spelling = False
         elif self.fire_star:
             self.fire_star -= 1
+            if not self.fire_star:
+                self.spelling = False
         elif self.spell:
             self.spell -= 1
         else:
+            #randint
+            #self.spell_type[1]()
             self.spell_type[randint(0, len(self.spell_type))]()
             self.spell = randint(500, 1100)
             self.spelling = True
@@ -378,9 +382,8 @@ class   Minion(Zombie):
         return Minion
 
     def __init__(self, env, x, y):
-        self.x = x + env.width + 200 if x > -100 else x
-        self.y = y + env.height + 200 if y > -100 else y
-
+        self.x = x
+        self.y = y
         self.rapidity = randint(3, 7)
         self.rapidity = 4 if self.rapidity > 4 else self.rapidity
         self.hitbox = set_hitbox_monster(env, self, 0.26)

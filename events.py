@@ -59,7 +59,7 @@ def wave_debug(env):
     time.sleep(5)
     env.titles.remove(title)
 
-    monsters = ['jack_lantern', 'zombie', 'cyclops', 'minion']
+    monsters = ['jack_lantern', 'zombie', 'cyclops']
     while True:
         for monster in monsters:
             env.spawn(monster)
