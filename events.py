@@ -118,7 +118,7 @@ def wave_2(env):
     jack_lantern_spawn = 370
     jacks_wave = 0
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
-    while jacks_wave < 16:
+    while jacks_wave < 9:
         if not zombie:
             zombie = randint(zombie_spawn, zombie_spawn * 2)
             env.spawn('zombie', randint(1, 3))
@@ -152,25 +152,25 @@ def wave_3(env):
     env.titles.remove(title)
 
     boss = env.spawn_boss()
-    zombie_spawn = 85
+    zombie_spawn = 150
     zombie = 0
-    cyclops_spawn = 720
+    cyclops_spawn = 1100
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 450
+    jack_lantern_spawn = 600
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
     while boss.lives:
         if not zombie:
             zombie = randint(zombie_spawn, zombie_spawn * 2)
-            env.spawn('zombie', randint(1, 3))
+            env.spawn('zombie')
         if not cyclops:
             cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
             env.spawn('cyclops')
         if not jack_lantern:
             jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
             env.spawn('jack_lantern')
-        #zombie -= 1
+        zombie -= 1
         cyclops -= 1
-        #jack_lantern -= 1
+        jack_lantern -= 1
         time.sleep(0.01)
         while env.pause:
             time.sleep(0.01)
