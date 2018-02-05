@@ -15,6 +15,7 @@ class Env:
         self.pause = False
         self.img_src = img_src
         self.jerk = False
+        self.walking_dead = 0
         self.furious = 0
         self.fire_star = 0
         self.players =[]
@@ -26,6 +27,7 @@ class Env:
         self.monster_type['cyclops'] = monsters.Cyclops.build_class(self)
         self.monster_type['jack_lantern'] = monsters.JackLantern.build_class(self)
         self.monster_type['minion'] = monsters.Minion.build_class(self)
+        self.monster_type['necromancer'] = monsters.Necromancer.build_class(self)
         self.main_title = pygame.image.load(self.img_src + "main_title.png")
         self.main_title = pygame.transform.scale(self.main_title, (self.player_dimensions * 4, self.player_dimensions * 4))
         self.title_position = (0.2 * self.width, 0.05 * self.height)

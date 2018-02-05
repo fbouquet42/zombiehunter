@@ -7,7 +7,7 @@ import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 #Monster idea
-#dark_knight (??) -- necromancer -- garou (24 lives)
+#dark_knight (??) -- necromancer -- garou (24 lives) -- spider
 
 class HitboxMonster:
     def update_coords(self, monster):
@@ -41,6 +41,7 @@ class Zombie:
         Zombie.img = tools.set_imgs(env.img_src + 'monsters/', Zombie.name, Zombie.dimensions)
         Zombie.img_injured = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_injured', Zombie.dimensions)
         Zombie.img_dead = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_dead', Zombie.dimensions)
+        Zombie.img_possessed = tools.set_imgs(env.img_src + 'monsters/', Zombie.name + '_possessed', Zombie.dimensions)
         return Zombie
 
     def __init__(self, env, x, y):
@@ -112,16 +113,23 @@ class Zombie:
             if player.affected(self):
                 player.hitted()
 
+    def action(self):
+        direction, _ = self.sniff_fresh_flesh()
+        if direction is not None:
+            self.direction = direction
+            tools.move(self, direction, self.rapidity + self.env.furious)
+            self.hitbox.update_coords(self)
+        self.target_hitted()
+
     def move(self):
-        while True:
-            if not self.lives:
-                return
-            direction, _ = self.sniff_fresh_flesh()
-            if direction is not None:
-                self.direction = direction
-                tools.move(self, direction, self.rapidity + self.env.furious)
-                self.hitbox.update_coords(self)
-            self.target_hitted()
+        while self.lives:
+            self.action()
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+        while self.degeneration:
+            if self.env.walking_dead:
+                self.action()
             time.sleep(0.01)
             while self.env.pause:
                 time.sleep(0.01)
@@ -129,7 +137,10 @@ class Zombie:
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
-            img = self.img_dead[self.direction]
+            if self.env.walking_dead:
+                img = self.img_possessed[self.direction]
+            else:
+                img = self.img_dead[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
@@ -147,6 +158,150 @@ class Zombie:
         if not self.lives and self.degeneration:
             self.degeneration -= 1
         #self.weapon.update()
+
+class   Undead(Zombie):
+    lives = 0
+    name = "zombie"
+
+    def __init__(self, env, player):
+        self.x = player.x
+        self.y = player.y
+        self.player = player
+
+        self.rapidity = 4
+        self.img = player.img_possessed
+        self.hitbox = set_hitbox_monster(env, self)
+        self.target = env.players[0]
+
+    def target_hitted(self):
+        for player in self.env.players:
+            if player is not self.player and player.affected(self):
+                player.hitted()
+
+    def move(self):
+        while self.env.walking_dead:
+            self.action()
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+        self.player.x = self.x
+        self.player.y = self.y
+        self.player.possessed = False
+        self.degeneration = 0
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        tools.display(env, self.img[self.direction], self.x, self.y, fitting)
+        if env.debug:
+            pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
+    def update(self):
+        pass
+
+class   Necromancer(Zombie):
+    lives = 6
+    name = "necromancer"
+    value = 4
+
+    def build_class(env):
+        Necromancer.img = tools.set_imgs(env.img_src + 'monsters/', Necromancer.name, Necromancer.dimensions)
+        Necromancer.img_injured = tools.set_imgs(env.img_src + 'monsters/', Necromancer.name + '_injured', Necromancer.dimensions)
+        Necromancer.img_ghost = tools.set_imgs(env.img_src + 'monsters/', Necromancer.name + '_ghost', Necromancer.dimensions)
+        return Necromancer
+
+    def __init__(self, env, x, y):
+        self.x = x + env.width + 200 if x > -100 else x
+        self.y = y + env.height + 200 if y > -100 else y
+
+        self.rapidity = randint(3, 4)
+        self.hitbox = set_hitbox_monster(env, self)
+        self.target = env.players[0]
+        self.out = True
+        self.limitx = env.width - self.half
+        self.limity = env.height - self.half
+        self.spelling = 75
+        self.ghost = Ghost
+
+    def center_reached(self):
+        if self.x < -self.half or self.y < -self.half or self.y > self.limity or self.x > self.limitx:
+            return False
+        return True
+
+    def move(self):
+        while self.lives:
+            self.action()
+            if self.out:
+                self.out = not self.center_reached()
+            elif self.spelling:
+                self.spelling -= 1
+                if not self.spelling:
+                    self.env.walking_dead += 1
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+        if self.spelling:
+            self.env.walking_dead += 1
+        ghost = self.ghost(self.env, self.x, self.y, self.img_ghost)
+        t = Thread(target=ghost.move, args=())
+        t.daemon = True
+        self.env.bullets.append(ghost)
+        self.degeneration = 0
+        t.start()
+        
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if self.injured:
+            img = self.img_injured[self.direction]
+        else:
+            img = self.img[self.direction]
+        tools.display(env, img, self.x, self.y, fitting)
+        if env.debug and self.lives:
+            pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+
+class Ghost(Zombie):
+    name = "ghost"
+    rapidity = 6
+    ultimatum = 280
+
+    def __init__(self, env, x, y, img):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.hitbox = set_hitbox_monster(env, self, 0.26)
+        self.alive = True
+        self.target = self.env.players[0]
+
+    def target_hitted(self):
+        for player in self.env.players:
+            if player.lives and player.affected(self):
+                player.hitted()
+                self.alive = False
+
+    def move(self):
+        while self.ultimatum:
+            self.action()
+            self.ultimatum -= 1
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+        self.alive = False
+        self.env.walking_dead -= 1
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        tools.display(env, self.img[self.direction], self.x, self.y, fitting)
+        if env.debug:
+            pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
 
 class FireBall(Zombie):
     name = "fire_ball"
@@ -399,6 +554,7 @@ class   JackLantern(Zombie):
         JackLantern.img = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name, JackLantern.dimensions)
         JackLantern.img_injured = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name + '_injured', JackLantern.dimensions)
         JackLantern.img_dead = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name + '_dead', JackLantern.dimensions)
+        JackLantern.img_possessed = tools.set_imgs(env.img_src + 'monsters/', JackLantern.name + '_possessed', JackLantern.dimensions)
         JackLantern.bullet = bullets.DoubleBullet.build_class(env)
         return JackLantern
 
@@ -416,8 +572,9 @@ class   JackLantern(Zombie):
         if self.injured:
             self.injured -= 1
         if self.next_shoot:
-            self.next_shoot -= 1
-        elif self.lives:
+            if self.lives or self.env.walking_dead:
+                self.next_shoot -= 1
+        elif self.lives or self.env.walking_dead:
             bullet = self.bullet(self.x, self.y, self.direction, self)
             t = Thread(target=bullet.move, args=())
             t.daemon = True
@@ -433,7 +590,7 @@ class   Cyclops(Zombie):
     name = "cyclops"
     turn = 30
     hunt = True
-    value = 5
+    value = 3
 
     def build_class(env):
         Cyclops.sniff = int(Cyclops.dimensions * 1.5)
@@ -442,6 +599,7 @@ class   Cyclops(Zombie):
         Cyclops.img_eyeless = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
         Cyclops.img_eyeless_injured = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_eyeless_injured', Cyclops.dimensions)
         Cyclops.img_dead = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_dead', Cyclops.dimensions)
+        Cyclops.img_possessed = tools.set_imgs(env.img_src + 'monsters/', Cyclops.name + '_possessed', Cyclops.dimensions)
         return Cyclops
 
     def __init__(self, env, x, y):
@@ -458,9 +616,7 @@ class   Cyclops(Zombie):
         #self.weapon = weapon(env, self)
 
     def move(self):
-        while True:
-            if not self.lives:
-                return
+        while self.lives:
             direction, distance = self.sniff_fresh_flesh()
             if direction is not None:
                 self.hunt = distance < self.sniff
@@ -481,11 +637,20 @@ class   Cyclops(Zombie):
             time.sleep(0.01)
             while self.env.pause:
                 time.sleep(0.01)
+        while self.degeneration:
+            if self.env.walking_dead:
+                self.action()
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
-            img = self.img_dead[self.direction]
+            if self.env.walking_dead:
+                img = self.img_possessed[self.direction]
+            else:
+                img = self.img_dead[self.direction]
         elif self.lives > self.eyeless and self.injured:
             img = self.img_injured[self.direction]
         elif self.lives > self.eyeless:

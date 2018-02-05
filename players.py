@@ -37,6 +37,8 @@ class Player:
         self.img = tools.set_imgs(env.img_src + 'players/', self.name, self.dimensions)
         self.img_injured = tools.set_imgs(env.img_src + 'players/', self.name + '_injured', self.dimensions)
         self.img_dead = tools.set_imgs(env.img_src + 'players/', self.name + '_dead', self.dimensions)
+        self.img_possessed = tools.set_imgs(env.img_src + 'players/', self.name + '_possessed', self.dimensions)
+        self.possessed = False
 
     def selected(self, env, title, keys, x, y):
         self.up, self.left, self.down, self.right, self.shoot = keys
@@ -70,7 +72,8 @@ class Player:
             img = self.img_injured[self.direction]
         else:
             img = self.img[self.direction]
-        tools.display(env, img, self.x, self.y, fitting)
+        if not self.possessed:
+            tools.display(env, img, self.x, self.y, fitting)
         if self.lives:
             self.weapon.display(env, self.direction, self.x, self.y, fitting)
         if env.debug and self.lives:

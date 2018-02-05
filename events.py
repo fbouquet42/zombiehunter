@@ -1,6 +1,8 @@
 import time
 import pygame
 import tools
+import monsters
+from threading import Thread
 import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
@@ -8,6 +10,13 @@ def keys_manager(env):
     players_alive = 0
     for player in env.players:
         if not player.lives:
+            if env.walking_dead and not player.possessed:
+                player.possessed = True
+                possessed = monsters.Undead(env, player)
+                t = Thread(target=possessed.move, args=())
+                t.daemon = True
+                env.monsters.append(possessed)
+                t.start()
             continue
         direction = tools.set_direction(env.pressed, player)
         if direction >= 0:
@@ -52,7 +61,7 @@ def update_tick(env):
 
 
 def wave_debug(env):
-    wave_3(env)
+    wave_4(env)
     title = pygame.image.load(env.img_src + "wave_1.png")
     title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
     env.titles.append(title)
@@ -113,9 +122,9 @@ def wave_2(env):
 
     zombie_spawn = 70
     zombie = 0
-    cyclops_spawn = 635
+    cyclops_spawn = 595
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 370
+    jack_lantern_spawn = 420
     jacks_wave = 0
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
     while jacks_wave < 9:
@@ -152,11 +161,11 @@ def wave_3(env):
     env.titles.remove(title)
 
     boss = env.spawn_boss()
-    zombie_spawn = 150
+    zombie_spawn = 135
     zombie = 0
-    cyclops_spawn = 1100
+    cyclops_spawn = 900
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 600
+    jack_lantern_spawn = 700
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
     while boss.lives:
         if not zombie:
@@ -191,13 +200,16 @@ def wave_4(env):
     time.sleep(5)
     env.titles.remove(title)
 
-    zombie_spawn = 70
+    necromancers_wave = 0
+    zombie_spawn = 130
     zombie = 0
-    cyclops_spawn = 600
+    cyclops_spawn = 605
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 350
+    jack_lantern_spawn = 430
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
-    while True:
+    necromancer_spawn = 790
+    necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
+    while necromancers_wave < 6:
         if not zombie:
             zombie = randint(zombie_spawn, zombie_spawn * 2)
             env.spawn('zombie', randint(1, 4))
@@ -207,9 +219,14 @@ def wave_4(env):
         if not jack_lantern:
             jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
             env.spawn('jack_lantern')
+        if not necromancer:
+            necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
+            env.spawn('necromancer')
+            necromancers_wave += 1
         zombie -= 1
         cyclops -= 1
         jack_lantern -= 1
+        necromancer -= 1
         time.sleep(0.01)
         while env.pause:
             time.sleep(0.01)
