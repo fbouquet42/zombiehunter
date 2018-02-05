@@ -7,7 +7,7 @@ import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 #Monster idea
-#dark_knight (??) -- necromancer -- garou (24 lives) -- spider
+#dark_knight (??) -- garou (24 lives) -- spider -- octopus -- rat king -- dog (dammage zone) -- bird
 
 class HitboxMonster:
     def update_coords(self, monster):
@@ -166,6 +166,7 @@ class   Undead(Zombie):
     def __init__(self, env, player):
         self.x = player.x
         self.y = player.y
+        self.direction = player.direction
         self.player = player
 
         self.rapidity = 4
@@ -186,6 +187,7 @@ class   Undead(Zombie):
                 time.sleep(0.01)
         self.player.x = self.x
         self.player.y = self.y
+        self.player.direction = self.direction
         self.player.possessed = False
         self.degeneration = 0
 
@@ -405,7 +407,7 @@ class Daemon(Zombie):
         self.rapidity = 3
         self.furious = 0
         #self.spell = randint(500, 1100)
-        self.spell = randint(250, 400)
+        self.spell = randint(230, 380)
         self.spell_type = [self.fire_spell , self.star_spell]
         self.fire_ball = FireBall.build_class(env)
         self.hell_star = bullets.HellStar.build_class(env, self)
@@ -460,7 +462,7 @@ class Daemon(Zombie):
         else:
             img = self.img[self.direction]
         tools.display(env, img, self.x, self.y, fitting)
-        if int(self.shooting) != -1:
+        if self.lives and int(self.shooting) != -1:
             tools.display(env, self.img_shooting[int(self.shooting) % 8], self.x, self.y, 0.23 * self.dimensions if int(self.shooting) % 2 else 0)
         if env.debug and self.lives:
             pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
@@ -496,6 +498,9 @@ class Daemon(Zombie):
     def update(self):
         if self.injured:
             self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+            return
         if self.furious:
             self.furious -= 1
             if not self.furious:
@@ -519,13 +524,9 @@ class Daemon(Zombie):
         elif self.spell:
             self.spell -= 1
         else:
-            #randint
-            #self.spell_type[1]()
             self.spell_type[randint(0, len(self.spell_type))]()
-            self.spell = randint(500, 1100)
+            self.spell = randint(470, 1070)
             self.spelling = True
-        if not self.lives and self.degeneration:
-            self.degeneration -= 1
 
 class   Minion(Zombie):
     name = "minion"

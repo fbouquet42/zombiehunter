@@ -230,3 +230,7 @@ def wave_4(env):
         time.sleep(0.01)
         while env.pause:
             time.sleep(0.01)
+    while len(env.monsters):
+        time.sleep(0.1)
+    for player in env.players:
+        player.lives = 0
