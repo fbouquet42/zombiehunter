@@ -7,7 +7,7 @@ import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 #Monster idea
-#dark_knight (??) -- garou (24 lives) -- spider -- octopus -- rat king -- dog (dammage zone) -- bird
+#dark_knight (??) -- garou (24 lives) -- spider -- octopus -- rat king -- dog (dammage zone) -- bird -- millipede -- virus -- shadow
 
 class HitboxMonster:
     def update_coords(self, monster):
@@ -158,6 +158,125 @@ class Zombie:
         if not self.lives and self.degeneration:
             self.degeneration -= 1
         #self.weapon.update()
+
+class Harpy(Zombie):
+    lives = 3
+    name = "harpy"
+    value = 3
+    wait = 0
+    rapidity_inflight = 6
+    rapidity_incharge = 13
+    ultimatum_inflight = 240
+    ultimatum_incharge = 30
+
+    def build_class(env):
+        Harpy.img = tools.set_imgs(env.img_src + 'monsters/', Harpy.name, Harpy.dimensions)
+        Harpy.img_injured = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_injured', Harpy.dimensions)
+        Harpy.img_dead = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_dead', Harpy.dimensions)
+        Harpy.img_shadow = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', Harpy.dimensions)
+        Harpy.img_possessed = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_possessed', Harpy.dimensions)
+        return Harpy
+
+    def __init__(self, env, x, y):
+        self.x = x + env.width + 200 if x > -100 else x
+        self.y = y + env.height + 200 if y > -100 else y
+
+        self.fly()
+        self.hitbox = set_hitbox_monster(env, self, 0.22)
+        self.target = env.players[0]
+
+    def fly(self):
+        if not self.lives:
+            return
+        self.rapidity = self.rapidity_inflight
+        self.flying = True
+        self.charging = False
+        self.ultimatum = self.ultimatum_inflight
+
+    def charge(self):
+        if not self.lives:
+            return
+        self.flying = False
+        self.charging = True
+        self.wait = 55
+        self.rapidity = self.rapidity_incharge
+        self.ultimatum = self.ultimatum_incharge
+
+    def affected(self, bullet):
+        if self.flying:
+            return False
+        if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
+            return True
+        return False
+
+    def target_hitted(self):
+        for player in self.env.players:
+            if player.affected(self):
+                if self.flying:
+                    return True
+                else:
+                    player.hitted()
+        return False
+
+    def move(self):
+        while self.lives:
+            if not self.charging or self.wait:
+                direction, _ = self.sniff_fresh_flesh()
+            else:
+                direction = self.direction
+            if direction is not None:
+                self.direction = direction
+                if not self.wait:
+                    tools.move(self, direction, self.rapidity + self.env.furious)
+                    self.hitbox.update_coords(self)
+            if self.target_hitted() and not self.wait:
+                self.wait = 30
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+        self.rapidity = 5
+        self.flying = False
+        self.charging = False
+        while self.degeneration:
+            if self.env.walking_dead:
+                self.action()
+            time.sleep(0.01)
+            while self.env.pause:
+                time.sleep(0.01)
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if not self.lives:
+            if self.env.walking_dead:
+                img = self.img_possessed[self.direction]
+            else:
+                img = self.img_dead[self.direction]
+        elif self.flying:
+            img = self.img_shadow[self.direction]
+        elif self.injured:
+            img = self.img_injured[self.direction]
+        else:
+            img = self.img[self.direction]
+        tools.display(env, img, self.x, self.y, fitting)
+        if env.debug and self.lives:
+            pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        if self.ultimatum and not self.wait:
+            self.ultimatum -= 1
+            if not self.ultimatum and self.flying:
+                self.charge()
+            elif not self.ultimatum and self.charging:
+                self.fly()
+        elif self.wait:
+            self.wait -= 1
+            if self.flying and not self.wait:
+                self.charge()
 
 class   Undead(Zombie):
     lives = 0
@@ -567,9 +686,13 @@ class   JackLantern(Zombie):
         self.hitbox = set_hitbox_monster(env, self)
         self.target = env.players[0]
 
-        self.next_shoot = randint(120, 300)
+        self.next_shoot = randint(170, 400)
+        self.walking_dead = False
 
     def update(self):
+        if self.env.walking_dead and not self.walking_dead:
+            self.walking_dead = True
+            self.next_shoot = randint(65, 135)
         if self.injured:
             self.injured -= 1
         if self.next_shoot:
@@ -584,6 +707,9 @@ class   JackLantern(Zombie):
             self.next_shoot = randint(120, 300)
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+            if self.walking_dead and not self.env.walking_dead:
+                self.walking_dead = False
+
 
 class   Cyclops(Zombie):
     lives = 7
