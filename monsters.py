@@ -6,6 +6,10 @@ import time
 import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
+#TODO
+#Change Hitbox harpy && change dimensions (for tools) otherwise they dash and they are decaled
+#Weapons: Blue when full
+
 #Monster idea
 #dark_knight (??) -- garou (24 lives) -- spider -- octopus -- rat king -- dog (dammage zone) -- bird -- millipede -- virus -- shadow
 
@@ -68,14 +72,16 @@ class Zombie:
                 return self.value
         return 0
     
-    def sniff_fresh_flesh(self):
+    def sniff_fresh_flesh(self, half=None):
+        if half is None:
+            half = self.half
         d_objective = -1
         target = None
         for player in self.env.players:
             if not player.lives:
                 continue
-            x = (player.x + player.half) - (self.x + self.half)
-            y = (player.y + player.half) - (self.y + self.half)
+            x = (player.x + player.half) - (self.x + half)
+            y = (player.y + player.half) - (self.y + half)
             distance = int((x ** 2 + y ** 2) ** 0.5)
             if target is None or d_objective > distance:
                 if not x and not y:
@@ -163,17 +169,19 @@ class Harpy(Zombie):
     lives = 3
     name = "harpy"
     value = 3
-    wait = 0
-    rapidity_inflight = 6
-    rapidity_incharge = 13
-    ultimatum_inflight = 240
-    ultimatum_incharge = 30
+    gradient = 0
+    gradient_max = 27
+    rapidity_onflight = 6
+    rapidity_onground = 5
+    ultimatum_onflight = 240
+    ultimatum_onground = 120
 
     def build_class(env):
         Harpy.img = tools.set_imgs(env.img_src + 'monsters/', Harpy.name, Harpy.dimensions)
         Harpy.img_injured = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_injured', Harpy.dimensions)
         Harpy.img_dead = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_dead', Harpy.dimensions)
-        Harpy.img_shadow = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', Harpy.dimensions)
+        Harpy.img_shadow_scale = list(tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', int(Harpy.dimensions * (0.6 + nb * 0.05))) for nb in range(0, 8))
+        #Harpy.img_shadow = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', Harpy.dimensions)
         Harpy.img_possessed = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_possessed', Harpy.dimensions)
         return Harpy
 
@@ -188,22 +196,21 @@ class Harpy(Zombie):
     def fly(self):
         if not self.lives:
             return
-        self.rapidity = self.rapidity_inflight
         self.flying = True
-        self.charging = False
-        self.ultimatum = self.ultimatum_inflight
+        self.rapidity = self.rapidity_onflight
+        self.ultimatum = self.ultimatum_onflight
+        self.gradient = self.gradient_max
 
-    def charge(self):
+    def on_ground(self):
         if not self.lives:
             return
         self.flying = False
-        self.charging = True
-        self.wait = 55
-        self.rapidity = self.rapidity_incharge
-        self.ultimatum = self.ultimatum_incharge
+        self.rapidity = self.rapidity_onground
+        self.ultimatum = self.ultimatum_onground
+        self.gradient = self.gradient_max
 
     def affected(self, bullet):
-        if self.flying:
+        if self.flying or not self.ultimatum:
             return False
         if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
             return True
@@ -212,7 +219,7 @@ class Harpy(Zombie):
     def target_hitted(self):
         for player in self.env.players:
             if player.affected(self):
-                if self.flying:
+                if self.flying or not self.ultimatum:
                     return True
                 else:
                     player.hitted()
@@ -220,23 +227,18 @@ class Harpy(Zombie):
 
     def move(self):
         while self.lives:
-            if not self.charging or self.wait:
-                direction, _ = self.sniff_fresh_flesh()
-            else:
-                direction = self.direction
+            direction, _ = self.sniff_fresh_flesh()
             if direction is not None:
                 self.direction = direction
-                if not self.wait:
-                    tools.move(self, direction, self.rapidity + self.env.furious)
-                    self.hitbox.update_coords(self)
-            if self.target_hitted() and not self.wait:
-                self.wait = 30
+                tools.move(self, direction, 1 if not self.ultimatum else self.rapidity)
+                self.hitbox.update_coords(self)
+            if self.target_hitted():
+                self.ultimatum = 0
             time.sleep(0.01)
             while self.env.pause:
                 time.sleep(0.01)
         self.rapidity = 5
         self.flying = False
-        self.charging = False
         while self.degeneration:
             if self.env.walking_dead:
                 self.action()
@@ -251,8 +253,10 @@ class Harpy(Zombie):
                 img = self.img_possessed[self.direction]
             else:
                 img = self.img_dead[self.direction]
+        elif not self.ultimatum:
+            img = self.img_shadow_scale[(self.gradient_max - self.gradient) // 4 + 1 if self.flying else (self.gradient) // 4 + 1][self.direction]
         elif self.flying:
-            img = self.img_shadow[self.direction]
+            img = self.img_shadow_scale[0][self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
@@ -267,16 +271,14 @@ class Harpy(Zombie):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if self.ultimatum and not self.wait:
+        if self.ultimatum:
             self.ultimatum -= 1
-            if not self.ultimatum and self.flying:
-                self.charge()
-            elif not self.ultimatum and self.charging:
+        else:
+            self.gradient -= 1
+            if self.flying and not self.gradient:
+                self.on_ground()
+            elif not self.gradient:
                 self.fly()
-        elif self.wait:
-            self.wait -= 1
-            if self.flying and not self.wait:
-                self.charge()
 
 class   Undead(Zombie):
     lives = 0
@@ -399,12 +401,6 @@ class Ghost(Zombie):
         self.hitbox = set_hitbox_monster(env, self, 0.26)
         self.alive = True
         self.target = self.env.players[0]
-
-    def target_hitted(self):
-        for player in self.env.players:
-            if player.lives and player.affected(self):
-                player.hitted()
-                self.alive = False
 
     def move(self):
         while self.ultimatum:
@@ -686,7 +682,7 @@ class   JackLantern(Zombie):
         self.hitbox = set_hitbox_monster(env, self)
         self.target = env.players[0]
 
-        self.next_shoot = randint(170, 400)
+        self.next_shoot = randint(260, 620)
         self.walking_dead = False
 
     def update(self):

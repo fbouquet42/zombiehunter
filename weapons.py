@@ -18,9 +18,10 @@ class   SubmachineGun(Weapon):
         super().__init__(player.dimensions)
         self.delay = 6
         self.heatup = self.delay * 7.5
-        self.heatmax = self.heatup * 24 - self.delay * 23
-        self.degree_1 = self.heatup * 6 - self.delay * 6
-        self.degree_2 = self.heatup * 15 - self.delay * 15
+        self.heatdown = 0.
+        self.heatmax = self.heatup * 24
+        self.degree_1 = self.heatup * 14
+        self.degree_2 = self.heatup * 21
         self.cooldown = 0
         self.overheating = False
         self.temperature = 0
@@ -44,12 +45,11 @@ class   SubmachineGun(Weapon):
         tools.display(env, img, x, y, fitting)
 
     def pressed(self, env, player):
-        if self.cooldown:
+        if self.cooldown or self.overheating:
             return
         self.temperature += self.heatup
         if self.temperature > self.heatmax:
-            self.temperature += int(self.heatup * 1.5)
-            self.cooldown += self.temperature + 4
+            self.temperature += (self.heatmax * 2)
             self.overheating = True
         else:
             self.cooldown += self.delay
@@ -58,10 +58,16 @@ class   SubmachineGun(Weapon):
         t.daemon = True
         env.bullets.append(bullet)
         t.start()
+        self.heatdown = 0.
 
     def update(self):
         if self.temperature:
-            self.temperature -= 1
+            self.temperature -= int(self.heatdown)
+            self.temperature = 0 if self.temperature < 0 else self.temperature
+            if self.heatdown >= 7.:
+                self.heatdown = 7.
+            else:
+                self.heatdown += 0.13
         else:
             self.overheating = False
         if self.cooldown:

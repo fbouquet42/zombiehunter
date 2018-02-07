@@ -258,7 +258,6 @@ def wave_5(env):
     #harpy_spawn = 500
     harpy_spawn = 330
     harpy = randint(harpy_spawn, harpy_spawn * 2)
-    harpy = 0
     while harpys_wave < 11:
         if not zombie:
             zombie = randint(zombie_spawn, zombie_spawn * 2)

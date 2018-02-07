@@ -36,7 +36,7 @@ class Env:
     def start(self):
         update_tick = Thread(target=events.update_tick, args=(self, ))
         update_tick.daemon = True
-        spawner = Thread(target=events.wave_1, args=(self, ))
+        spawner = Thread(target=events.wave_5, args=(self, ))
         spawner.daemon = True
         update_tick.start()
         spawner.start()

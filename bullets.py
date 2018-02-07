@@ -132,7 +132,7 @@ class   HellStar:
                 time.sleep(0.01)
 
 class   DoubleBullet():
-    rapidity = 23
+    rapidity = 22
 
     def build_class(env):
         DoubleBullet.dimensions = env.player_dimensions
