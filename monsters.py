@@ -72,16 +72,14 @@ class Zombie:
                 return self.value
         return 0
     
-    def sniff_fresh_flesh(self, half=None):
-        if half is None:
-            half = self.half
+    def sniff_fresh_flesh(self):
         d_objective = -1
         target = None
         for player in self.env.players:
             if not player.lives:
                 continue
-            x = (player.x + player.half) - (self.x + half)
-            y = (player.y + player.half) - (self.y + half)
+            x = (player.x + player.half) - (self.x + self.half)
+            y = (player.y + player.half) - (self.y + self.half)
             distance = int((x ** 2 + y ** 2) ** 0.5)
             if target is None or d_objective > distance:
                 if not x and not y:
@@ -170,7 +168,7 @@ class Harpy(Zombie):
     name = "harpy"
     value = 3
     gradient = 0
-    gradient_max = 27
+    gradient_max = 30
     rapidity_onflight = 6
     rapidity_onground = 5
     ultimatum_onflight = 240
@@ -180,7 +178,7 @@ class Harpy(Zombie):
         Harpy.img = tools.set_imgs(env.img_src + 'monsters/', Harpy.name, Harpy.dimensions)
         Harpy.img_injured = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_injured', Harpy.dimensions)
         Harpy.img_dead = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_dead', Harpy.dimensions)
-        Harpy.img_shadow_scale = list(tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', int(Harpy.dimensions * (0.6 + nb * 0.05))) for nb in range(0, 8))
+        Harpy.img_shadow_scale = list(tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', int(Harpy.dimensions * (0.6 + nb * 0.05))) for nb in range(0, 9))
         #Harpy.img_shadow = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_shadow', Harpy.dimensions)
         Harpy.img_possessed = tools.set_imgs(env.img_src + 'monsters/', Harpy.name + '_possessed', Harpy.dimensions)
         return Harpy
@@ -189,13 +187,24 @@ class Harpy(Zombie):
         self.x = x + env.width + 200 if x > -100 else x
         self.y = y + env.height + 200 if y > -100 else y
 
-        self.fly()
-        self.hitbox = set_hitbox_monster(env, self, 0.22)
+        self.shadow = 0
+        self.list_hitbox = list(set_hitbox_monster(env, self, (0.6 + nb * 0.05) * 0.22) for nb in range(0, 9))
+        self.hitbox = self.list_hitbox[self.shadow]
+        self.list_dimensions = list((0.6 + nb * 0.05) * self.dimensions for nb in range(0, 9))
+        self.dimensions = self.list_dimensions[self.shadow]
         self.target = env.players[0]
+        self.fly()
+
+    def gradient_fly(self, shadow):
+        self.list_hitbox[shadow].update_coords(self)
+        self.shadow = shadow
+        self.hitbox = self.list_hitbox[self.shadow]
+        self.dimensions = self.list_dimensions[self.shadow]
 
     def fly(self):
         if not self.lives:
             return
+        self.gradient_fly(0)
         self.flying = True
         self.rapidity = self.rapidity_onflight
         self.ultimatum = self.ultimatum_onflight
@@ -204,6 +213,7 @@ class Harpy(Zombie):
     def on_ground(self):
         if not self.lives:
             return
+        self.gradient_fly(8)
         self.flying = False
         self.rapidity = self.rapidity_onground
         self.ultimatum = self.ultimatum_onground
@@ -254,7 +264,7 @@ class Harpy(Zombie):
             else:
                 img = self.img_dead[self.direction]
         elif not self.ultimatum:
-            img = self.img_shadow_scale[(self.gradient_max - self.gradient) // 4 + 1 if self.flying else (self.gradient) // 4 + 1][self.direction]
+            img = self.img_shadow_scale[self.shadow][self.direction]
         elif self.flying:
             img = self.img_shadow_scale[0][self.direction]
         elif self.injured:
@@ -269,9 +279,10 @@ class Harpy(Zombie):
     def update(self):
         if self.injured:
             self.injured -= 1
-        if not self.lives and self.degeneration:
-            self.degeneration -= 1
-        if self.ultimatum:
+        if not self.lives:
+            if self.degeneration:
+                self.degeneration -= 1
+        elif self.ultimatum:
             self.ultimatum -= 1
         else:
             self.gradient -= 1
@@ -279,6 +290,10 @@ class Harpy(Zombie):
                 self.on_ground()
             elif not self.gradient:
                 self.fly()
+            elif self.flying:
+                self.gradient_fly((self.gradient_max - self.gradient) // 4 + 1)
+            else:
+                self.gradient_fly((self.gradient) // 4 + 1)
 
 class   Undead(Zombie):
     lives = 0
@@ -303,11 +318,11 @@ class   Undead(Zombie):
     def move(self):
         while self.env.walking_dead:
             self.action()
+            self.player.x = self.x
+            self.player.y = self.y
             time.sleep(0.01)
             while self.env.pause:
                 time.sleep(0.01)
-        self.player.x = self.x
-        self.player.y = self.y
         self.player.direction = self.direction
         self.player.possessed = False
         self.degeneration = 0

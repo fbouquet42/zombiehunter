@@ -20,7 +20,7 @@ class   SubmachineGun(Weapon):
         self.heatup = self.delay * 7.5
         self.heatdown = 0.
         self.heatmax = self.heatup * 24
-        self.degree_1 = self.heatup * 14
+        self.degree_1 = self.heatup * 15
         self.degree_2 = self.heatup * 21
         self.cooldown = 0
         self.overheating = False
@@ -30,11 +30,14 @@ class   SubmachineGun(Weapon):
         self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_1", self.dimensions))
         self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_2", self.dimensions))
         self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_3", self.dimensions))
+        self.img.append(tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_full", self.dimensions))
         self.bullet = bullets.Bullet.build_class(env, player)
 
     def display(self, env, direction, x, y, fitting):
         if not self.overheating:
-            if self.temperature < self.degree_1:
+            if not self.temperature:
+                img = self.img[4][direction]
+            elif self.temperature < self.degree_1:
                 img = self.img[3][direction]
             elif self.temperature < self.degree_2:
                 img = self.img[2][direction]
@@ -67,7 +70,7 @@ class   SubmachineGun(Weapon):
             if self.heatdown >= 7.:
                 self.heatdown = 7.
             else:
-                self.heatdown += 0.13
+                self.heatdown += 0.11
         else:
             self.overheating = False
         if self.cooldown:

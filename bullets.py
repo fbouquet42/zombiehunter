@@ -38,7 +38,7 @@ class   Bullet:
         self.direction = direction
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         self.hitbox = set_hitbox_bullet(self.env, self)
-        tools.move(self, self.direction)
+        tools.move(self, self.direction, 22)
 
     def display(self, env):
         tools.display(env, self.img[self.direction], self.x, self.y, self.fitting)
@@ -132,7 +132,7 @@ class   HellStar:
                 time.sleep(0.01)
 
 class   DoubleBullet():
-    rapidity = 22
+    rapidity = 23
 
     def build_class(env):
         DoubleBullet.dimensions = env.player_dimensions
