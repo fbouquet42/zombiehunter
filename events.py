@@ -247,7 +247,7 @@ def wave_5(env):
 
     harpys_wave = 0
     zombie_spawn = 130
-    #zombie : 130 (1-4), harpy: 485 cyclop: 525 jack_lantern: 575 necromancer: 1600
+    #zombie : 130 (1-3), cyclop: 515 jack_lantern: 575 harpy: 780 (1-2) necromancer: 1600
     #and then we can add a bit each wave
     zombie = 0
     cyclops_spawn = 485

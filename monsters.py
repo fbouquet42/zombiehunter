@@ -7,7 +7,7 @@ import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 #Monster idea
-#dark_knight (??) -- garou (24 lives) -- spider -- octopus -- rat king -- dog (dammage zone) -- bird -- millipede -- virus -- shadow
+#dark_knight (??) -- garou (24 lives) 1200 (2400) madness -- spider -- octopus -- rat king -- dog (dammage zone) -- bird -- millipede -- virus -- shadow
 
 class HitboxMonster:
     def update_coords(self, monster):
