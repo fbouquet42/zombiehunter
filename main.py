@@ -9,7 +9,7 @@ import menu
 
 #initialization
 pygame.init()
-env = Env(width=1366, height=768, img_src='img/', player_dimensions=180, debug=False)
+env = Env(width=1366, height=768, img_src='img/', player_dimensions=180, debug=True)
 
 env.GameManager = pygame.display.set_mode((env.width,env.height))
 pygame.display.set_caption('Zombie Hunters')

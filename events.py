@@ -90,7 +90,7 @@ def wave_1(env):
     zombies_wave = 0
     zombie_spawn = 45
     zombie = 0
-    cyclops_spawn = 650
+    cyclops_spawn = 490
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
     while zombies_wave < 41:
         if not zombie:
@@ -124,8 +124,7 @@ def wave_2(env):
     zombie = 0
     cyclops_spawn = 595
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    #jack_lantern_spawn = 420
-    jack_lantern_spawn = 390
+    jack_lantern_spawn = 360
     jacks_wave = 0
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
     while jacks_wave < 9:
@@ -164,9 +163,9 @@ def wave_3(env):
     boss = env.spawn_boss()
     zombie_spawn = 120
     zombie = 0
-    cyclops_spawn = 870
+    cyclops_spawn = 740
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 740
+    jack_lantern_spawn = 870
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
     while boss.lives:
         if not zombie:
@@ -204,9 +203,9 @@ def wave_4(env):
     necromancers_wave = 0
     zombie_spawn = 130
     zombie = 0
-    cyclops_spawn = 605
+    cyclops_spawn = 560
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 430
+    jack_lantern_spawn = 545
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
     necromancer_spawn = 790
     necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
@@ -248,14 +247,15 @@ def wave_5(env):
 
     harpys_wave = 0
     zombie_spawn = 130
+    #zombie : 130 (1-4), harpy: 485 cyclop: 525 jack_lantern: 575 necromancer: 1600
+    #and then we can add a bit each wave
     zombie = 0
-    cyclops_spawn = 565
+    cyclops_spawn = 485
     cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
-    jack_lantern_spawn = 445
+    jack_lantern_spawn = 575
     jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
-    necromancer_spawn = 880
+    necromancer_spawn = 1600
     necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
-    #harpy_spawn = 500
     harpy_spawn = 330
     harpy = randint(harpy_spawn, harpy_spawn * 2)
     while harpys_wave < 11:

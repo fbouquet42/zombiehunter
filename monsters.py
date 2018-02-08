@@ -6,10 +6,6 @@ import time
 import numpy as np
 randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
-#TODO
-#Change Hitbox harpy && change dimensions (for tools) otherwise they dash and they are decaled
-#Weapons: Blue when full
-
 #Monster idea
 #dark_knight (??) -- garou (24 lives) -- spider -- octopus -- rat king -- dog (dammage zone) -- bird -- millipede -- virus -- shadow
 
@@ -271,7 +267,7 @@ class Harpy(Zombie):
             img = self.img_injured[self.direction]
         else:
             img = self.img[self.direction]
-        tools.display(env, img, self.x, self.y, fitting)
+        tools.display(env, img, self.x, self.y, fitting - (self.list_dimensions[8] - self.dimensions) // 2)
         if env.debug and self.lives:
             pygame.draw.line(env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
@@ -401,8 +397,6 @@ class   Necromancer(Zombie):
     def update(self):
         if self.injured:
             self.injured -= 1
-        if not self.lives and self.degeneration:
-            self.degeneration -= 1
 
 class Ghost(Zombie):
     name = "ghost"
