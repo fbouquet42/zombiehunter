@@ -1,0 +1,289 @@
+import time
+import pygame
+import tools
+import monsters
+from threading import Thread
+import numpy as np
+randint = lambda mini, maxi: np.random.randint(mini, maxi)
+
+def keys_manager(env):
+    players_alive = 0
+    for player in env.players:
+        if not player.lives:
+            if env.walking_dead and not player.possessed:
+                player.possessed = True
+                possessed = monsters.Undead(env, player)
+                t = Thread(target=possessed.move, args=())
+                t.daemon = True
+                env.monsters.append(possessed)
+                t.start()
+            continue
+        direction = tools.set_direction(env.pressed, player)
+        if direction >= 0:
+            player.move(direction)
+        if env.pressed[player.shoot]:
+            player.weapon.pressed(env, player)
+        else:
+            player.weapon.not_pressed(env=env, player=player)
+        players_alive += 1
+    env.players_alive = players_alive
+
+def display(env):
+    keys_manager(env)
+    for player in env.players:
+        player.display(env)
+    i = 0
+    while i != len(env.monsters):
+        if not env.monsters[i].degeneration:
+            del env.monsters[i]
+        else:
+            env.monsters[i].display(env)
+            i += 1
+    i = 0
+    while i != len(env.bullets):
+        if not env.bullets[i].alive:
+            del env.bullets[i]
+        else:
+            env.bullets[i].display(env)
+            i += 1
+    for title in env.titles:
+        tools.display(env, title, env.title_position[0], env.title_position[1])
+
+def update_tick(env):
+    while True:
+        for player in env.players:
+            player.update()
+        for monster in env.monsters:
+            monster.update()
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
+
+
+def wave_debug(env):
+    wave_5(env)
+    title = pygame.image.load(env.img_src + "wave_1.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
+
+    monsters = ['jack_lantern', 'zombie', 'cyclops']
+    while True:
+        for monster in monsters:
+            env.spawn(monster)
+        while len(env.monsters):
+            time.sleep(0.1)
+        while env.pause:
+            time.sleep(0.01)
+
+def wave_1(env):
+    if env.debug:
+        wave_debug(env)
+        return
+    title = pygame.image.load(env.img_src + "wave_1.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
+
+    zombies_wave = 0
+    zombie_spawn = 45
+    zombie = 0
+    cyclops_spawn = 490
+    cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+    while zombies_wave < 41:
+        if not zombie:
+            zombie = randint(zombie_spawn, zombie_spawn * 2)
+            env.spawn('zombie')
+            zombies_wave += 1
+        if not cyclops:
+            cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+            env.spawn('cyclops')
+        zombie -= 1
+        cyclops -= 1
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
+    while len(env.monsters):
+        time.sleep(0.1)
+    wave_2(env)
+
+def wave_2(env):
+
+    for player in env.players:
+        player.lives = 4
+
+    title = pygame.image.load(env.img_src + "wave_2.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
+
+    zombie_spawn = 55
+    zombie = 0
+    cyclops_spawn = 595
+    cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+    jack_lantern_spawn = 360
+    jacks_wave = 0
+    jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+    while jacks_wave < 9:
+        if not zombie:
+            zombie = randint(zombie_spawn, zombie_spawn * 2)
+            env.spawn('zombie', randint(1, 3))
+        if not cyclops:
+            cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+            env.spawn('cyclops')
+        if not jack_lantern:
+            jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+            env.spawn('jack_lantern')
+            jacks_wave += 1
+        zombie -= 1
+        cyclops -= 1
+        jack_lantern -= 1
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
+    while len(env.monsters):
+        time.sleep(0.1)
+    wave_3(env)
+
+def wave_3(env):
+
+    env.background = env.background_hell
+    for player in env.players:
+        player.lives = 4
+
+    title = pygame.image.load(env.img_src + "wave_3.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
+
+    boss = env.spawn_boss()
+    zombie_spawn = 120
+    zombie = 0
+    cyclops_spawn = 740
+    cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+    jack_lantern_spawn = 870
+    jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+    while boss.lives:
+        if not zombie:
+            zombie = randint(zombie_spawn, zombie_spawn * 2)
+            env.spawn('zombie')
+        if not cyclops:
+            cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+            env.spawn('cyclops')
+        if not jack_lantern:
+            jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+            env.spawn('jack_lantern')
+        zombie -= 1
+        cyclops -= 1
+        jack_lantern -= 1
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
+
+    env.background = env.background_basic
+    while len(env.monsters):
+        time.sleep(0.1)
+    wave_4(env)
+
+def wave_4(env):
+
+    for player in env.players:
+        player.lives = 4
+
+    title = pygame.image.load(env.img_src + "wave_4.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
+
+    necromancers_wave = 0
+    zombie_spawn = 130
+    zombie = 0
+    cyclops_spawn = 560
+    cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+    jack_lantern_spawn = 545
+    jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+    necromancer_spawn = 790
+    necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
+    while necromancers_wave < 6:
+        if not zombie:
+            zombie = randint(zombie_spawn, zombie_spawn * 2)
+            env.spawn('zombie', randint(1, 4))
+        if not cyclops:
+            cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+            env.spawn('cyclops')
+        if not jack_lantern:
+            jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+            env.spawn('jack_lantern')
+        if not necromancer:
+            necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
+            env.spawn('necromancer')
+            necromancers_wave += 1
+        zombie -= 1
+        cyclops -= 1
+        jack_lantern -= 1
+        necromancer -= 1
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
+    while len(env.monsters):
+        time.sleep(0.1)
+    wave_5(env)
+
+def wave_5(env):
+
+    for player in env.players:
+        player.lives = 4
+
+    title = pygame.image.load(env.img_src + "wave_5.png")
+    title = pygame.transform.scale(title, (env.player_dimensions * 4, env.player_dimensions * 4))
+    env.titles.append(title)
+    time.sleep(5)
+    env.titles.remove(title)
+
+    harpys_wave = 0
+    zombie_spawn = 130
+    #zombie : 130 (1-3), cyclop: 515 jack_lantern: 575 harpy: 720 (1-3) necromancer: 1600
+    #and then we can add a bit each wave
+    zombie = 0
+    cyclops_spawn = 485
+    cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+    jack_lantern_spawn = 575
+    jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+    necromancer_spawn = 1600
+    necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
+    harpy_spawn = 330
+    harpy = randint(harpy_spawn, harpy_spawn * 2)
+    while harpys_wave < 21:
+        if not zombie:
+            zombie = randint(zombie_spawn, zombie_spawn * 2)
+            env.spawn('zombie', randint(1, 4))
+        if not cyclops:
+            cyclops = randint(cyclops_spawn, cyclops_spawn * 2)
+            env.spawn('cyclops')
+        if not jack_lantern:
+            jack_lantern = randint(jack_lantern_spawn, jack_lantern_spawn * 2)
+            env.spawn('jack_lantern')
+        if not necromancer:
+            necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
+            env.spawn('necromancer')
+        if not harpy:
+            harpy = randint(harpy_spawn, harpy_spawn * 2)
+            env.spawn('harpy', randint(1, 3))
+            harpys_wave += 1
+        zombie -= 1
+        cyclops -= 1
+        jack_lantern -= 1
+        necromancer -= 1
+        harpy -= 1
+        time.sleep(0.01)
+        while env.pause:
+            time.sleep(0.01)
+    while len(env.monsters):
+        time.sleep(0.1)
+    for player in env.players:
+        player.lives = 0

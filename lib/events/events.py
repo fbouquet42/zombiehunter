@@ -247,7 +247,7 @@ def wave_5(env):
 
     harpys_wave = 0
     zombie_spawn = 130
-    #zombie : 130 (1-3), cyclop: 515 jack_lantern: 575 harpy: 780 (1-2) necromancer: 1600
+    #zombie : 130 (1-3), cyclop: 515 jack_lantern: 575 harpy: 720 (1-3) necromancer: 1600
     #and then we can add a bit each wave
     zombie = 0
     cyclops_spawn = 485
@@ -258,7 +258,7 @@ def wave_5(env):
     necromancer = randint(necromancer_spawn, necromancer_spawn * 2)
     harpy_spawn = 330
     harpy = randint(harpy_spawn, harpy_spawn * 2)
-    while harpys_wave < 11:
+    while harpys_wave < 21:
         if not zombie:
             zombie = randint(zombie_spawn, zombie_spawn * 2)
             env.spawn('zombie', randint(1, 4))
@@ -273,7 +273,8 @@ def wave_5(env):
             env.spawn('necromancer')
         if not harpy:
             harpy = randint(harpy_spawn, harpy_spawn * 2)
-            env.spawn('harpy')
+            env.spawn('harpy', randint(1, 3))
+            harpys_wave += 1
         zombie -= 1
         cyclops -= 1
         jack_lantern -= 1

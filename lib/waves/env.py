@@ -1,21 +1,24 @@
-import multiprocessing as mp
 from threading import Thread
 import events
 import monsters
 import pygame
-import numpy as np
-randint = lambda mini, maxi: np.random.randint(mini, maxi)
 
 class Env:
-    def __init__(self, width, height, img_src, player_dimensions, debug=False):
+    def __init__(self, width, height, img_folder, player_dimensions, debug=False):
         self.debug = debug
         self.width = width
         self.height = height
         self.player_dimensions = player_dimensions
         self.pause = False
-        self.img_src = img_src
+        self.quit = False
+        self.img_folder = img_folder
         self.jerk = False
         self.walking_dead = 0
+
+        import tools
+        self.tools = tools
+
+
         self.furious = 0
         self.fire_star = 0
         self.players =[]
