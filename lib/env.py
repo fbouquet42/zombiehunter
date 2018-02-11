@@ -2,26 +2,27 @@
 from threading import Thread
 
 #Local Module
-import .tools
-import .bullets
-import .weapons
-import .monsters
-import .menus
-import .events
-import .waves
+from . import tools
+from . import bullets
+from . import weapons
+from . import monsters
+from . import players
+from . import menus
+from . import events
+from . import waves
 
 class Env:
     def set_imgs(self):
         self.background_basic = self.mod.tools.load_img(self, 'background_basic', self.width, self.height)
         self.background_hell = self.mod.tools.load_img(self, 'background_hell', self.width, self.height)
-        env.background = env.background_basic
+        self.background = self.background_basic
 
     def __init__(self, width, height, pwd, player_dimensions):
         ###Debug
         self.debug = False
         self.debug_wave = 1
 
-        env.closed = False
+        self.closed = False
 
         ###Paths
         self.pwd = pwd
@@ -41,6 +42,7 @@ class Env:
             bullets = bullets
             weapons = weapons
             monsters = monsters
+            players = players
             menus = menus
             events = events
             waves = waves
@@ -52,18 +54,21 @@ class Env:
         #Explosion
         self.jerk = False
         #Daemon
-        self.furious = 0
+        self.furious = False
         #Necromancer
         self.walking_dead = 0
 
         ###Data
-        self.players =[]
+        self.players = []
         self.monsters = []
         self.bullets = []
         self.titles = []
 
         #Set Images
         self.set_imgs()
+
+        #Build DefaultWeapon
+        self.mod.weapons.DefaultWeapon.build_class(self)
 
     def start(self):
         update_tick = Thread(target=self.mod.events.update_tick, args=(self, ))
@@ -77,6 +82,9 @@ class Env:
         self.monsters.clear()
         self.players.clear()
         self.bullets.clear()
+        self.jerk = False
+        self.furious = False
+        self.walking_dead = 0
 
     def usage(self):
         print("usage: python3 main.py [-debug [wave_nb]]")

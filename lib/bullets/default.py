@@ -1,3 +1,4 @@
+import time
 
 class   DefaultBullet:
     attack=1
@@ -41,7 +42,7 @@ class   DefaultBullet:
     def _dead(self):
         self.alive = False
 
-    def _quit():
+    def _quit(self):
         time.sleep(self.tools.clock(self))
         while self.env.pause:
             if self.env.quit:

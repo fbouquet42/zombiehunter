@@ -1,3 +1,5 @@
+import time
+
 #Current Module
 from . import set_hitbox_bullet
 from . import DefaultBullet
@@ -10,7 +12,7 @@ class   Explosion(DefaultBullet):
         return Explosion
 
     def __init__(self, x, y, direction):
-        super.__init__(x, y, direction)
+        super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self, 0.88)
 
     def _target_hitted(self):
@@ -22,6 +24,7 @@ class   Explosion(DefaultBullet):
                 self.player.score += monster.hitted()
 
     def explose(self):
+        self.time = time.time()
         while True:
             self.lifetime -= 1
             if not self.lifetime % 5:

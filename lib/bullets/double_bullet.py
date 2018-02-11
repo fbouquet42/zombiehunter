@@ -6,7 +6,7 @@ class   DoubleBullet(DefaultBullet):
     rapidity = 23
 
     def build_class(env):
-        DoubleBullet.img = env.mod.tools.set_imgs(env.img_src + "bullets/", "double_bullet", env.player_dimensions)
+        DoubleBullet.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "double_bullet", env.player_dimensions)
         return DoubleBullet
 
     def __init__(self, x, y, direction, monster):

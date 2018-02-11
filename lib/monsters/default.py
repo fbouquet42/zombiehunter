@@ -1,6 +1,7 @@
 
 #Python Lib
 import pygame
+import time
 
 #Current Module
 from . import set_hitbox_monster
@@ -23,10 +24,10 @@ class DefaultMonster:
         DefaultMonster.tools = env.mod.tools
         return DefaultMonster
 
-    def _father_init(x, y):
+    def _father_init(self, x, y):
         self.x = x + self.env.width + 200 if x > -100 else x
         self.y = y + self.env.height + 200 if y > -100 else y
-        self.target = env.players[0]
+        self.target = self.env.players[0]
 
     def affected(self, bullet):
         if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
@@ -47,10 +48,12 @@ class DefaultMonster:
     def _find_target(self):
         d_objective = -1
         target = None
+        x_objective = 0
+        y_objective = 0
         for player in self.env.players:
             if not player.lives:
                 continue
-            x, y, distance = self.env.process_distance(player, self)
+            x, y, distance = self.tools.process_distance(player, self)
             if target is None or d_objective > distance:
                 if not x and not y:
                     return None, None
@@ -124,13 +127,13 @@ class DefaultMonster:
         while self.degeneration:
             if self.env.walking_dead:
                 self._action()
-                if self._quit():
-                    return
+            if self._quit():
+                return
 
 
     def _debug(self):
         if self.env.debug and (self.lives or self.env.walking_dead) and self.hunt:
-            pygame.draw.line(self.env.GameManager, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            pygame.draw.line(self.env.GameWindow, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             self.tools.display(self.env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
 

@@ -10,13 +10,14 @@ def welcome(env):
     welcome_title = env.mod.tools.load_img(env, 'menus/' + 'welcome_menu', env.height, env.height)
     env.title_position = (env.width - env.height) // 2
     selection = env.mod.tools.load_img(env, 'menus/' + 'selection', env.height, env.height)
-    position = [(env.title_position,0), (int(env.title_position * 1.25), 0), (int(env.title_position * 1.5), 0)]
-    up = K_w
-    down = K_s
-    approve = K_r
+    position = [(env.title_position,0), (env.title_position, int(env.height * 0.15)), (env.title_position, int(env.height * 0.3))]
+    up = pygame.K_w
+    down = pygame.K_s
+    approve = pygame.K_r
 
     tick = _Tick()
     action = 0
+    time.sleep(1)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -30,15 +31,15 @@ def welcome(env):
         elif action and pressed[up]:
             action -= 1
 
-        env.GameManager.blit(env.background, (0, 0))
-        env.GameManager.blit(welcome_title, (title_position, 0))
-        env.GameManager.blit(selection, position[action])
+        env.GameWindow.blit(env.background, (0, 0))
+        env.GameWindow.blit(welcome_title, (env.title_position, 0))
+        env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         time.sleep(env.mod.tools.clock(tick, wait=0.25))
 
     if not action:
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_r), x=int(0.45* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='jack'))
-    if action == 1:
+    elif action == 1:
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_r), x=int(0.2* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='jack'))
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT, pygame.K_SPACE), x=int(0.7* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='baltazar'))
     else:

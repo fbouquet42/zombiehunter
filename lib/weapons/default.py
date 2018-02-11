@@ -2,6 +2,9 @@ from threading import Thread
 
 class   DefaultWeapon:
 
+    def build_class(env):
+        env.mod.bullets.DefaultBullet.build_class(env)
+
     def update(self, **kwargs):
         pass
 

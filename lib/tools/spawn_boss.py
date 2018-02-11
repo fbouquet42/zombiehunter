@@ -7,6 +7,6 @@ def spawn_boss(env, boss):
     obj = boss(env, x, y)
     t = Thread(target=obj.move, args=())
     t.daemon = True
-    self.monsters.append(obj)
+    env.monsters.append(obj)
     t.start()
     return obj

@@ -1,3 +1,4 @@
+import time
 
 class   _Tick:
     def __init__(self):
@@ -10,7 +11,7 @@ def update_tick(env):
             player.update()
         for monster in env.monsters:
             monster.update()
-        time.sleep(env.tools.clock(tick))
+        time.sleep(env.mod.tools.clock(tick))
         while env.pause:
-            time.sleep(env.tools.clock(tick))
+            time.sleep(env.mod.tools.clock(tick))
 

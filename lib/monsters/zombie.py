@@ -12,7 +12,6 @@ class Zombie(DefaultMonster):
     name = "zombie"
     value = 1
 
-
     def build_class():
         Zombie.img = Zombie.tools.set_imgs(Zombie.env.img_folder + 'monsters/', Zombie.name, Zombie.dimensions)
         Zombie.img_injured = Zombie.tools.set_imgs(Zombie.env.img_folder + 'monsters/', Zombie.name + '_injured', Zombie.dimensions)
@@ -29,7 +28,7 @@ class Zombie(DefaultMonster):
         self.rapidity = 4 if self.rapidity > 4 else self.rapidity
 
 
-    def display(self):
+    def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
             if self.env.walking_dead:

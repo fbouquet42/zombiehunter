@@ -1,5 +1,6 @@
+from . import DefaultWeapon
 
-class   Crossbow(Weapon):
+class   Crossbow(DefaultWeapon):
     def __init__(self, env, player):
         self.tools = env.mod.tools
         self.dimensions = player.dimensions
@@ -8,12 +9,12 @@ class   Crossbow(Weapon):
         self.loaded = 15
         self.overloaded = 104
 
-        self.img_unloaded = self.tools.set_imgs(env.img_src + 'weapons/', "crossbow_unloaded", self.dimensions)
-        self.img_loaded = self.tools.set_imgs(env.img_src + 'weapons/', "crossbow_loaded", self.dimensions)
-        self.img_overloaded = self.tools.set_imgs(env.img_src + 'weapons/', "crossbow_overloaded", self.dimensions)
+        self.img_unloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_unloaded", self.dimensions)
+        self.img_loaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_loaded", self.dimensions)
+        self.img_overloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_overloaded", self.dimensions)
 
-        self.arrow = bullets.Arrow.build_class(env, player)
-        self.rocket = bullets.Rocket.build_class(env, player)
+        self.arrow = env.mod.bullets.Arrow.build_class(env, player)
+        self.rocket = env.mod.bullets.Rocket.build_class(env, player)
 
     def display(self, env, direction, x, y, fitting):
         if self.loading > self.overloaded:
@@ -29,7 +30,7 @@ class   Crossbow(Weapon):
 
     def not_pressed(self, env, player):
         if self.loading > self.overloaded:
-            self.shoot(env, player, self.rocket)
+            self._shoot(env, player, self.rocket)
         elif self.loading > self.loaded:
-            self.shoot(env, player, self.arrow)
+            self._shoot(env, player, self.arrow)
         self.loading = 0

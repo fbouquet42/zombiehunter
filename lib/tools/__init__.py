@@ -7,3 +7,5 @@ from .move import move
 from .set_imgs import set_imgs
 from .spawn import spawn
 from .spawn_boss import spawn_boss
+from .load_img import load_img
+from .clock import clock

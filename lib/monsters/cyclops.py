@@ -1,5 +1,6 @@
 
 #Python Lib
+import time
 from random import randint
 
 #Current Module
@@ -16,12 +17,12 @@ class   Cyclops(DefaultMonster):
 
     def build_class():
         Cyclops.sniff = int(Cyclops.dimensions * 1.5)
-        Cyclops.img = Cyclops.tools.set_imgs(env.img_folder + 'monsters/', Cyclops.name, Cyclops.dimensions)
-        Cyclops.img_injured = Cyclops.tools.set_imgs(env.img_folder + 'monsters/', Cyclops.name + '_injured', Cyclops.dimensions)
-        Cyclops.img_eyeless = Cyclops.tools.set_imgs(env.img_folder + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
-        Cyclops.img_eyeless_injured = Cyclops.tools.set_imgs(env.img_folder + 'monsters/', Cyclops.name + '_eyeless_injured', Cyclops.dimensions)
-        Cyclops.img_dead = Cyclops.tools.set_imgs(env.img_folder + 'monsters/', Cyclops.name + '_dead', Cyclops.dimensions)
-        Cyclops.img_possessed = Cyclops.tools.set_imgs(env.img_folder + 'monsters/', Cyclops.name + '_possessed', Cyclops.dimensions)
+        Cyclops.img = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name, Cyclops.dimensions)
+        Cyclops.img_injured = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_injured', Cyclops.dimensions)
+        Cyclops.img_eyeless = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
+        Cyclops.img_eyeless_injured = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_eyeless_injured', Cyclops.dimensions)
+        Cyclops.img_dead = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_dead', Cyclops.dimensions)
+        Cyclops.img_possessed = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_possessed', Cyclops.dimensions)
         return Cyclops
 
     def __init__(self, env, x, y):
@@ -31,7 +32,7 @@ class   Cyclops(DefaultMonster):
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
 
-        self.rapidity = randint(2, 3)
+        self.rapidity = randint(2, 4)
 
         self.random = randint(0, 12)
         self.wait = self.turn
@@ -74,7 +75,7 @@ class   Cyclops(DefaultMonster):
                 return
 
 
-    def display(self):
+    def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
             if self.env.walking_dead:
@@ -89,5 +90,5 @@ class   Cyclops(DefaultMonster):
             img = self.img_eyeless_injured[self.direction]
         else:
             img = self.img_eyeless[self.direction]
-        tools.display(self.env, img, self.x, self.y, fitting)
+        self.tools.display(self.env, img, self.x, self.y, fitting)
         self._debug()

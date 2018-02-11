@@ -1,6 +1,6 @@
 from . import DefaultWeapon
 
-class   SubmachineGun(Weapon):
+class   SubmachineGun(DefaultWeapon):
     def __init__(self, env, player):
         self.tools = env.mod.tools
 
@@ -17,11 +17,11 @@ class   SubmachineGun(Weapon):
         self.overheating = False
         self.temperature = 0
 
-        self.img_red = self.tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_0", self.dimensions)
-        self.img_orange = self.tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_1", self.dimensions)
-        self.img_yellow = self.tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_2", self.dimensions)
-        self.img_green = self.tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_3", self.dimensions)
-        self.img_blue = tools.set_imgs(env.img_src + 'weapons/', "submachine_gun_full", self.dimensions)
+        self.img_red = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_0", self.dimensions)
+        self.img_orange = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_1", self.dimensions)
+        self.img_yellow = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_2", self.dimensions)
+        self.img_green = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_3", self.dimensions)
+        self.img_blue = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_full", self.dimensions)
         self.bullet = env.mod.bullets.Bullet.build_class(env, player)
 
     def display(self, env, direction, x, y, fitting):
@@ -47,7 +47,7 @@ class   SubmachineGun(Weapon):
             self.overheating = True
         else:
             self.cooldown += self.delay
-        self.shoot(env, player, self.bullet)
+        self._shoot(env, player, self.bullet)
         self.heatdown = -0.66
 
     def update(self):

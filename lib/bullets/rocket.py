@@ -1,6 +1,7 @@
 
 #Python Lib
 from threading import Thread
+import time
 
 #Current Module
 from . import Explosion
@@ -16,9 +17,9 @@ class   Rocket(DefaultBullet):
         return Rocket
 
     def __init__(self, x, y, direction):
-        super.__init__(x, y, direction)
+        super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self, 0.14)
-        tools.move(self, self.direction)
+        self.tools.move(self, self.direction)
         self.acceleration = 0.
 
     def _explose(self):

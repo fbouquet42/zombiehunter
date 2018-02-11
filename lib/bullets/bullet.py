@@ -10,6 +10,6 @@ class   Bullet(DefaultBullet):
         return Bullet
 
     def __init__(self, x, y, direction):
-        super.__init__(x, y, direction)
+        super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self)
         self.tools.move(self, self.direction, 22)

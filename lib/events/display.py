@@ -5,8 +5,7 @@ def _keys_manager(env):
     for player in env.players:
         if not player.lives:
             if env.walking_dead and not player.possessed:
-                player.possessed = True
-                env.monster_spwan(monsters.Undead(env, player))
+                player.undead(env)
             continue
         direction = env.mod.tools.set_direction(env.pressed, player)
         if direction >= 0:

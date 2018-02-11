@@ -11,7 +11,7 @@ class   Arrow(DefaultBullet):
         return Arrow
 
     def __init__(self, x, y, direction):
-        super.__init__(x, y, direction)
+        super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self)
-        tools.move(self, self.direction)
+        self.tools.move(self, self.direction)
 
