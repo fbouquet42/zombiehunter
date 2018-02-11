@@ -3,3 +3,6 @@ from .default import DefaultMonster
 
 from .zombie import Zombie
 from .cyclops import Cyclops
+
+
+tab = [Zombie, Cyclops]

@@ -5,3 +5,5 @@ from .display import display
 from .set_imgs import set_imgs
 from .move import move
 from .set_imgs import set_imgs
+from .spawn import spawn
+from .spawn_boss import spawn_boss

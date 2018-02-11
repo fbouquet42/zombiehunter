@@ -43,4 +43,5 @@ def pause(env):
         return
     else:
         env.closed = True
+    env.clear()
     welcome(env)

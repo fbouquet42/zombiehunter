@@ -4,10 +4,11 @@ import pygame
 pygame.init()
 
 #Local Lib
-from lib import env
+from lib import Env
+import init
 
 #TOADJUST: machinegun? explosion? waves? bosslive?
-env.parsing(sys.argv)
+env = init.init(Env, sys.argv)
 clock = pygame.time.Clock()
 
 #Start the game
