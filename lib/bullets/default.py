@@ -35,7 +35,9 @@ class   DefaultBullet:
                 ret = True
         for monster in self.env.monsters:
             if monster.affected(self):
-                self.player.score += monster.hitted(attack=self.attack)
+                id_nb, value = monster.hitted(attack=self.attack)
+                if id_nb is not None:
+                    self.player.score.kills[id_nb] += value
                 ret = True
         return ret
 

@@ -22,6 +22,9 @@ def credits(env):
     tick = _Tick()
     action = 2
     exe = False
+    for player in env.players:
+        player.score.calculate()
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -32,11 +35,19 @@ def credits(env):
             pass
         elif pressed[approve]:
             break
+        elif pressed[up]:
+            for player in env.players:
+                player.score.up()
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+        elif pressed[down]:
+            for player in env.players:
+                player.score.down()
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
 
         env.GameWindow.blit(env.background, (0, 0))
 
         for player in env.players:
-            player.display_score(env, (0, 21, 108))
+            player.score.display(env, (0, 21, 108))
 
         env.GameWindow.blit(credits_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])

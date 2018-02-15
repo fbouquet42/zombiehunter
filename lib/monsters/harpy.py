@@ -6,7 +6,7 @@ from . import set_hitbox_monster
 class Harpy(DefaultMonster):
     lives = 30
     name = "harpy"
-    value = 3
+    id_nb = 6
     gradient = 0
     gradient_max = 30
     rapidity_onflight = 6

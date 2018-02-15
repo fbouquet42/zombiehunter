@@ -9,7 +9,7 @@ from . import Ghost
 class   Necromancer(DefaultMonster):
     lives = 60
     name = "necromancer"
-    value = 4
+    id_nb = 5
 
     def build_class():
         Necromancer.img = Necromancer.tools.set_imgs(Necromancer.env.img_folder + 'monsters/', Necromancer.name, Necromancer.dimensions)
@@ -29,7 +29,7 @@ class   Necromancer(DefaultMonster):
         self.spelling = 75
         self.ghost = Ghost
 
-    def center_reached(self):
+    def _center_reached(self):
         if self.x < -self.half or self.y < -self.half or self.y > self.limity or self.x > self.limitx:
             return False
         return True
@@ -39,7 +39,7 @@ class   Necromancer(DefaultMonster):
         while self.lives:
             self._action()
             if self.out:
-                self.out = not self.center_reached()
+                self.out = not self._center_reached()
             elif self.spelling:
                 self.spelling -= 1
                 if not self.spelling:

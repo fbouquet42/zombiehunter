@@ -14,6 +14,7 @@ class Daemon(DefaultMonster):
     fury_2 = 450
     rapidity = 3
     attack = 3
+    id_nb = 3
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -60,7 +61,9 @@ class Daemon(DefaultMonster):
                 self.fury_mod(999)
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
-        return attack
+            if not self.lives:
+                return attack + 250, self.id_nb
+        return attack, self.id_nb
 
     def move(self):
         self.time = time.time()

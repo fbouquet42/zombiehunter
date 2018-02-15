@@ -42,8 +42,8 @@ class DefaultMonster:
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
-                return self.value
-        return 0
+                return self.id_nb, 1
+        return None, None
 
 
     def _find_target(self):

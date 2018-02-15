@@ -13,7 +13,7 @@ class   Cyclops(DefaultMonster):
     name = "cyclops"
     turn = 30
     hunt = True
-    value = 3
+    id_nb = 1
     attack = 2
 
     def build_class():

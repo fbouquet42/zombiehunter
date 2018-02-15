@@ -8,6 +8,7 @@ class   Minion(DefaultMonster):
     lives = 30
     value = 1
     attack = 2
+    id_nb = 4
 
     def build_class():
         Minion.img = Minion.tools.set_imgs(Minion.env.img_folder + 'monsters/', Minion.name, Minion.dimensions)

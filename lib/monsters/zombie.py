@@ -10,7 +10,7 @@ from . import set_hitbox_monster
 class Zombie(DefaultMonster):
     lives = 20
     name = "zombie"
-    value = 1
+    id_nb = 0
 
     def build_class():
         Zombie.img = Zombie.tools.set_imgs(Zombie.env.img_folder + 'monsters/', Zombie.name, Zombie.dimensions)

@@ -7,7 +7,7 @@ from . import set_hitbox_monster
 class   JackLantern(DefaultMonster):
     name = "jack_lantern"
     lives = 30
-    value = 3
+    id_nb = 2
 
     def build_class():
         JackLantern.img = JackLantern.tools.set_imgs(JackLantern.env.img_folder + 'monsters/', JackLantern.name, JackLantern.dimensions)
@@ -18,7 +18,7 @@ class   JackLantern(DefaultMonster):
         return JackLantern
 
     def loading(self):
-        self.next_shoot = randint(180, 360)
+        self.next_shoot = randint(200, 400)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)

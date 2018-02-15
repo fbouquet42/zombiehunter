@@ -2,6 +2,7 @@ import pygame
 from threading import Thread
 
 from . import set_hitbox_player
+from . import Score
 
 class Player:
     max_lives = 88
@@ -9,7 +10,6 @@ class Player:
     direction = 0
     rapidity = 11
     injured = 0
-    score = 0
     font = pygame.font.SysFont('Comic Sans MS', 40)
 
     def _get_weapon(self, env):
@@ -31,8 +31,6 @@ class Player:
         self.tools = env.mod.tools
 
         self.up, self.left, self.down, self.right, self.shoot = keys
-        self.xinitial = x
-        self.yinitial = y
         self.x = x
         self.y = y
         self.dimensions = dimensions
@@ -51,6 +49,7 @@ class Player:
 
         self.hitbox = set_hitbox_player(env, self)
         self.weapon = self._get_weapon(env)
+        self.score = Score(env, self, x, y, dimensions)
 
     def affected(self, bullet):
         if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
@@ -68,11 +67,6 @@ class Player:
         else:
             img = self.font.render(str(live_percent), False, (152, 25, 0))
         self.tools.display(env, img, self.x, self.y)
-
-    def display_score(self, env, color):
-        score = self.font.render(str(self.score), False, color)
-        self.tools.display(env, self.img[0], self.xinitial, self.yinitial)
-        self.tools.display(env, score, self.xinitial, self.yinitial)
 
     def hitted(self, attack=1):
         if self.lives:
