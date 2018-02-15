@@ -38,6 +38,7 @@ class Env:
 
         ###Menus
         self.retry = 1
+        self.credits = False
         self.pause = False
         self.quit = False
 

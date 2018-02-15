@@ -32,8 +32,12 @@ while not env.closed:
 
     if env.pause:
         env.mod.menus.pause(env)
-    if not env.closed and not env.players_alive:
+    if env.closed:
+        pass
+    if not env.players_alive:
         env.mod.menus.game_over(env)
+    elif env.credits:
+        env.mod.menus.credits(env)
     clock.tick(30)
 
 pygame.quit()

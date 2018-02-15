@@ -29,4 +29,7 @@ def loop(env):
                 i = 0
             else:
                 i += 1
-        env.menus.credits(env)
+        env.quit = True
+        env.credits = True
+        while env.quit:
+            time.sleep(0.2)

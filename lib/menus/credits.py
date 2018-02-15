@@ -11,8 +11,6 @@ class   _Tick:
 
 def credits(env):
     env.quit = True
-    #if env.retry:
-    #    return failure()
     credits_title = env.mod.tools.load_img(env, 'menus/' + 'credits_menu', env.height, env.height)
     title_position = (env.width - env.height) // 2
     selection = env.mod.tools.load_img(env, 'menus/' + 'selection', env.height, env.height)
@@ -46,5 +44,6 @@ def credits(env):
         time.sleep(env.mod.tools.clock(tick))
         exe = time.time() - tick.before_loop > 0.8
 
+    env.credits = False
     env.clear()
     welcome(env)
