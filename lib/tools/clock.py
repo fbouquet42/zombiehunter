@@ -1,10 +1,10 @@
 import time
 
-def clock(obj, wait=0.03):
+def clock(obj, wait=0.04):
     t = time.time()
     diff = t - obj.time
     obj.time = t
     if diff < wait:
-        return diff
+        return wait - diff
     else:
         return 0

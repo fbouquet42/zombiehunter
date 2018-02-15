@@ -6,7 +6,7 @@ class Player:
     max_lives = 4
     lives = 4
     direction = 0
-    rapidity = 17
+    rapidity = 14
     injured = 0
     score = 0
 

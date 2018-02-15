@@ -29,14 +29,16 @@ def pause(env):
             break
         elif not action and pressed[down]:
             action += 2
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
         elif action and pressed[up]:
             action -= 2
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
 
         env.GameWindow.blit(env.background, (0, 0))
         env.GameWindow.blit(welcome_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
-        time.sleep(env.mod.tools.clock(tick, wait=0.25))
+        time.sleep(env.mod.tools.clock(tick))
 
     env.pause = False
     if not action:

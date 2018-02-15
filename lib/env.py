@@ -1,4 +1,5 @@
 #Python Lib
+import pygame
 from threading import Thread
 
 #Local Module
@@ -17,7 +18,10 @@ class Env:
         self.background_hell = self.mod.tools.load_img(self, 'background_hell', self.width, self.height)
         self.background = self.background_basic
 
-    def __init__(self, width, height, pwd, player_dimensions):
+    def __init__(self, argv, pwd):
+        ##Init
+        info = pygame.display.Info()
+
         ###Debug
         self.debug = False
         self.debug_wave = 1
@@ -29,8 +33,8 @@ class Env:
         self.img_folder = pwd + '/img/'
 
         ###Size
-        self.width = width
-        self.height = height
+        self.width = info.current_w
+        self.height = info.current_h
 
         ###Menus
         self.pause = False
@@ -50,7 +54,7 @@ class Env:
         self.mod = LocalModules
 
         ###Game
-        self.player_dimensions = player_dimensions
+        self.player_dimensions = self.width // 8
         #Explosion
         self.jerk = False
         #Daemon
@@ -70,11 +74,18 @@ class Env:
         #Build DefaultWeapon
         self.mod.weapons.DefaultWeapon.build_class(self)
 
+        self.parsing(argv)
+        self.pressed = (0,) * 323
+        self.GameWindow = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+
     def start(self):
         update_tick = Thread(target=self.mod.events.update_tick, args=(self, ))
         update_tick.daemon = True
+        keys_manager = Thread(target=self.mod.events.keys_manager, args=(self, ))
+        keys_manager.daemon = True
         spawner = Thread(target=self.mod.waves.loop, args=(self, ))
         spawner.daemon = True
+        keys_manager.start()
         update_tick.start()
         spawner.start()
 

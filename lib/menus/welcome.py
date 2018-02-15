@@ -28,14 +28,16 @@ def welcome(env):
             break
         elif action < 2 and pressed[down]:
             action += 1
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
         elif action and pressed[up]:
             action -= 1
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
 
         env.GameWindow.blit(env.background, (0, 0))
         env.GameWindow.blit(welcome_title, (env.title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
-        time.sleep(env.mod.tools.clock(tick, wait=0.25))
+        time.sleep(env.mod.tools.clock(tick))
 
     if not action:
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_r), x=int(0.45* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='jack'))
@@ -44,5 +46,5 @@ def welcome(env):
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT, pygame.K_SPACE), x=int(0.7* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='baltazar'))
     else:
         env.closed = True
-    env.players_live = len(env.players)
+    env.players_alive = len(env.players)
     env.quit = False

@@ -1,14 +1,20 @@
 #Python Lib
 import sys
+import os
 import pygame
 pygame.init()
 
 #Local Lib
-import init
+from lib import Env
 
 #TOADJUST: machinegun? explosion? waves? bosslive?
-env = init.init(sys.argv)
+pwd = os.path.dirname(os.path.realpath(__file__))
+env = Env(sys.argv, pwd)
+
 clock = pygame.time.Clock()
+
+#Welcome Menu
+env.mod.menus.welcome(env)
 
 #Start the game
 if not env.closed:
@@ -33,3 +39,4 @@ while not env.closed:
     clock.tick(40)
 
 pygame.quit()
+quit()
