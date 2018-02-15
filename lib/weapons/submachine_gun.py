@@ -48,14 +48,14 @@ class   SubmachineGun(DefaultWeapon):
         else:
             self.cooldown += self.delay
         self._shoot(env, player, self.bullet)
-        self.heatdown = -0.66
+        self.heatdown = 0.
 
     def update(self):
         if self.temperature:
             self.temperature -= int(self.heatdown)
             self.temperature = 0 if self.temperature < 0 else self.temperature
-            if self.heatdown >= 6.:
-                self.heatdown = 6.
+            if self.heatdown >= 6.2:
+                self.heatdown = 6.2
             else:
                 self.heatdown += 0.11
         else:

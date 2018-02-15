@@ -56,7 +56,7 @@ class Env:
         self.mod = LocalModules
 
         ###Game
-        self.player_dimensions = self.width // 8
+        self.player_dimensions = int(self.width / 7.6)
         #Explosion
         self.jerk = False
         #Daemon

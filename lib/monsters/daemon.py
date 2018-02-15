@@ -61,9 +61,7 @@ class Daemon(DefaultMonster):
                 self.fury_mod(999)
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
-            if not self.lives:
-                return attack + 250, self.id_nb
-        return attack, self.id_nb
+        return self.id_nb, attack
 
     def move(self):
         self.time = time.time()
