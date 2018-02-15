@@ -69,8 +69,8 @@ class Player:
             img = self.font.render(str(live_percent), False, (152, 25, 0))
         self.tools.display(env, img, self.x, self.y)
 
-    def display_score(self, env):
-        score = self.font.render(str(self.score), False, (110, 74, 0))
+    def display_score(self, env, color):
+        score = self.font.render(str(self.score), False, color)
         self.tools.display(env, self.img[0], self.xinitial, self.yinitial)
         self.tools.display(env, score, self.xinitial, self.yinitial)
 

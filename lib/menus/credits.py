@@ -9,13 +9,13 @@ class   _Tick:
         self.time = time.time()
         self.before_loop = self.time
 
-def game_over(env):
+def credits(env):
     env.quit = True
     #if env.retry:
     #    return failure()
-    go_title = env.mod.tools.load_img(env, 'menus/' + 'GO_menu', env.height, env.height)
+    credits_title = env.mod.tools.load_img(env, 'menus/' + 'credits_menu', env.height, env.height)
     title_position = (env.width - env.height) // 2
-    selection = env.mod.tools.load_img(env, 'menus/' + 'selection_failure', env.height, env.height)
+    selection = env.mod.tools.load_img(env, 'menus/' + 'selection', env.height, env.height)
     position = [(title_position,0), (title_position, env.height * 0.15), (title_position, env.height * 0.3)]
     up = pygame.K_w
     down = pygame.K_s
@@ -38,9 +38,9 @@ def game_over(env):
         env.GameWindow.blit(env.background, (0, 0))
 
         for player in env.players:
-            player.display_score(env, (110, 74, 0))
+            player.display_score(env, (0, 21, 108))
 
-        env.GameWindow.blit(go_title, (title_position, 0))
+        env.GameWindow.blit(credits_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         time.sleep(env.mod.tools.clock(tick))
