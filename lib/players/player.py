@@ -23,7 +23,7 @@ class Player:
         t = Thread(target=obj.move, args=())
         t.daemon = True
         self.possessed = True
-        env.monsters.append(monster)
+        env.monsters.append(obj)
         t.start()
 
     def __init__(self, env, keys, x, y, dimensions, name):
@@ -58,10 +58,12 @@ class Player:
         return False
 
     def display_lives(self, env):
+        if not self.lives:
+            return
         live_percent = int((self.lives / self.max_lives) * 100)
-        if live_percent > 70:
+        if live_percent > 66:
             img = self.font.render(str(live_percent), False, (13, 115, 5))
-        elif live_percent > 35:
+        elif live_percent > 33:
             img = self.font.render(str(live_percent), False, (222, 146, 13))
         else:
             img = self.font.render(str(live_percent), False, (152, 25, 0))

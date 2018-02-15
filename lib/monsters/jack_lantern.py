@@ -27,6 +27,7 @@ class   JackLantern(DefaultMonster):
         self.rapidity = randint(2, 3)
 
         self.loading()
+        self.walking_dead = False
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -45,6 +46,9 @@ class   JackLantern(DefaultMonster):
     def update(self):
         if self.env.walking_dead and not self.walking_dead:
             self.loading()
+            self.walking_dead = True
+        elif not self.walking_dead:
+            self.walking_dead = False
         if self.injured:
             self.injured -= 1
         if self.next_shoot:

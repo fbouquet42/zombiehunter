@@ -7,7 +7,7 @@ class FireBall(DefaultMonster):
     lives = 1
     name = "fire_ball"
     rapidity = 7
-    ultimatum = 480
+    ultimatum = 500
     attack = 20
 
     def build_class():

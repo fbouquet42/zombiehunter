@@ -74,7 +74,7 @@ class   Wave4(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_4', env.height, env.height)
         self.objective = 7
-        self.times = [18, 72, 80, 130]
+        self.times = [48, 155, 175, 820]
         self.nb = [3, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3)]
 

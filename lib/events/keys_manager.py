@@ -1,6 +1,5 @@
 import pygame
 import time
-from threading import Thread
 
 class _Tick:
     def __init__(self):

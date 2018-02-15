@@ -1,10 +1,14 @@
+import time
+
 from . import DefaultMonster
 from . import set_hitbox_monster
 
 class Ghost(DefaultMonster):
+    lives = 1
     name = "ghost"
     rapidity = 6
-    ultimatum = 280
+    ultimatum = 360
+    attack = 2
 
     def __init__(self, env, x, y, img):
         self.x = x
@@ -17,6 +21,7 @@ class Ghost(DefaultMonster):
         return False
 
     def move(self):
+        self.time = time.time()
         while self.ultimatum:
             self._action()
             self.ultimatum -= 1

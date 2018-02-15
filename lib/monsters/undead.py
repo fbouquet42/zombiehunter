@@ -5,7 +5,6 @@ from . import set_hitbox_monster
 
 class   Undead(DefaultMonster):
     lives = 0
-    name = "zombie"
 
     def __init__(self, env, player):
         self.x = player.x
@@ -18,10 +17,10 @@ class   Undead(DefaultMonster):
         self.hitbox = set_hitbox_monster(env, self)
         self.target = env.players[0]
 
-    def target_hitted(self):
+    def _target_hitted(self):
         for player in self.env.players:
             if player is not self.player and player.affected(self):
-                player.hitted()
+                player.hitted(attack=self.attack)
 
     def move(self):
         self.time = time.time()

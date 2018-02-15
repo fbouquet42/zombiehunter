@@ -1,11 +1,13 @@
+from random import randint
 from threading import Thread
+import time
 
 from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Ghost
 
 class   Necromancer(DefaultMonster):
-    lives = 6
+    lives = 60
     name = "necromancer"
     value = 4
 
@@ -33,6 +35,7 @@ class   Necromancer(DefaultMonster):
         return True
 
     def move(self):
+        self.time = time.time()
         while self.lives:
             self._action()
             if self.out:
