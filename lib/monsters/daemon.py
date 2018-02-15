@@ -9,10 +9,11 @@ from . import FireBall
 
 class Daemon(DefaultMonster):
     name = "daemon"
-    lives = 135
-    fury_1 = 90
-    fury_2 = 45
+    lives = 1350
+    fury_1 = 900
+    fury_2 = 450
     rapidity = 3
+    attack = 3
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -48,7 +49,7 @@ class Daemon(DefaultMonster):
         self.shooting = 0
 
     def next_spell(self):
-        self.spell = randint(350, 650)
+        self.spell = randint(680, 1180)
 
     def hitted(self, attack=1):
         if self.lives and not self.furious and not self.spelling:
@@ -68,7 +69,7 @@ class Daemon(DefaultMonster):
             if direction is not None:
                 self.direction = direction
                 if not self.spelling:
-                    tools.move(self, direction, self.rapidity + self.env.furious)
+                    self.tools.move(self, direction, self.rapidity + self.env.furious)
                     self.hitbox.update_coords(self)
             self._target_hitted()
             if self._quit():
@@ -123,7 +124,7 @@ class Daemon(DefaultMonster):
         self.shooting = 0
         for i in range(1, 5):
             x, y = self.get_coords(i)
-            fire_ball = self.fire_ball(self.env, x, y, self.env.players[randint(1, len(self.env.players)) - 1])
+            fire_ball = self.fire_ball(self.env, x, y, self.env.players[randint(0, len(self.env.players)) - 1])
             t = Thread(target=fire_ball.move, args=())
             t.daemon = True
             self.env.monsters.append(fire_ball)
@@ -150,6 +151,6 @@ class Daemon(DefaultMonster):
         elif self.spell:
             self.spell -= 1
         else:
-            self.spell_type[randint(1, len(self.spell_type)) - 1]()
+            self.spell_type[randint(0, len(self.spell_type) - 1)]()
             self.next_spell()
             self.spelling = True

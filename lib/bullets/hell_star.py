@@ -1,4 +1,5 @@
 #Python Lib
+import time
 from threading import Thread
 
 #Current Module
@@ -14,7 +15,7 @@ class   HellStar(DefaultBullet):
         return HellStar
 
     def __init__(self, x, y, direction):
-        super.__init__(x, y, direction)
+        super().__init__(x, y, direction)
         self.summoning = 0
         self.hitbox = set_hitbox_bullet(self.env, self, 0.40)
 
@@ -32,6 +33,7 @@ class   HellStar(DefaultBullet):
                 player.hitted()
 
     def move(self):
+        self.time = time.time()
         while True:
             if self.monster.fire_star:
                 self.summoning = 600

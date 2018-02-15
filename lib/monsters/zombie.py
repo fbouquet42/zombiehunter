@@ -24,8 +24,7 @@ class Zombie(DefaultMonster):
         self._father_init(x, y)
         self.hitbox = set_hitbox_monster(env, self)
 
-        self.rapidity = randint(2, 6)
-        self.rapidity = 4 if self.rapidity > 4 else self.rapidity
+        self.rapidity = randint(2, 4)
 
 
     def display(self, env):

@@ -10,20 +10,20 @@ class   DoubleBullet(DefaultBullet):
         return DoubleBullet
 
     def __init__(self, x, y, direction, monster):
-        super.__init__(x, y, direction)
+        super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self, 0.14)
         self.monster = monster
-        tools.move(self, self.direction)
+        self.tools.move(self, self.direction)
     
     def _target_hitted(self):
         ret = False
         for player in self.env.players:
             if player.affected(self):
-                player.hitted()
+                player.hitted(attack=self.attack)
                 ret = True
         for monster in self.env.monsters:
             if not monster is self.monster and monster.affected(self):
-                monster.hitted()
+                monster.hitted(attack=self.attack)
                 ret = True
         return ret
 

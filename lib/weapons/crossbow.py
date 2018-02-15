@@ -6,8 +6,8 @@ class   Crossbow(DefaultWeapon):
         self.dimensions = player.dimensions
 
         self.loading = 0
-        self.loaded = 15
-        self.overloaded = 104
+        self.loaded = 22
+        self.overloaded = 258
 
         self.img_unloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_unloaded", self.dimensions)
         self.img_loaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_loaded", self.dimensions)

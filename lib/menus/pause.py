@@ -9,8 +9,7 @@ class   _Tick:
         self.before_loop = self.time
 
 def pause(env):
-    env.pause = True
-    welcome_title = env.mod.tools.load_img(env, 'menus/' + 'pause_menu', env.height, env.height)
+    pause_title = env.mod.tools.load_img(env, 'menus/' + 'pause_menu', env.height, env.height)
     title_position = (env.width - env.height) // 2
     selection = env.mod.tools.load_img(env, 'menus/' + 'selection', env.height, env.height)
     position = [(title_position,0), (title_position, env.height * 0.15), (title_position, env.height * 0.3)]
@@ -39,13 +38,14 @@ def pause(env):
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
 
         env.GameWindow.blit(env.background, (0, 0))
-        env.GameWindow.blit(welcome_title, (title_position, 0))
+        env.GameWindow.blit(pause_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         time.sleep(env.mod.tools.clock(tick))
         exe = time.time() - tick.before_loop > 0.5
 
     env.pause = False
+
     if not action:
         return
     env.clear()

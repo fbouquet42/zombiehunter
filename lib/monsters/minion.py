@@ -5,8 +5,9 @@ from random import randint
 
 class   Minion(DefaultMonster):
     name = "minion"
-    lives = 3
+    lives = 30
     value = 1
+    attack = 2
 
     def build_class():
         Minion.img = Minion.tools.set_imgs(Minion.env.img_folder + 'monsters/', Minion.name, Minion.dimensions)
@@ -21,3 +22,16 @@ class   Minion(DefaultMonster):
         self.rapidity = 4 if self.rapidity > 4 else self.rapidity
         self.hitbox = set_hitbox_monster(env, self, 0.26)
         self.target = env.players[0]
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if not self.lives:
+            if self.env.walking_dead:
+                img = self.img_possessed[self.direction]
+            else:
+                img = self.img_dead[self.direction]
+        elif self.injured:
+            img = self.img_injured[self.direction]
+        else:
+            img = self.img[self.direction]
+        self.tools.display(self.env, img, self.x, self.y, fitting)

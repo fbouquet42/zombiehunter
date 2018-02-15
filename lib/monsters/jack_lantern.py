@@ -6,7 +6,7 @@ from . import set_hitbox_monster
 
 class   JackLantern(DefaultMonster):
     name = "jack_lantern"
-    lives = 3
+    lives = 30
     value = 3
 
     def build_class():
@@ -18,7 +18,7 @@ class   JackLantern(DefaultMonster):
         return JackLantern
 
     def loading(self):
-        self.next_shoot = randint(120, 300)
+        self.next_shoot = randint(180, 360)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)

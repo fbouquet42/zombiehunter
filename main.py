@@ -1,4 +1,5 @@
 #Python Lib
+import time
 import sys
 import os
 import pygame
@@ -26,17 +27,14 @@ while not env.closed:
         if event.type == pygame.QUIT:
             env.closed = True
 
-    env.pressed = pygame.key.get_pressed()
-
-    if env.pressed[pygame.K_ESCAPE]:
-        env.mod.menus.pause(env)
-
     env.display()
     pygame.display.update()
 
+    if env.pause:
+        env.mod.menus.pause(env)
     if not env.closed and not env.players_alive:
         env.mod.menus.game_over(env)
-    clock.tick(40)
+    clock.tick(30)
 
 pygame.quit()
 quit()

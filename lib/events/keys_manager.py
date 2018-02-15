@@ -1,3 +1,4 @@
+import pygame
 import time
 from threading import Thread
 
@@ -9,6 +10,9 @@ def keys_manager(env):
     tick = _Tick()
     while True:
         players_alive = 0
+        env.pressed = pygame.key.get_pressed()
+        if env.pressed[pygame.K_ESCAPE]:
+            env.pause = True
         for player in env.players:
             if not player.lives:
                 if env.walking_dead and not player.possessed:

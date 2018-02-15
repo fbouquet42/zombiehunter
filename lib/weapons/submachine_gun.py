@@ -6,7 +6,7 @@ class   SubmachineGun(DefaultWeapon):
 
         self.dimensions = player.dimensions
 
-        self.delay = 6
+        self.delay = 8
         self.heatup = self.delay * 12
         self.heatdown = 0.
         self.heatmax = self.heatup * 22

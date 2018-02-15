@@ -11,9 +11,10 @@ from . import set_hitbox_monster
 
 class DefaultMonster:
     injured = 0
-    injured_gradient = 12
+    injured_gradient = 16
+    attack = 1
     direction = 0
-    degeneration = 400
+    degeneration = 650
     hunt = True
 
 
@@ -37,7 +38,7 @@ class DefaultMonster:
 
     def hitted(self, attack=1):
         if self.lives:
-            self.injured += self.injured_gradient
+            self.injured = self.injured_gradient
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
@@ -98,7 +99,7 @@ class DefaultMonster:
     def _target_hitted(self):
         for player in self.env.players:
             if player.affected(self):
-                player.hitted()
+                player.hitted(attack=self.attack)
 
 
     def _action(self):

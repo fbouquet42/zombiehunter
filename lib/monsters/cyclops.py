@@ -14,6 +14,7 @@ class   Cyclops(DefaultMonster):
     turn = 30
     hunt = True
     value = 3
+    attack = 2
 
     def build_class():
         Cyclops.sniff = int(Cyclops.dimensions * 1.5)

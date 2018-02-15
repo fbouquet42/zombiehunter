@@ -4,9 +4,11 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 
 class FireBall(DefaultMonster):
+    lives = 1
     name = "fire_ball"
     rapidity = 7
-    ultimatum = 360
+    ultimatum = 480
+    attack = 20
 
     def build_class():
         FireBall.img = FireBall.tools.set_imgs(FireBall.env.img_folder + 'bullets/', FireBall.name, FireBall.dimensions)
@@ -26,18 +28,18 @@ class FireBall(DefaultMonster):
     def _target_hitted(self):
         for player in self.env.players:
             if player.lives and player.affected(self):
-                player.hitted()
+                player.hitted(attack=self.attack)
                 self.ultimatum = 0
 
     def move(self):
         self.time = time.time()
         while self.ultimatum:
             x, y, _ = self.tools.process_distance(self.target, self)
-            self.direction = _determine_direction(x, y)
-            tools.move(self, self.direction)
+            self.direction = self._determine_direction(x, y)
+            self.tools.move(self, self.direction)
             self.hitbox.update_coords(self)
             self._target_hitted()
-            if self._quit:
+            if self._quit():
                 return
             if self.ultimatum:
                 self.ultimatum -= 1
