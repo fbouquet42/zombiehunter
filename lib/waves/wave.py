@@ -20,4 +20,4 @@ def wave(env, obj):
         time.sleep(0.3)
     for player in env.players:
         player.lives = player.max_lives
-    return True
+    return not env.quit

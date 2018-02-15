@@ -1,7 +1,7 @@
 import time
 
 class   DefaultBullet:
-    attack=1
+    attack=10
     def build_class(env):
         DefaultBullet.env = env
         DefaultBullet.dimensions = env.player_dimensions

@@ -5,7 +5,8 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   Explosion(DefaultBullet):
-    lifetime = 40
+    lifetime = 35
+    attack = 1
     def build_class(env, player):
         Explosion.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "explosion", player.dimensions)
         Explosion.player = player
@@ -18,10 +19,10 @@ class   Explosion(DefaultBullet):
     def _target_hitted(self):
         for player in self.env.players:
             if player.affected(self):
-                player.hitted()
+                player.hitted(attack=self.attack)
         for monster in self.env.monsters:
-            if not monster.injured and monster.affected(self):
-                self.player.score += monster.hitted()
+            if monster.affected(self):
+                self.player.score += monster.hitted(attack=self.attack)
 
     def explose(self):
         self.time = time.time()

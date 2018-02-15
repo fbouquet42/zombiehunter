@@ -8,8 +8,8 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 
 class   Cyclops(DefaultMonster):
-    lives = 7
-    eyeless = 3
+    lives = 70
+    eyeless = 30
     name = "cyclops"
     turn = 30
     hunt = True
@@ -39,6 +39,8 @@ class   Cyclops(DefaultMonster):
 
 
     def _no_eye(self, direction, distance):
+        if distance is None:
+            return None
         self.hunt = distance < self.sniff
         if self.hunt:
             return direction

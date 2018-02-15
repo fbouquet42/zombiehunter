@@ -37,6 +37,7 @@ class Env:
         self.height = info.current_h
 
         ###Menus
+        self.retry = 1
         self.pause = False
         self.quit = False
 
@@ -96,6 +97,8 @@ class Env:
         self.jerk = False
         self.furious = False
         self.walking_dead = 0
+        self.retry = 1
+        self.pressed = (0,) * 323
 
     def usage(self):
         print("usage: python3 main.py [-debug [wave_nb]]")

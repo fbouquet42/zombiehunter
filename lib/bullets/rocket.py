@@ -32,10 +32,12 @@ class   Rocket(DefaultBullet):
     def _target_hitted(self):
         for player in self.env.players:
             if player is not self.player and player.affected(self):
+                player.hitted(attack=self.attack)
                 self._explose()
                 return True
         for monster in self.env.monsters:
             if monster.affected(self):
+                self.player.score += monster.hitted(attack=self.attack)
                 self._explose()
                 return True
         return False

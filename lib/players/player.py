@@ -1,14 +1,16 @@
+import pygame
 from threading import Thread
 
 from . import set_hitbox_player
 
 class Player:
-    max_lives = 4
-    lives = 4
+    max_lives = 88
+    lives = 88
     direction = 0
-    rapidity = 14
+    rapidity = 11
     injured = 0
     score = 0
+    font = pygame.font.SysFont('Comic Sans MS', 40)
 
     def _get_weapon(self, env):
         if self.name == 'jack':
@@ -29,6 +31,8 @@ class Player:
         self.tools = env.mod.tools
 
         self.up, self.left, self.down, self.right, self.shoot = keys
+        self.xinitial = x
+        self.yinitial = y
         self.x = x
         self.y = y
         self.dimensions = dimensions
@@ -53,9 +57,24 @@ class Player:
             return True
         return False
 
+    def display_lives(self, env):
+        live_percent = int((self.lives / self.max_lives) * 100)
+        if live_percent > 70:
+            img = self.font.render(str(live_percent), False, (13, 115, 5))
+        elif live_percent > 35:
+            img = self.font.render(str(live_percent), False, (222, 146, 13))
+        else:
+            img = self.font.render(str(live_percent), False, (152, 25, 0))
+        self.tools.display(env, img, self.x, self.y)
+
+    def display_score(self, env):
+        score = self.font.render(str(self.score), False, (110, 74, 0))
+        self.tools.display(env, self.img[0], self.xinitial, self.yinitial)
+        self.tools.display(env, score, self.xinitial, self.yinitial)
+
     def hitted(self, attack=1):
-        if self.lives and not self.injured:
-            self.injured += 25
+        if self.lives:
+            self.injured = 22
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
 

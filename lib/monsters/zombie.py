@@ -8,7 +8,7 @@ from . import set_hitbox_monster
 
 
 class Zombie(DefaultMonster):
-    lives = 2
+    lives = 20
     name = "zombie"
     value = 1
 

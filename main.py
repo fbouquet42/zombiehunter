@@ -34,8 +34,8 @@ while not env.closed:
     env.display()
     pygame.display.update()
 
-    if not env.players_alive:
-        env.closed = env.mod.menus.dead()
+    if not env.closed and not env.players_alive:
+        env.mod.menus.game_over(env)
     clock.tick(40)
 
 pygame.quit()

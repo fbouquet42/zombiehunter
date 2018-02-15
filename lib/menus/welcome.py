@@ -4,6 +4,7 @@ import time
 class   _Tick:
     def __init__(self):
         self.time = time.time()
+        self.before_loop = self.time
 
 def welcome(env):
     env.quit = True
@@ -17,14 +18,16 @@ def welcome(env):
 
     tick = _Tick()
     action = 0
-    time.sleep(1)
+    exe = False
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 env.closed = True
                 return
         pressed = pygame.key.get_pressed()
-        if pressed[approve]:
+        if not exe:
+            pass
+        elif pressed[approve]:
             break
         elif action < 2 and pressed[down]:
             action += 1
@@ -38,6 +41,7 @@ def welcome(env):
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         time.sleep(env.mod.tools.clock(tick))
+        exe = time.time() - tick.before_loop > 0.5
 
     if not action:
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_r), x=int(0.45* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='jack'))

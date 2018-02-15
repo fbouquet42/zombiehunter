@@ -16,6 +16,9 @@ def display(env):
         else:
             env.bullets[i].display(env)
             i += 1
+    for player in env.players:
+        player.display_lives(env)
+
     for title in env.titles:
         env.mod.tools.display(env, title, env.title_position, 0)
 
