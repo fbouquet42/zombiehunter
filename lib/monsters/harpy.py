@@ -4,7 +4,7 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 
 class Harpy(DefaultMonster):
-    lives = 3
+    lives = 30
     name = "harpy"
     value = 3
     gradient = 0
@@ -30,27 +30,27 @@ class Harpy(DefaultMonster):
         self.hitbox = self.list_hitbox[self.shadow]
         self.list_dimensions = list((0.6 + nb * 0.05) * self.dimensions for nb in range(0, 9))
         self.dimensions = self.list_dimensions[self.shadow]
-        self.fly()
+        self._fly()
 
-    def gradient_fly(self, shadow):
+    def _gradient_fly(self, shadow):
         self.list_hitbox[shadow].update_coords(self)
         self.shadow = shadow
         self.hitbox = self.list_hitbox[self.shadow]
         self.dimensions = self.list_dimensions[self.shadow]
 
-    def fly(self):
+    def _fly(self):
         if not self.lives:
             return
-        self.gradient_fly(0)
+        self._gradient_fly(0)
         self.flying = True
         self.rapidity = self.rapidity_onflight
         self.ultimatum = self.ultimatum_onflight
         self.gradient = self.gradient_max
 
-    def on_ground(self):
+    def _on_ground(self):
         if not self.lives:
             return
-        self.gradient_fly(8)
+        self._gradient_fly(8)
         self.flying = False
         self.rapidity = self.rapidity_onground
         self.ultimatum = self.ultimatum_onground
@@ -63,13 +63,13 @@ class Harpy(DefaultMonster):
             return True
         return False
 
-    def target_hitted(self):
+    def _target_hitted(self):
         for player in self.env.players:
             if player.affected(self):
                 if self.flying or not self.ultimatum:
                     return True
                 else:
-                    player.hitted()
+                    player.hitted(attack=self.attack)
         return False
 
     def move(self):
@@ -122,11 +122,11 @@ class Harpy(DefaultMonster):
         else:
             self.gradient -= 1
             if self.flying and not self.gradient:
-                self.on_ground()
+                self._on_ground()
             elif not self.gradient:
-                self.fly()
+                self._fly()
             elif self.flying:
-                self.gradient_fly((self.gradient_max - self.gradient) // 4 + 1)
+                self._gradient_fly((self.gradient_max - self.gradient) // 4 + 1)
             else:
-                self.gradient_fly((self.gradient) // 4 + 1)
+                self._gradient_fly((self.gradient) // 4 + 1)
 

@@ -111,7 +111,7 @@ class Env:
             if len(argv) > 2:
                 try:
                     self.debug_wave = int(argv[2])
-                    if self.debug_wave < 0 or self.debug_wave >= len(self.mod.monsters.tab):
+                    if self.debug_wave < 1 or self.debug_wave > len(self.mod.monsters.tab):
                         self.debug_wave = 1
                 except ValueError:
                     self.debug_wave = 1

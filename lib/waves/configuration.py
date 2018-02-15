@@ -14,7 +14,7 @@ class   Wave1(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_1', env.height, env.height)
         self.objective = 70
-        self.times = [35, 148]
+        self.times = [45, 178]
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
 
@@ -34,7 +34,7 @@ class   Wave2(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_2', env.height, env.height)
         self.objective = 25
-        self.times = [48, 160, 85]
+        self.times = [58, 180, 105]
         self.nb = [3, 1, 2]
         self.next = [0, self.random(1), self.random(2)]
 
@@ -53,7 +53,7 @@ class   Wave2(DefaultWave):
 class   Wave3(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_3', env.height, env.height)
-        self.times = [70, 210, 165]
+        self.times = [80, 230, 185]
         self.nb = [2, 1, 1]
         self.next = [0, self.random(1), self.random(2)]
         env.background = env.background_hell
@@ -74,7 +74,7 @@ class   Wave4(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_4', env.height, env.height)
         self.objective = 7
-        self.times = [48, 155, 175, 820]
+        self.times = [58, 175, 195, 850]
         self.nb = [3, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3)]
 
@@ -93,8 +93,8 @@ class   Wave4(DefaultWave):
 class   Wave5(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_5', env.height, env.height)
-        self.objective = 48
-        self.times = [18, 70, 82, 210, 32]
+        self.objective = 28
+        self.times = [68, 180, 205, 1400, 102]
         self.nb = [3, 1, 1, 1, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4)]
 
