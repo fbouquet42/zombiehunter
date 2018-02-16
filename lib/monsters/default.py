@@ -16,7 +16,8 @@ class DefaultMonster:
     direction = 0
     degeneration = 650
     hunt = True
-
+    poisoned = 0
+    forest = False
 
     def build_class(env):
         DefaultMonster.env = env
@@ -143,3 +144,8 @@ class DefaultMonster:
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+        if self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5

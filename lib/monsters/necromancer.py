@@ -69,3 +69,8 @@ class   Necromancer(DefaultMonster):
     def update(self):
         if self.injured:
             self.injured -= 1
+        if self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5

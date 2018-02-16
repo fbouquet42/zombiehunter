@@ -34,7 +34,7 @@ while not env.closed:
         env.mod.menus.pause(env)
     if env.closed:
         pass
-    if not env.players_alive:
+    elif not env.players_alive:
         env.mod.menus.game_over(env)
     elif env.credits:
         env.mod.menus.credits(env)

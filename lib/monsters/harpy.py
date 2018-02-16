@@ -129,4 +129,8 @@ class Harpy(DefaultMonster):
                 self._gradient_fly((self.gradient_max - self.gradient) // 4 + 1)
             else:
                 self._gradient_fly((self.gradient) // 4 + 1)
-
+        if self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5

@@ -8,7 +8,7 @@ class FireBall(DefaultMonster):
     name = "fire_ball"
     rapidity = 7
     ultimatum = 500
-    attack = 20
+    attack = 16
 
     def build_class():
         FireBall.img = FireBall.tools.set_imgs(FireBall.env.img_folder + 'bullets/', FireBall.name, FireBall.dimensions)

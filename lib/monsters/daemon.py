@@ -54,14 +54,15 @@ class Daemon(DefaultMonster):
 
     def hitted(self, attack=1):
         if self.lives and not self.furious and not self.spelling:
-            self.injured += 12
+            self.injured = 12
             if self.lives > self.fury_2 and self.lives - attack <= self.fury_2:
                 self.fury_mod(1444)
             elif self.lives > self.fury_1 and self.lives - attack <= self.fury_1:
                 self.fury_mod(999)
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
-        return self.id_nb, attack
+            return self.id_nb, attack
+        return None, None
 
     def move(self):
         self.time = time.time()

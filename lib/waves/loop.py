@@ -12,6 +12,7 @@ def _init(env):
     env.mod.monsters.JackLantern.build_class()
     env.mod.monsters.Necromancer.build_class()
     env.mod.monsters.Harpy.build_class()
+    env.mod.monsters.Ent.build_class()
 
 def loop(env):
     _init(env)

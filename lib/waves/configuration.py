@@ -73,7 +73,7 @@ class   Wave3(DefaultWave):
 class   Wave4(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_4', env.height, env.height)
-        self.objective = 7
+        self.objective = 6
         self.times = [58, 175, 195, 850]
         self.nb = [3, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3)]
@@ -93,8 +93,8 @@ class   Wave4(DefaultWave):
 class   Wave5(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_5', env.height, env.height)
-        self.objective = 28
-        self.times = [68, 180, 205, 1400, 102]
+        self.objective = 27
+        self.times = [68, 180, 205, 1380, 102]
         self.nb = [3, 1, 1, 1, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4)]
 
@@ -103,6 +103,26 @@ class   Wave5(DefaultWave):
             if not value:
                 spawned = self.spawn(env, i)
                 if i == 4:
+                    self.objective -= spawned
+            else:
+                self.next[i] -= 1
+        if self.objective > 0:
+            return True
+        return False
+
+class   Wave6(DefaultWave):
+    def __init__(self, env):
+        self.title = env.mod.tools.load_img(env, 'waves/wave_6', env.height, env.height)
+        self.objective = 4
+        self.times = [68, 180, 205, 1380, 258, 950]
+        self.nb = [3, 1, 1, 1, 2, 1]
+        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2]
+
+    def process(self, env):
+        for i, value in enumerate(self.next):
+            if not value:
+                spawned = self.spawn(env, i)
+                if i == 5:
                     self.objective -= spawned
             else:
                 self.next[i] -= 1

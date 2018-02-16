@@ -11,5 +11,7 @@ from .ghost import Ghost
 from .necromancer import Necromancer
 from .undead import Undead
 from .harpy import Harpy
+from .vines import Vines
+from .ent import Ent
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent]
