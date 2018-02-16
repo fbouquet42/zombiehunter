@@ -19,7 +19,8 @@ def keys_manager(env):
                 continue
             direction = env.mod.tools.set_direction(env.pressed, player)
             if player.fixed:
-                pass
+                if direction >= 0:
+                    player.direction = direction
             elif direction >= 0:
                 player.move(direction)
             if env.pressed[player.shoot]:
