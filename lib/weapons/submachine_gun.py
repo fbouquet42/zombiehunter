@@ -43,7 +43,7 @@ class   SubmachineGun(DefaultWeapon):
             return
         self.temperature += self.heatup
         if self.temperature > self.heatmax:
-            self.temperature += (self.heatmax * 2)
+            self.temperature += int(self.heatmax * 0.5)
             self.overheating = True
         else:
             self.cooldown += self.delay

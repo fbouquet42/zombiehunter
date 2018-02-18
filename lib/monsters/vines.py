@@ -9,7 +9,7 @@ from . import set_hitbox_monster
 
 
 class Vines(DefaultMonster):
-    lives = 16
+    lives = 13
     name = "vines"
     forest = True
     degeneration = 250
@@ -35,7 +35,7 @@ class Vines(DefaultMonster):
     def move(self):
         self.time = time.time()
         while self.lives:
-            if not self.monster.lives:
+            if not self.monster.lives or not self.target.lives:
                 break
             self.x = self.target.x
             self.y = self.target.y
