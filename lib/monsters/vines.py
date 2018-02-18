@@ -9,7 +9,7 @@ from . import set_hitbox_monster
 
 
 class Vines(DefaultMonster):
-    lives = 9
+    lives = 16
     name = "vines"
     forest = True
     degeneration = 250
@@ -37,6 +37,8 @@ class Vines(DefaultMonster):
         while self.lives:
             if not self.monster.lives:
                 break
+            self.x = self.target.x
+            self.y = self.target.y
             if self.target.direction != self.direction:
                 self.direction = self.target.direction
                 self.lives -= 1

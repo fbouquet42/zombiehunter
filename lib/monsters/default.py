@@ -144,7 +144,7 @@ class DefaultMonster:
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if self.poisoned:
+        if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:
                 self.lives -= 1

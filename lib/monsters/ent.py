@@ -100,7 +100,9 @@ class   Ent(DefaultMonster):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if self.cradling:
+        if not self.lives:
+            pass
+        elif self.cradling:
             self.cradling -= 1
             if not self.cradling:
                 self.spelling = False

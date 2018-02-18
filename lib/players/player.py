@@ -76,8 +76,11 @@ class Player:
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
 
-    def move(self, direction):
-        self.tools.move(self, direction)
+    def move(self, direction, rapidity=0):
+        if rapidity:
+            self.tools.move(self, direction, rapidity=rapidity)
+        else:
+            self.tools.move(self, direction)
         self.tools.limits(self, self.limitx, self.limity)
         self.hitbox.update_coords(self)
 
