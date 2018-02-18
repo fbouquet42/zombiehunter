@@ -20,7 +20,7 @@ def loop(env):
         if env.debug:
             i = env.debug_wave - 1
         else:
-            i = 5
+            i = 0
         while i < len(_waves):
             obj = _waves[i](env)
             env.titles.append(obj.title)
