@@ -15,9 +15,12 @@ def _init(env):
     env.mod.monsters.Ent.build_class()
 
 def loop(env):
+    buff = 0
     _init(env)
     while True:
-        if env.debug:
+        if not env.retry:
+            i = buff
+        elif env.debug:
             i = env.debug_wave - 1
         else:
             i = 0
@@ -27,10 +30,12 @@ def loop(env):
             time.sleep(5)
             env.titles.remove(obj.title)
             if not wave(env, obj):
-                i = 0
+                buff = i
+                break
             else:
                 i += 1
-        env.quit = True
-        env.credits = True
+        if i == len(_waves):
+            env.quit = True
+            env.credits = True
         while env.quit:
             time.sleep(0.2)

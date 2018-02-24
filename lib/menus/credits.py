@@ -18,6 +18,8 @@ def credits(env):
     up = pygame.K_w
     down = pygame.K_s
     approve = pygame.K_r
+    left = pygame.K_a
+    right = pygame.K_d
 
     tick = _Tick()
     action = 2
@@ -35,11 +37,11 @@ def credits(env):
             pass
         elif pressed[approve]:
             break
-        elif pressed[up]:
+        elif pressed[right]:
             for player in env.players:
                 player.score.up()
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
-        elif pressed[down]:
+        elif pressed[left]:
             for player in env.players:
                 player.score.down()
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
@@ -56,5 +58,4 @@ def credits(env):
         exe = time.time() - tick.before_loop > 0.8
 
     env.credits = False
-    env.clear()
     welcome(env)

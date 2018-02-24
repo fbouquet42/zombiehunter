@@ -6,7 +6,7 @@ from random import randint
 class   Minion(DefaultMonster):
     name = "minion"
     lives = 30
-    value = 1
+    value = 2
     attack = 2
     id_nb = 4
 

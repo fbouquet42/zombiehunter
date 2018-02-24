@@ -11,14 +11,18 @@ class   _Tick:
 
 def game_over(env):
     env.quit = True
-    #if env.retry:
-    #    return failure()
     go_title = env.mod.tools.load_img(env, 'menus/' + 'GO_menu', env.height, env.height)
+    if env.retry:
+        retry_title = env.mod.tools.load_img(env, 'menus/' + 'fire_goblet', env.height, env.height)
+    else:
+        retry_title = env.mod.tools.load_img(env, 'menus/' + 'fire_goblet_off', env.height, env.height)
     title_position = (env.width - env.height) // 2
     selection = env.mod.tools.load_img(env, 'menus/' + 'selection_failure', env.height, env.height)
     position = [(title_position,0), (title_position, env.height * 0.15), (title_position, env.height * 0.3)]
     up = pygame.K_w
     down = pygame.K_s
+    left = pygame.K_a
+    right = pygame.K_d
     approve = pygame.K_r
 
     tick = _Tick()
@@ -36,13 +40,19 @@ def game_over(env):
         if not exe:
             pass
         elif pressed[approve]:
-            break
-        elif pressed[up]:
-
+            if action != 1 or env.retry:
+                break
+        elif action > 1 and pressed[up]:
+            action -= 1
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+        elif action < 2 and pressed[down]:
+            action += 1
+            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+        elif pressed[right]:
             for player in env.players:
                 player.score.up()
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
-        elif pressed[down]:
+        elif pressed[left]:
             for player in env.players:
                 player.score.down()
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
@@ -54,10 +64,22 @@ def game_over(env):
             player.score.display(env, (110, 74, 0))
 
         env.GameWindow.blit(go_title, (title_position, 0))
+        env.GameWindow.blit(retry_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         time.sleep(env.mod.tools.clock(tick))
         exe = time.time() - tick.before_loop > 0.8
 
-    env.clear()
+    if action == 1:
+        env.monsters.clear()
+        env.bullets.clear()
+        env.jerk = False
+        env.furious = False
+        env.walking_dead = 0
+        env.retry -= 1
+        env.pressed = (0,) * 323
+        for player in env.players:
+            player.lives = player.max_lives
+        env.quit = False
+        return
     welcome(env)
