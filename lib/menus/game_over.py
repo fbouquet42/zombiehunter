@@ -48,11 +48,11 @@ def game_over(env):
         elif action < 2 and pressed[down]:
             action += 1
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
-        elif pressed[right]:
+        elif pressed[left]:
             for player in env.players:
                 player.score.up()
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
-        elif pressed[left]:
+        elif pressed[right]:
             for player in env.players:
                 player.score.down()
             time.sleep(env.mod.tools.clock(tick, wait=0.1))
@@ -80,6 +80,7 @@ def game_over(env):
         env.pressed = (0,) * 323
         for player in env.players:
             player.lives = player.max_lives
+            player.score.total = 0
         env.quit = False
         return
     welcome(env)
