@@ -25,8 +25,7 @@ class   Ent(DefaultMonster):
         return Ent
 
     def next_spell(self):
-        #self.spell = randint(420, 760)
-        self.spell = randint(220, 400)
+        self.spell = randint(400, 750)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
