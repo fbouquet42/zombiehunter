@@ -38,7 +38,7 @@ def pause(env):
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         tick.sleep()
-        exe = time.time() - tick.before_loop > 0.7
+        exe = time.time() - tick.before_loop > 0.45
 
     env.pause = False
 

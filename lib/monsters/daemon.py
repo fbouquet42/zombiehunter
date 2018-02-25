@@ -50,7 +50,7 @@ class Daemon(DefaultMonster):
         self.shooting = 0
 
     def next_spell(self):
-        self.spell = randint(480, 880)
+        self.spell = randint(480, 840)
 
     def hitted(self, attack=1):
         if self.lives and not self.furious and not self.spelling:

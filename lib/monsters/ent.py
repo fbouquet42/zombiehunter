@@ -10,7 +10,7 @@ class   Ent(DefaultMonster):
     lives = 400
     id_nb = 7
     attack = 2
-    max_thorny = 75
+    max_thorny = 30
     nb_thorns = 3
     forest = True
 
@@ -25,7 +25,8 @@ class   Ent(DefaultMonster):
         return Ent
 
     def next_spell(self):
-        self.spell = randint(550, 990)
+        #self.spell = randint(420, 760)
+        self.spell = randint(220, 400)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -40,7 +41,7 @@ class   Ent(DefaultMonster):
         self.spell_type = [self.thorns_spell, self.vines_spell]
 
     def vines_spell(self):
-        self.cradling = 80
+        self.cradling = 35
         if self.target is not None:
             vines = self.vines(self, self.target)
             t = Thread(target=vines.move, args=())

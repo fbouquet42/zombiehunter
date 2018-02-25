@@ -9,7 +9,7 @@ from . import set_hitbox_monster
 
 
 class Vines(DefaultMonster):
-    lives = 13
+    lives = 15
     name = "vines"
     forest = True
     degeneration = 200
@@ -27,7 +27,6 @@ class Vines(DefaultMonster):
         self.direction = target.direction
         self.target = target
         self.monster = monster
-        self.hitbox = set_hitbox_monster(self.env, self, 0.5)
 
     def affected(self, bullet):
         return False
@@ -54,7 +53,6 @@ class Vines(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
-        self._debug()
 
     def update(self):
         if not self.lives and self.degeneration:

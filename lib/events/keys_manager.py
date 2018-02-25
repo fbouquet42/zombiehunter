@@ -3,9 +3,12 @@ import pygame
 def keys_manager(env, player):
     tick = env.mod.tools.Tick()
 
+    tick.sleep(0.45)
     while True:
         tick.sleep()
         while env.pause or env.quit:
+            if player.destroy:
+                return
             tick.sleep()
 
         if not player.lives:
@@ -29,4 +32,3 @@ def keys_manager(env, player):
             player.weapon.pressed(env, player)
         else:
             player.weapon.not_pressed(env=env, player=player)
-

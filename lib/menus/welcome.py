@@ -38,7 +38,7 @@ def welcome(env):
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         tick.sleep()
-        exe = time.time() - tick.before_loop > 0.7
+        exe = time.time() - tick.before_loop > 0.45
 
     if not action:
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_r), x=int(0.2* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='jack'))
@@ -48,5 +48,6 @@ def welcome(env):
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT, pygame.K_SPACE), x=int(0.7* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='baltazar'))
     else:
         env.closed = True
+    env.start_players()
     env.players_alive = len(env.players)
     env.quit = False

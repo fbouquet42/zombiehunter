@@ -13,6 +13,7 @@ class Player:
     font = pygame.font.SysFont('Comic Sans MS', 40)
     poisoned = 0
     fixed = False
+    destroy = False
 
     def _get_weapon(self, env):
         if self.name == 'jack':
@@ -105,6 +106,6 @@ class Player:
         self.weapon.update()
         if self.poisoned:
             self.poisoned -= 1
-            if not self.poisoned % 20:
+            if self.lives and not self.poisoned % 20:
                 self.lives -= 1
                 self.injured += 5

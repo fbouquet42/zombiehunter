@@ -6,9 +6,9 @@ from . import set_hitbox_monster
 class FireBall(DefaultMonster):
     lives = 1
     name = "fire_ball"
-    rapidity = 16
-    ultimatum = 420
-    attack = 14
+    rapidity = 17
+    ultimatum = 200
+    attack = 12
 
     def build_class():
         FireBall.img = FireBall.tools.set_imgs(FireBall.env.img_folder + 'bullets/', FireBall.name, FireBall.dimensions)

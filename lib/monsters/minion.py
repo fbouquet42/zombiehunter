@@ -20,7 +20,7 @@ class   Minion(DefaultMonster):
         self.x = x
         self.y = y
         self.rapidity = randint(7, 13)
-        self.rapidity = 10 if self.rapidity > 10 else self.rapidity
+        self.rapidity = 11 if self.rapidity > 11 else self.rapidity
         self.hitbox = set_hitbox_monster(env, self, 0.26)
         self.target = env.players[0]
 

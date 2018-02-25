@@ -7,7 +7,7 @@ class Ghost(DefaultMonster):
     lives = 1
     name = "ghost"
     rapidity = 13
-    ultimatum = 300
+    ultimatum = 200
     attack = 2
 
     def __init__(self, env, x, y, img):

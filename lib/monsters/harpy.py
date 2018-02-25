@@ -8,11 +8,11 @@ class Harpy(DefaultMonster):
     name = "harpy"
     id_nb = 6
     gradient = 0
-    gradient_max = 30
+    gradient_max = 20
     rapidity_onflight = 14
     rapidity_onground = 12
-    ultimatum_onflight = 240
-    ultimatum_onground = 120
+    ultimatum_onflight = 170
+    ultimatum_onground = 85
 
     def build_class():
         Harpy.img = Harpy.tools.set_imgs(Harpy.env.img_folder + 'monsters/', Harpy.name, Harpy.dimensions)
@@ -78,7 +78,7 @@ class Harpy(DefaultMonster):
             direction, _ = self._sniff_fresh_flesh()
             if direction is not None:
                 self.direction = direction
-                self.tools.move(self, direction, 1 if not self.ultimatum else self.rapidity)
+                self.tools.move(self, direction, 3 if not self.ultimatum else self.rapidity)
                 self.hitbox.update_coords(self)
             if self._target_hitted():
                 self.ultimatum = 0

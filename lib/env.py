@@ -79,12 +79,7 @@ class Env:
         self.parsing(argv)
         self.GameWindow = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
 
-    def start(self):
-        update_tick = Thread(target=self.mod.events.update_tick, args=(self, ))
-        update_tick.daemon = True
-        spawner = Thread(target=self.mod.waves.loop, args=(self, ))
-        spawner.daemon = True
-
+    def start_players(self):
         keys_managers = []
         for player in self.players:
             t = Thread(target=self.mod.events.keys_manager, args=(self, player,))
@@ -93,11 +88,20 @@ class Env:
 
         for t in keys_managers:
             t.start()
+
+    def start(self):
+        update_tick = Thread(target=self.mod.events.update_tick, args=(self, ))
+        update_tick.daemon = True
+        spawner = Thread(target=self.mod.waves.loop, args=(self, ))
+        spawner.daemon = True
+
         update_tick.start()
         spawner.start()
 
     def clear(self):
         self.monsters.clear()
+        for player in self.players:
+            player.destroy = True
         self.players.clear()
         self.bullets.clear()
         self.jerk = False
