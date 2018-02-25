@@ -114,7 +114,7 @@ class   Wave6(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_6', env.height, env.height)
         self.objective = 4
-        self.times = [71, 185, 220, 1380, 263, 1050]
+        self.times = [71, 185, 220, 1380, 263, 900]
         self.nb = [3, 1, 1, 1, 2, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2]
 
@@ -129,3 +129,21 @@ class   Wave6(DefaultWave):
         if self.objective > 0:
             return True
         return False
+
+class   Wave7(DefaultWave):
+    def __init__(self, env):
+        self.title = env.mod.tools.load_img(env, 'waves/wave_3', env.height, env.height)
+        self.next = []
+        env.background = env.background_shadows
+        self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Kraken)
+
+    def process(self, env):
+        for i, value in enumerate(self.next):
+            if not value:
+                self.spawn(env, i)
+            else:
+                self.next[i] -= 1
+        if not self.objective.lives:
+            env.background = env.background_basic
+            return False
+        return True

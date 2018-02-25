@@ -7,7 +7,7 @@ from . import set_hitbox_monster
 
 class   Ent(DefaultMonster):
     name = "ent"
-    lives = 400
+    lives = 330
     id_nb = 7
     attack = 2
     max_thorny = 30
@@ -25,7 +25,7 @@ class   Ent(DefaultMonster):
         return Ent
 
     def next_spell(self):
-        self.spell = randint(400, 750)
+        self.spell = randint(375, 680)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)

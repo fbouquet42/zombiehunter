@@ -9,6 +9,7 @@ from . import FireBall
 
 class Daemon(DefaultMonster):
     name = "daemon"
+    degeneration = 550
     lives = 1350
     fury_1 = 900
     fury_2 = 450
@@ -50,7 +51,7 @@ class Daemon(DefaultMonster):
         self.shooting = 0
 
     def next_spell(self):
-        self.spell = randint(480, 840)
+        self.spell = randint(430, 720)
 
     def hitted(self, attack=1):
         if self.lives and not self.furious and not self.spelling:

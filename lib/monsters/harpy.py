@@ -85,7 +85,7 @@ class Harpy(DefaultMonster):
             if self._quit():
                 return
 
-        self.rapidity = 5
+        self.rapidity = self.rapidity_onground
         self.flying = False
         while self.degeneration:
             if self.env.walking_dead:

@@ -3,7 +3,7 @@ import pygame
 def keys_manager(env, player):
     tick = env.mod.tools.Tick()
 
-    tick.sleep(0.45)
+    tick.sleep(0.25)
     while True:
         tick.sleep()
         while env.pause or env.quit:

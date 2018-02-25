@@ -16,6 +16,7 @@ class Env:
     def set_imgs(self):
         self.background_basic = self.mod.tools.load_img(self, 'background_basic', self.width, self.height)
         self.background_hell = self.mod.tools.load_img(self, 'background_hell', self.width, self.height)
+        self.background_shadows = self.mod.tools.load_img(self, 'background_shadows', self.width, self.height)
         self.background = self.background_basic
 
     def __init__(self, argv, pwd):
@@ -120,7 +121,7 @@ class Env:
             if len(argv) > 2:
                 try:
                     self.debug_wave = int(argv[2])
-                    if self.debug_wave < 1 or self.debug_wave > len(self.mod.monsters.tab):
+                    if self.debug_wave < 1 or self.debug_wave > len(self.mod.waves._waves):
                         self.debug_wave = 1
                 except ValueError:
                     self.debug_wave = 1
