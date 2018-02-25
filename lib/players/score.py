@@ -14,7 +14,7 @@ class   Score:
         self.img_total = player.img[0]
         self.list = ['zombie', 'cyclops', 'jack_lantern', 'daemon', 'minion', 'necromancer', 'harpy', 'ent']
         self.kills = [0, 0, 0, 0, 0, 0, 0, 0]
-        self.values = [1, 3.5, 3, 0.1, 2, 6, 3, 0.1]
+        self.values = [1, 3.5, 2.5, 0.1, 2, 6, 3, 0.1]
         self.img = []
         for name in self.list:
             self.load_img(env, name, dimensions)

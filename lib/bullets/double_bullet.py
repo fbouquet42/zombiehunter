@@ -3,7 +3,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   DoubleBullet(DefaultBullet):
-    rapidity = 23
+    rapidity = 43
 
     def build_class(env):
         DoubleBullet.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "double_bullet", env.player_dimensions)

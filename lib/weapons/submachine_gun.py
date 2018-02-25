@@ -6,7 +6,7 @@ class   SubmachineGun(DefaultWeapon):
 
         self.dimensions = player.dimensions
 
-        self.delay = 7
+        self.delay = 5
         self.heatup = self.delay * 12
         self.heatdown = 0.
         self.heatmax = self.heatup * 23
@@ -54,10 +54,10 @@ class   SubmachineGun(DefaultWeapon):
         if self.temperature:
             self.temperature -= int(self.heatdown)
             self.temperature = 0 if self.temperature < 0 else self.temperature
-            if self.heatdown >= 6.2:
-                self.heatdown = 6.2
+            if self.heatdown >= 9.:
+                self.heatdown = 9.
             else:
-                self.heatdown += 0.11
+                self.heatdown += 0.2
         else:
             self.overheating = False
         if self.cooldown:

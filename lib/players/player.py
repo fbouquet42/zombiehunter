@@ -5,10 +5,10 @@ from . import set_hitbox_player
 from . import Score
 
 class Player:
-    max_lives = 88
-    lives = 88
+    max_lives = 82
+    lives = 82
     direction = 0
-    rapidity = 10
+    rapidity = 22
     injured = 0
     font = pygame.font.SysFont('Comic Sans MS', 40)
     poisoned = 0

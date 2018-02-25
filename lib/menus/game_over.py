@@ -4,11 +4,6 @@ import time
 #from . import failure
 from . import welcome
 
-class   _Tick:
-    def __init__(self):
-        self.time = time.time()
-        self.before_loop = self.time
-
 def game_over(env):
     env.quit = True
     go_title = env.mod.tools.load_img(env, 'menus/' + 'GO_menu', env.height, env.height)
@@ -25,7 +20,8 @@ def game_over(env):
     right = pygame.K_d
     approve = pygame.K_r
 
-    tick = _Tick()
+    tick = env.mod.tools.Tick()
+    tick.before_loop = tick.time
     action = 2
     exe = False
     for player in env.players:
@@ -44,18 +40,18 @@ def game_over(env):
                 break
         elif action > 1 and pressed[up]:
             action -= 1
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
         elif action < 2 and pressed[down]:
             action += 1
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
         elif pressed[left]:
             for player in env.players:
                 player.score.up()
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
         elif pressed[right]:
             for player in env.players:
                 player.score.down()
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
             
 
         env.GameWindow.blit(env.background, (0, 0))
@@ -67,17 +63,16 @@ def game_over(env):
         env.GameWindow.blit(retry_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
-        time.sleep(env.mod.tools.clock(tick))
-        exe = time.time() - tick.before_loop > 0.8
+        tick.sleep()
+        exe = time.time() - tick.before_loop > 0.7
 
     if action == 1:
         env.monsters.clear()
         env.bullets.clear()
         env.jerk = False
-        env.furious = False
+        env.furious = 0
         env.walking_dead = 0
         env.retry -= 1
-        env.pressed = (0,) * 323
         for player in env.players:
             player.lives = player.max_lives
             player.score.total = 0

@@ -9,8 +9,8 @@ class Harpy(DefaultMonster):
     id_nb = 6
     gradient = 0
     gradient_max = 30
-    rapidity_onflight = 6
-    rapidity_onground = 5
+    rapidity_onflight = 14
+    rapidity_onground = 12
     ultimatum_onflight = 240
     ultimatum_onground = 120
 
@@ -73,7 +73,7 @@ class Harpy(DefaultMonster):
         return False
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             direction, _ = self._sniff_fresh_flesh()
             if direction is not None:

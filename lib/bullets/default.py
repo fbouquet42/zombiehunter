@@ -45,15 +45,15 @@ class   DefaultBullet:
         self.alive = False
 
     def _quit(self):
-        time.sleep(self.tools.clock(self))
+        self.tick.sleep()
         while self.env.pause:
             if self.env.quit:
                 return True
-            time.sleep(self.tools.clock(self))
+            self.tick.sleep()
         return self.env.quit
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while True:
             self.tools.move(self, self.direction)
             if self._limits_reached():

@@ -12,7 +12,7 @@ class   Undead(DefaultMonster):
         self.direction = player.direction
         self.player = player
 
-        self.rapidity = 4
+        self.rapidity = 10
         self.img = player.img_possessed
         self.hitbox = set_hitbox_monster(env, self)
         self.target = env.players[0]
@@ -23,7 +23,7 @@ class   Undead(DefaultMonster):
                 player.hitted(attack=self.attack)
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.env.walking_dead:
             self._action()
             self.player.x = self.x

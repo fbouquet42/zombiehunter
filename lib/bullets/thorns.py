@@ -5,8 +5,8 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   Thorns(DefaultBullet):
-    lifetime = 35
-    attack = 1
+    lifetime = 25
+    attack = 2
     poison = 140
 
     def build_class(env):
@@ -39,7 +39,7 @@ class   Thorns(DefaultBullet):
                 monster.poisoned = self.poison
 
     def explose(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while True:
             if self.monster.thorny:
                 pass

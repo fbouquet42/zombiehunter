@@ -6,8 +6,8 @@ from . import set_hitbox_monster
 class Ghost(DefaultMonster):
     lives = 1
     name = "ghost"
-    rapidity = 6
-    ultimatum = 360
+    rapidity = 13
+    ultimatum = 300
     attack = 2
 
     def __init__(self, env, x, y, img):
@@ -21,7 +21,7 @@ class Ghost(DefaultMonster):
         return False
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.ultimatum:
             self._action()
             self.ultimatum -= 1

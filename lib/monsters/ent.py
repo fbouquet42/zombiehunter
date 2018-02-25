@@ -10,7 +10,6 @@ class   Ent(DefaultMonster):
     lives = 400
     id_nb = 7
     attack = 2
-    rapidity = 3
     max_thorny = 75
     nb_thorns = 3
     forest = True
@@ -31,6 +30,8 @@ class   Ent(DefaultMonster):
     def __init__(self, env, x, y):
         self._father_init(x, y)
         self.hitbox = set_hitbox_monster(env, self, 0.48)
+
+        self.rapidity = randint(7, 8)
 
         self.thorny = 0
         self.cradling = 0
@@ -83,7 +84,7 @@ class   Ent(DefaultMonster):
         return None, None
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             direction, _ = self._sniff_fresh_flesh()
             if direction is not None:

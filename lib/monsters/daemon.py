@@ -12,7 +12,7 @@ class Daemon(DefaultMonster):
     lives = 1350
     fury_1 = 900
     fury_2 = 450
-    rapidity = 3
+    rapidity = 7
     attack = 3
     id_nb = 3
 
@@ -44,28 +44,28 @@ class Daemon(DefaultMonster):
 
     def fury_mod(self, time):
         self.furious = time
-        self.env.furious = True
+        self.env.furious = 2
         self.spelling = False
         self.spell += 25
         self.shooting = 0
 
     def next_spell(self):
-        self.spell = randint(680, 1180)
+        self.spell = randint(480, 880)
 
     def hitted(self, attack=1):
         if self.lives and not self.furious and not self.spelling:
             self.injured = 12
             if self.lives > self.fury_2 and self.lives - attack <= self.fury_2:
-                self.fury_mod(1444)
+                self.fury_mod(888)
             elif self.lives > self.fury_1 and self.lives - attack <= self.fury_1:
-                self.fury_mod(999)
+                self.fury_mod(666)
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
             return self.id_nb, attack
         return None, None
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             direction, _ = self._sniff_fresh_flesh()
             if direction is not None:
@@ -126,7 +126,7 @@ class Daemon(DefaultMonster):
         self.shooting = 0
         for i in range(1, 5):
             x, y = self.get_coords(i)
-            fire_ball = self.fire_ball(self.env, x, y, self.env.players[randint(0, len(self.env.players)) - 1])
+            fire_ball = self.fire_ball(self.env, self, x, y, self.env.players[randint(0, len(self.env.players)) - 1])
             t = Thread(target=fire_ball.move, args=())
             t.daemon = True
             self.env.monsters.append(fire_ball)
@@ -138,10 +138,13 @@ class Daemon(DefaultMonster):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if self.furious:
+
+        if not self.lives:
+            pass
+        elif self.furious:
             self.furious -= 1
             if not self.furious:
-                self.env.furious = False
+                self.env.furious = 0
         elif self.shooting > 120:
             self.firing()
         elif self.shooting:

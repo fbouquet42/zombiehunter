@@ -3,11 +3,6 @@ import time
 
 from . import welcome
 
-class   _Tick:
-    def __init__(self):
-        self.time = time.time()
-        self.before_loop = self.time
-
 def pause(env):
     pause_title = env.mod.tools.load_img(env, 'menus/' + 'pause_menu', env.height, env.height)
     title_position = (env.width - env.height) // 2
@@ -17,7 +12,8 @@ def pause(env):
     down = pygame.K_s
     approve = pygame.K_r
 
-    tick = _Tick()
+    tick = env.mod.tools.Tick()
+    tick.before_loop = tick.time
     action = 0
     exe = False
     while True:
@@ -32,17 +28,17 @@ def pause(env):
             break
         elif not action and pressed[down]:
             action += 2
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
         elif action and pressed[up]:
             action -= 2
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
 
         env.GameWindow.blit(env.background, (0, 0))
         env.GameWindow.blit(pause_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
-        time.sleep(env.mod.tools.clock(tick))
-        exe = time.time() - tick.before_loop > 0.5
+        tick.sleep()
+        exe = time.time() - tick.before_loop > 0.7
 
     env.pause = False
 

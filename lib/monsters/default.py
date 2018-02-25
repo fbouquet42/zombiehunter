@@ -14,7 +14,7 @@ class DefaultMonster:
     injured_gradient = 16
     attack = 1
     direction = 0
-    degeneration = 650
+    degeneration = 450
     hunt = True
     poisoned = 0
     forest = False
@@ -112,15 +112,15 @@ class DefaultMonster:
         self._target_hitted()
 
     def _quit(self):
-        time.sleep(self.tools.clock(self))
+        self.tick.sleep()
         while self.env.pause:
             if self.env.quit:
                 return True
-            time.sleep(self.tools.clock(self))
+            self.tick.sleep()
         return self.env.quit
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             self._action()
             if self._quit():

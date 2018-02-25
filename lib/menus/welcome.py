@@ -1,11 +1,6 @@
 import pygame
 import time
 
-class   _Tick:
-    def __init__(self):
-        self.time = time.time()
-        self.before_loop = self.time
-
 def welcome(env):
     env.quit = True
     env.clear()
@@ -17,7 +12,8 @@ def welcome(env):
     down = pygame.K_s
     approve = pygame.K_r
 
-    tick = _Tick()
+    tick = env.mod.tools.Tick()
+    tick.before_loop = tick.time
     action = 0
     exe = False
     while True:
@@ -32,17 +28,17 @@ def welcome(env):
             break
         elif action < 2 and pressed[down]:
             action += 1
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
         elif action and pressed[up]:
             action -= 1
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
 
         env.GameWindow.blit(env.background, (0, 0))
         env.GameWindow.blit(welcome_title, (env.title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
-        time.sleep(env.mod.tools.clock(tick))
-        exe = time.time() - tick.before_loop > 0.5
+        tick.sleep()
+        exe = time.time() - tick.before_loop > 0.7
 
     if not action:
         env.players.append(env.mod.players.Player(env=env, keys=(pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d, pygame.K_r), x=int(0.2* env.width), y=int(0.5 *env.height), dimensions=env.player_dimensions, name='jack'))

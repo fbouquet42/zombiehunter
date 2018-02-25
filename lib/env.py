@@ -60,7 +60,7 @@ class Env:
         #Explosion
         self.jerk = False
         #Daemon
-        self.furious = False
+        self.furious = 0
         #Necromancer
         self.walking_dead = 0
 
@@ -77,17 +77,22 @@ class Env:
         self.mod.weapons.DefaultWeapon.build_class(self)
 
         self.parsing(argv)
-        self.pressed = (0,) * 323
         self.GameWindow = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
 
     def start(self):
         update_tick = Thread(target=self.mod.events.update_tick, args=(self, ))
         update_tick.daemon = True
-        keys_manager = Thread(target=self.mod.events.keys_manager, args=(self, ))
-        keys_manager.daemon = True
         spawner = Thread(target=self.mod.waves.loop, args=(self, ))
         spawner.daemon = True
-        keys_manager.start()
+
+        keys_managers = []
+        for player in self.players:
+            t = Thread(target=self.mod.events.keys_manager, args=(self, player,))
+            t.daemon = True
+            keys_managers.append(t)
+
+        for t in keys_managers:
+            t.start()
         update_tick.start()
         spawner.start()
 
@@ -96,10 +101,9 @@ class Env:
         self.players.clear()
         self.bullets.clear()
         self.jerk = False
-        self.furious = False
+        self.furious = 0
         self.walking_dead = 0
         self.retry = 1
-        self.pressed = (0,) * 323
 
     def usage(self):
         print("usage: python3 main.py [-debug [wave_nb]]")

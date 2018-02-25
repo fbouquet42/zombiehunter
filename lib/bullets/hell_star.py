@@ -33,13 +33,13 @@ class   HellStar(DefaultBullet):
                 player.hitted()
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while True:
             if self.monster.fire_star:
-                self.summoning = 600
+                self.summoning = 480
             if not self.monster.fire_star and self.summoning:
                 self._target_hitted()
-            if not (self.summoning + 100) % 220:
+            if not (self.summoning + 5) % 119:
                 monster = self.minion(self.env, self.x, self.y)
                 t = Thread(target=monster.move, args=())
                 t.daemon = True

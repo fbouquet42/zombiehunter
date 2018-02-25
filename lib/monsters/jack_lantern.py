@@ -18,13 +18,13 @@ class   JackLantern(DefaultMonster):
         return JackLantern
 
     def loading(self):
-        self.next_shoot = randint(200, 400)
+        self.next_shoot = randint(140, 280)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
         self.hitbox = set_hitbox_monster(env, self)
 
-        self.rapidity = randint(2, 3)
+        self.rapidity = randint(5, 8)
 
         self.loading()
         self.walking_dead = False

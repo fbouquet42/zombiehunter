@@ -12,7 +12,7 @@ class Vines(DefaultMonster):
     lives = 13
     name = "vines"
     forest = True
-    degeneration = 250
+    degeneration = 200
 
     def build_class():
         Vines.img = Vines.tools.set_imgs(Vines.env.img_folder + 'monsters/', Vines.name, Vines.dimensions)
@@ -33,7 +33,7 @@ class Vines(DefaultMonster):
         return False
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             if not self.monster.lives or not self.target.lives:
                 break

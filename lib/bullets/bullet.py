@@ -3,7 +3,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   Bullet(DefaultBullet):
-    rapidity = 29
+    rapidity = 50
     def build_class(env, player):
         Bullet.player = player
         Bullet.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "bullet", env.player_dimensions)

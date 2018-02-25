@@ -20,13 +20,13 @@ class   Necromancer(DefaultMonster):
     def __init__(self, env, x, y):
         self._father_init(x, y)
 
-        self.rapidity = randint(3, 4)
+        self.rapidity = randint(7, 10)
         self.hitbox = set_hitbox_monster(env, self)
 
         self.out = True
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
-        self.spelling = 75
+        self.spelling = 65
         self.ghost = Ghost
 
     def _center_reached(self):
@@ -35,7 +35,7 @@ class   Necromancer(DefaultMonster):
         return True
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             self._action()
             if self.out:

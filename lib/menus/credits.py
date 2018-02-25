@@ -4,11 +4,6 @@ import time
 #from . import failure
 from . import welcome
 
-class   _Tick:
-    def __init__(self):
-        self.time = time.time()
-        self.before_loop = self.time
-
 def credits(env):
     env.quit = True
     credits_title = env.mod.tools.load_img(env, 'menus/' + 'credits_menu', env.height, env.height)
@@ -21,7 +16,8 @@ def credits(env):
     left = pygame.K_a
     right = pygame.K_d
 
-    tick = _Tick()
+    tick = env.mod.tools.Tick()
+    tick.before_loop = tick.time
     action = 2
     exe = False
     for player in env.players:
@@ -40,11 +36,11 @@ def credits(env):
         elif pressed[right]:
             for player in env.players:
                 player.score.up()
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
         elif pressed[left]:
             for player in env.players:
                 player.score.down()
-            time.sleep(env.mod.tools.clock(tick, wait=0.1))
+            tick.sleep(0.1)
 
         env.GameWindow.blit(env.background, (0, 0))
 
@@ -54,8 +50,8 @@ def credits(env):
         env.GameWindow.blit(credits_title, (title_position, 0))
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
-        time.sleep(env.mod.tools.clock(tick))
-        exe = time.time() - tick.before_loop > 0.8
+        tick.sleep()
+        exe = time.time() - tick.before_loop > 0.7
 
     env.credits = False
     welcome(env)

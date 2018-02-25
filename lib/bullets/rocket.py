@@ -9,7 +9,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   Rocket(DefaultBullet):
-    rapidity = 20.
+    rapidity = 30
     def build_class(env, player):
         Rocket.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "rocket", player.dimensions)
         Rocket.player = player
@@ -45,11 +45,11 @@ class   Rocket(DefaultBullet):
         return False
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while True:
             self.tools.move(self, self.direction, int(self.rapidity + self.acceleration))
-            if self.acceleration < 15.:
-                self.acceleration += 0.4
+            if self.acceleration < 30:
+                self.acceleration += 1
             if self._limits_reached():
                 return self._dead()
             self.hitbox.update_coords(self)

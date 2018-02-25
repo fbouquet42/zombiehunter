@@ -33,7 +33,7 @@ class   Cyclops(DefaultMonster):
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
 
-        self.rapidity = randint(2, 4)
+        self.rapidity = randint(5, 9)
 
         self.random = randint(0, 12)
         self.wait = self.turn
@@ -53,7 +53,7 @@ class   Cyclops(DefaultMonster):
         return self.random
 
     def move(self):
-        self.time = time.time()
+        self.tick = self.env.mod.tools.Tick()
         while self.lives:
             direction, distance = self._sniff_fresh_flesh()
             if self.lives <= self.eyeless:
