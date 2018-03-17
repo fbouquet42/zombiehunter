@@ -74,7 +74,9 @@ class _BaseTentacles:
 
 class Kraken(DefaultMonster):
     name = "kraken"
-    lives = 1350
+    lives = 1710
+    #450 570 690
+    # + 3 necromancer spawns
     rapidity = 4
     attack = 3
     id_nb = 8

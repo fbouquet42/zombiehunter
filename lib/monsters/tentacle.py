@@ -8,7 +8,7 @@ from . import set_hitbox_monster
 
 
 class Tentacle(DefaultMonster):
-    lives = 30
+    lives = 40
     name = "tentacle"
     id_nb = 9
     following = False

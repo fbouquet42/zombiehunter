@@ -51,7 +51,7 @@ def credits(env):
         env.GameWindow.blit(selection, position[action])
         pygame.display.update()
         tick.sleep()
-        exe = time.time() - tick.before_loop > 0.45
+        exe = time.time() - tick.before_loop > 0.75
 
     env.credits = False
     welcome(env)

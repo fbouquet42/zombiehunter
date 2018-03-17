@@ -5,7 +5,7 @@ def wave(env, obj):
     while True:
         if not obj.process(env):
             break
-        tick.sleep()
+        tick.sleep(0.047)
         while env.pause:
             time.sleep(0.3)
         if env.quit:
