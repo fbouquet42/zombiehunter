@@ -1,6 +1,7 @@
 
 #Python Lib
 from random import randint
+from threading import Thread
 
 #Current Module
 from . import DefaultMonster
@@ -13,11 +14,14 @@ class Tentacle(DefaultMonster):
     id_nb = 9
     following = False
     degeneration = 280
+    spore = False
 
     def build_class():
         Tentacle.img = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name, Tentacle.dimensions)
         Tentacle.img_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_injured', Tentacle.dimensions)
         Tentacle.img_dead = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_dead', Tentacle.dimensions)
+        Tentacle.img_spore = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore', Tentacle.dimensions)
+        Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish.build_class(Tentacle.env)
 
     def __init__(self, env, monster, base, x, y, identity):
         self.x = x
@@ -27,6 +31,7 @@ class Tentacle(DefaultMonster):
         self.limit_coords = int(identity * 0.12 * self.dimensions)
         self.base = base
         self.monster = monster
+        self.loading()
 
         self.target = self.base.target
         class _TestCoords:
@@ -35,6 +40,9 @@ class Tentacle(DefaultMonster):
         self.test.x = x
         self.test.y = y
         self.test.rapidity += identity
+
+    def loading(self):
+        self.sporing = randint(65, 125)
 
     def _limits(self):
         if self.test.x > self.base.x + self.limit_coords:
@@ -85,9 +93,23 @@ class Tentacle(DefaultMonster):
 #            if self.env.walking_dead:
 #                img = self.img_possessed[self.direction]
 #            else:
+        elif self.spore:
+            img = self.img_spore[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
         self._debug()
+
+    def update(self):
+        super().update()
+        if self.lives and self.spore:
+            self.sporing -= 1
+            if not self.sporing:
+                bullet = self.bullet(self.x, self.y, self.direction, self)
+                t = Thread(target=bullet.move, args=())
+                t.daemon = True
+                self.env.bullets.append(bullet)
+                t.start()
+                self.loading()

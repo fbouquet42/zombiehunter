@@ -5,6 +5,7 @@ from . import DefaultBullet
 class   Arrow(DefaultBullet):
     rapidity = 39
     attack=20
+
     def build_class(env, player):
         Arrow.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "arrow", player.dimensions)
         Arrow.player = player

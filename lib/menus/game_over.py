@@ -76,6 +76,7 @@ def game_over(env):
         for player in env.players:
             player.lives = player.max_lives
             player.score.total = 0
+            player.score.i = 0
         env.quit = False
         return
     welcome(env)

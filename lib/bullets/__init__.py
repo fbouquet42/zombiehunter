@@ -8,3 +8,4 @@ from .double_bullet import DoubleBullet
 from .hell_star import HellStar
 from .rocket import Rocket
 from .thorns import Thorns
+from .jellyfish import JellyFish

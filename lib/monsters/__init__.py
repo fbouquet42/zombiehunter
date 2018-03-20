@@ -14,6 +14,7 @@ from .harpy import Harpy
 from .vines import Vines
 from .ent import Ent
 from .tentacle import Tentacle
+from .base_tentacles import BaseTentacles
 from .kraken import Kraken
 
 tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent]

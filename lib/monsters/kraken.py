@@ -1,76 +1,10 @@
-from threading import Thread
 from random import randint
 import time
 
 from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Tentacle
-
-
-class _BaseTentacles:
-    def __init__(self, env, monster, identity):
-        self.half = monster.half
-        self.pos = int(monster.half * 0.8)
-        self.env = env
-        self.tools = env.mod.tools
-        self.monster = monster
-        self.id = identity
-        self.target = env.players[0]
-        self.update()
-
-        self.tentacles = []
-        for i in range(0, 6):
-            self.growing()
-
-    def _find_target(self):
-        d_objective = -1
-        target = None
-        x_objective = 0
-        y_objective = 0
-        for player in self.env.players:
-            if not player.lives:
-                continue
-            x, y, distance = self.tools.process_distance(player, self)
-            if target is None or d_objective > distance:
-                if not x and not y:
-                    return None, None
-                d_objective = distance
-                x_objective = x
-                y_objective = y
-                target = player
-        return target
-
-    def growing(self):
-        i = 0
-        while i != len(self.tentacles):
-            if not self.tentacles[i].lives:
-                del self.tentacles[i]
-            else:
-                i += 1
-        if len(self.tentacles):
-            tentacle = Tentacle(self.env, self.monster, self, self.tentacles[0].x, self.tentacles[0].y, len(self.tentacles))
-            self.tentacles[0].following = True
-            self.tentacles[0].target = tentacle
-        else:
-            tentacle = Tentacle(self.env, self.monster, self, self.x, self.y, 0)
-        t = Thread(target=tentacle.move, args=())
-        t.daemon = True
-        self.env.monsters.append(tentacle)
-        t.start()
-        self.tentacles.insert(0, tentacle)
-
-    def update(self):
-        if self.id < 3:
-            self.x = self.monster.x - self.pos
-        else:
-            self.x = self.monster.x + self.pos
-        if self.id % 2:
-            self.y = self.monster.y - self.pos
-        else:
-            self.y = self.monster.y + self.pos
-        target = self._find_target()
-        if target is not None:
-            self.target = target
+from . import BaseTentacles
 
 class Kraken(DefaultMonster):
     name = "kraken"
@@ -87,15 +21,27 @@ class Kraken(DefaultMonster):
 
         self.img = self.tools.set_imgs(env.img_folder + 'monsters/', self.name, self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_injured', self.dimensions)
+        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
 
         self.hitbox = set_hitbox_monster(env, self, 0.7)
         Tentacle.build_class()
         self.tentacles_headers = []
         for i in range(1, 5):
-            self.tentacles_headers.append(_BaseTentacles(env, self, i))
+            self.tentacles_headers.append(BaseTentacles(env, self, i))
+
+        self.spelling = 0
+        self._next_spell()
+        self.spell_type = [self.sporing]
 
         self.next_enlargement()
+
+    def _next_spell(self):
+        self.spell = randint(390, 680)
+
+    def sporing(self):
+        for tentacles_header in self.tentacles_headers:
+            tentacles_header.spore_popping()
 
     def next_enlargement(self):
         self.expand = randint(100, 230)
@@ -112,12 +58,31 @@ class Kraken(DefaultMonster):
 #            img = self.img_furious[self.direction]
 #        elif self.spelling:
 #            img = self.img_spelling[self.direction]
+        elif self.spelling:
+            img = self.img_spelling[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
             img = self.img[self.direction]
         self.tools.display(env, img, self.x, self.y, fitting)
         self._debug()
+
+    def hitted(self, attack=1):
+        if self.lives and not self.spelling:
+            self.injured = 12
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            return self.id_nb, attack
+        return None, None
+
+    def _action(self):
+        direction, _ = self._sniff_fresh_flesh()
+        if direction is not None:
+            self.direction = direction
+            if not self.spelling:
+                self.tools.move(self, direction, self.rapidity + self.env.furious)
+            self.hitbox.update_coords(self)
+        self._target_hitted()
 
     def move(self):
         self.tick = self.env.mod.tools.Tick()
@@ -153,3 +118,13 @@ class Kraken(DefaultMonster):
         else:
             self.growing()
             self.next_enlargement()
+        if not self.lives:
+            pass
+        elif self.spelling:
+            self.spelling -= 1
+        else:
+            self.spell -= 1
+            if not self.spell:
+                self.spell_type[randint(0, len(self.spell_type) - 1)]()
+                self.spelling = randint(45, 75)
+                self._next_spell()
