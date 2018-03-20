@@ -13,14 +13,17 @@ class Tentacle(DefaultMonster):
     name = "tentacle"
     id_nb = 9
     following = False
-    degeneration = 280
+    degeneration = 185
     spore = False
+    rooted = True
 
     def build_class():
         Tentacle.img = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name, Tentacle.dimensions)
         Tentacle.img_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_injured', Tentacle.dimensions)
         Tentacle.img_dead = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_dead', Tentacle.dimensions)
         Tentacle.img_spore = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore', Tentacle.dimensions)
+        Tentacle.img_spore_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore_injured', Tentacle.dimensions)
+        Tentacle.img_possessed = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed', Tentacle.dimensions)
         Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish.build_class(Tentacle.env)
 
     def __init__(self, env, monster, base, x, y, identity):
@@ -42,7 +45,7 @@ class Tentacle(DefaultMonster):
         self.test.rapidity += identity
 
     def loading(self):
-        self.sporing = randint(65, 125)
+        self.sporing = randint(50, 95)
 
     def _limits(self):
         if self.test.x > self.base.x + self.limit_coords:
@@ -85,6 +88,7 @@ class Tentacle(DefaultMonster):
                 self.lives = 0
         if self.following:
             self.target.lives = 0
+        self.rooted = False
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -93,6 +97,8 @@ class Tentacle(DefaultMonster):
 #            if self.env.walking_dead:
 #                img = self.img_possessed[self.direction]
 #            else:
+        elif self.spore and self.injured:
+            img = self.img_spore_injured[self.direction]
         elif self.spore:
             img = self.img_spore[self.direction]
         elif self.injured:

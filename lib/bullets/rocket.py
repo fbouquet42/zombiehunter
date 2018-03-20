@@ -10,6 +10,8 @@ from . import DefaultBullet
 
 class   Rocket(DefaultBullet):
     rapidity = 30
+    from_player=True
+
     def build_class(env, player):
         Rocket.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "rocket", player.dimensions)
         Rocket.player = player
@@ -32,7 +34,7 @@ class   Rocket(DefaultBullet):
     def _target_hitted(self):
         for player in self.env.players:
             if player is not self.player and player.affected(self):
-                player.hitted(attack=self.attack)
+                player.hitted(attack=self.attack // 2)
                 self._explose()
                 return True
         for monster in self.env.monsters:

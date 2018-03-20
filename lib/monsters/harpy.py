@@ -13,6 +13,7 @@ class Harpy(DefaultMonster):
     rapidity_onground = 12
     ultimatum_onflight = 170
     ultimatum_onground = 85
+    rooted = True
 
     def build_class():
         Harpy.img = Harpy.tools.set_imgs(Harpy.env.img_folder + 'monsters/', Harpy.name, Harpy.dimensions)
@@ -52,6 +53,7 @@ class Harpy(DefaultMonster):
             return
         self._gradient_fly(8)
         self.flying = False
+        self.rooted = False
         self.rapidity = self.rapidity_onground
         self.ultimatum = self.ultimatum_onground
         self.gradient = self.gradient_max
@@ -87,6 +89,7 @@ class Harpy(DefaultMonster):
 
         self.rapidity = self.rapidity_onground
         self.flying = False
+        self.rooted = False
         while self.degeneration:
             if self.env.walking_dead:
                 self._action()
@@ -120,6 +123,7 @@ class Harpy(DefaultMonster):
         elif self.ultimatum:
             self.ultimatum -= 1
         else:
+            self.rooted = True
             self.gradient -= 1
             if self.flying and not self.gradient:
                 self._on_ground()

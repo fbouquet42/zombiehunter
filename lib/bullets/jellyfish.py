@@ -4,8 +4,9 @@ from . import DefaultBullet
 
 class   JellyFish(DefaultBullet):
     rapidity = 2
-    rapidity_moving = 26
+    rapidity_moving = 32
     moving = True
+    attack = 8
 
     @classmethod
     def build_class(cls, env):
@@ -18,13 +19,13 @@ class   JellyFish(DefaultBullet):
         self.hitbox = set_hitbox_bullet(self.env, self, 0.19)
         self.monster = monster
         self.tools.move(self, self.direction)
-        self.ultimatum = 9
+        self.ultimatum = 7
 
     def _change_state(self):
         if not self.moving:
-            self.ultimatum = 9
+            self.ultimatum = 7
         else:
-            self.ultimatum = 18
+            self.ultimatum = 13
         self.moving = not self.moving
 
     def display(self, env):

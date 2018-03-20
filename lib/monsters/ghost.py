@@ -9,6 +9,7 @@ class Ghost(DefaultMonster):
     rapidity = 13
     ultimatum = 200
     attack = 2
+    rooted = True
 
     def __init__(self, env, x, y, img):
         self.x = x

@@ -1,10 +1,12 @@
 from random import randint
+from threading import Thread
 import time
 
 from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Tentacle
 from . import BaseTentacles
+from . import Vortex
 
 class Kraken(DefaultMonster):
     name = "kraken"
@@ -15,6 +17,7 @@ class Kraken(DefaultMonster):
     attack = 3
     id_nb = 8
     degeneration = 550
+    rooted = True
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -23,9 +26,11 @@ class Kraken(DefaultMonster):
         self.img_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_injured', self.dimensions)
         self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
+        self.img_possessed = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_possessed', self.dimensions)
 
         self.hitbox = set_hitbox_monster(env, self, 0.7)
         Tentacle.build_class()
+        Vortex.build_class(self.env, self)
         self.tentacles_headers = []
         for i in range(1, 5):
             self.tentacles_headers.append(BaseTentacles(env, self, i))
@@ -37,7 +42,7 @@ class Kraken(DefaultMonster):
         self.next_enlargement()
 
     def _next_spell(self):
-        self.spell = randint(390, 680)
+        self.spell = randint(400, 630)
 
     def sporing(self):
         for tentacles_header in self.tentacles_headers:
@@ -126,5 +131,9 @@ class Kraken(DefaultMonster):
             self.spell -= 1
             if not self.spell:
                 self.spell_type[randint(0, len(self.spell_type) - 1)]()
-                self.spelling = randint(45, 75)
+                self.spelling = randint(90, 115)
                 self._next_spell()
+                vortex = Vortex(self.x, self.y)
+                t = Thread(target=vortex.update, args=())
+                t.daemon = True
+                t.start()

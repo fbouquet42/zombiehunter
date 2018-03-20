@@ -4,6 +4,8 @@ from . import DefaultBullet
 
 class   Bullet(DefaultBullet):
     rapidity = 50
+    from_player = True
+
     def build_class(env, player):
         Bullet.player = player
         Bullet.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "bullet", env.player_dimensions)

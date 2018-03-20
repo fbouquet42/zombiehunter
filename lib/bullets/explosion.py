@@ -7,6 +7,8 @@ from . import DefaultBullet
 class   Explosion(DefaultBullet):
     lifetime = 25
     attack = 2
+    from_player = True
+
     def build_class(env, player):
         Explosion.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "explosion", player.dimensions)
         Explosion.player = player

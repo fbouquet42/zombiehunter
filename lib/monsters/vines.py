@@ -12,6 +12,7 @@ class Vines(DefaultMonster):
     lives = 15
     name = "vines"
     forest = True
+    rooted = True
     degeneration = 200
 
     def build_class():
@@ -44,6 +45,7 @@ class Vines(DefaultMonster):
             if self._quit():
                 return
         self.target.fixed = False
+        self.rooted = False
         self.lives = 0
 
     def display(self, env):

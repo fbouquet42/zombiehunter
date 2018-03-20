@@ -18,6 +18,7 @@ class DefaultMonster:
     hunt = True
     poisoned = 0
     forest = False
+    rooted = False
 
     def build_class(env):
         DefaultMonster.env = env

@@ -2,6 +2,8 @@ import time
 
 class   DefaultBullet:
     attack=10
+    from_player=False
+
     def build_class(env):
         DefaultBullet.env = env
         DefaultBullet.dimensions = env.player_dimensions
@@ -31,7 +33,7 @@ class   DefaultBullet:
         ret = False
         for player in self.env.players:
             if player is not self.player and player.affected(self):
-                player.hitted(attack=self.attack)
+                player.hitted(attack = self.attack // 2 if self.from_player else self.attack)
                 ret = True
         for monster in self.env.monsters:
             if monster.affected(self):
