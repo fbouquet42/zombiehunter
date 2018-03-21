@@ -3,7 +3,7 @@ from . import DefaultMonster
 
 
 class Vortex(DefaultMonster):
-    name = "zombie"
+    name = "vortex"
     rapidity = 8
 
     @classmethod
@@ -21,8 +21,7 @@ class Vortex(DefaultMonster):
 
     def _pull(self, target):
         x, y, _ = self.tools.process_distance(self, target)
-        direction = self._determine_direction(x, y)
-        self.tools.force_move(target, x, y, direction, rapidity=self.rapidity, set_direction=False)
+        self.tools.force_move(target, x, y, direction=0, rapidity=self.rapidity if target.rapidity > self.rapidity else 2, set_direction=False)
         target.hitbox.update_coords(target)
 
     def update(self):

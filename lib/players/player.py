@@ -8,6 +8,7 @@ class Player:
     max_lives = 82
     lives = 82
     direction = 0
+    max_rapidity = 22
     rapidity = 22
     injured = 0
     font = pygame.font.SysFont('Comic Sans MS', 40)

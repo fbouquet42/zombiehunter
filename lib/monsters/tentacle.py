@@ -13,7 +13,7 @@ class Tentacle(DefaultMonster):
     name = "tentacle"
     id_nb = 9
     following = False
-    degeneration = 160
+    degeneration = 175
     spore = False
     rooted = True
 
@@ -22,9 +22,9 @@ class Tentacle(DefaultMonster):
         Tentacle.img_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_injured', Tentacle.dimensions)
         Tentacle.img_dead = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_dead', Tentacle.dimensions)
         Tentacle.img_spore = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore', Tentacle.dimensions)
+        Tentacle.img_mood = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_mood', Tentacle.dimensions)
         Tentacle.img_spore_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore_injured', Tentacle.dimensions)
         Tentacle.img_possessed = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed', Tentacle.dimensions)
-        Tentacle.img_possessed_head = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed_head', Tentacle.dimensions)
         Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish.build_class(Tentacle.env)
 
     def __init__(self, env, monster, base, x, y, identity):
@@ -39,7 +39,7 @@ class Tentacle(DefaultMonster):
 
         self.target = self.base.target
         class _TestCoords:
-            rapidity = 5
+            rapidity = 4
         self.test = _TestCoords
         self.test.x = x
         self.test.y = y
@@ -47,6 +47,15 @@ class Tentacle(DefaultMonster):
 
     def loading(self):
         self.sporing = randint(50, 95)
+
+    def hitted(self, attack=1):
+        if self.lives:
+            self.injured = self.injured_gradient
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            if not self.lives:
+                return self.id_nb, len(self.base.tentacles) - self.id
+        return None, None
 
     def _limits(self):
         if self.test.x > self.base.x + self.limit_coords:
@@ -69,7 +78,7 @@ class Tentacle(DefaultMonster):
         if distance > self.hitbox.dimensions:
             direction = self._determine_direction(x, y)
             self.direction = direction
-            self.tools.force_move(self.test, x, y, self.direction)
+            self.tools.force_move(self, x, y, self.direction, rapidity = distance - self.hitbox.dimensions)
         self.hitbox.update_coords(self)
         self._target_hitted()
 
@@ -112,10 +121,8 @@ class Tentacle(DefaultMonster):
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
-            if self.env.walking_dead and self.following:
+            if self.env.walking_dead and not self.following:
                 img = self.img_possessed[self.direction]
-            elif self.env.walking_dead:
-                img = self.img_possessed_head[self.direction]
             else:
                 img = self.img_dead[self.direction]
         elif self.spore and self.injured:

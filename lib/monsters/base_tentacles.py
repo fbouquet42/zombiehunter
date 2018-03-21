@@ -17,6 +17,11 @@ class BaseTentacles:
         for i in range(0, 6):
             self.growing()
 
+    def mood(self, i):
+        self.tentacles.clear()
+        for i in range(0, i):
+            self.growing()
+
     def _find_target(self):
         d_objective = -1
         target = None

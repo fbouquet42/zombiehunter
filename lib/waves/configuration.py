@@ -5,6 +5,8 @@ class   DefaultWave:
         return randint(self.times[i], self.times[i]*2)
     
     def spawn(self, env, i):
+        if not self.nb[i]:
+            return 0
         spawned = randint(1, self.nb[i])
         env.mod.tools.spawn(env, env.mod.monsters.tab[i], spawned)
         self.next[i] = self.random(i)
