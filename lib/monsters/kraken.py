@@ -58,7 +58,10 @@ class Kraken(DefaultMonster):
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
-            img = self.img_dead[self.direction]
+            if self.env.walking_dead:
+                img = self.img_possessed[self.direction]
+            else:
+                img = self.img_dead[self.direction]
 #        elif self.furious:
 #            img = self.img_furious[self.direction]
 #        elif self.spelling:

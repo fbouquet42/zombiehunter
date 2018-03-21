@@ -22,7 +22,7 @@ class Vortex(DefaultMonster):
     def _pull(self, target):
         x, y, _ = self.tools.process_distance(self, target)
         direction = self._determine_direction(x, y)
-        self.tools.move(target, direction, rapidity=self.rapidity, set_direction=False)
+        self.tools.force_move(target, x, y, direction, rapidity=self.rapidity, set_direction=False)
         target.hitbox.update_coords(target)
 
     def update(self):

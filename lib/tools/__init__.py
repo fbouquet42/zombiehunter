@@ -9,3 +9,4 @@ from .spawn import spawn
 from .spawn_boss import spawn_boss
 from .load_img import load_img
 from .tick import Tick
+from .force_move import force_move

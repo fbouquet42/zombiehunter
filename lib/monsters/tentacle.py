@@ -13,7 +13,7 @@ class Tentacle(DefaultMonster):
     name = "tentacle"
     id_nb = 9
     following = False
-    degeneration = 185
+    degeneration = 160
     spore = False
     rooted = True
 
@@ -24,6 +24,7 @@ class Tentacle(DefaultMonster):
         Tentacle.img_spore = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore', Tentacle.dimensions)
         Tentacle.img_spore_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore_injured', Tentacle.dimensions)
         Tentacle.img_possessed = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed', Tentacle.dimensions)
+        Tentacle.img_possessed_head = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed_head', Tentacle.dimensions)
         Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish.build_class(Tentacle.env)
 
     def __init__(self, env, monster, base, x, y, identity):
@@ -60,9 +61,17 @@ class Tentacle(DefaultMonster):
             self.y = self.base.y - self.limit_coords
         else:
             self.y = self.test.y
-
         self.test.x = self.x
         self.test.y = self.y
+
+    def _crawler(self):
+        x, y, distance = self.tools.process_distance(self.target, self)
+        if distance > self.hitbox.dimensions:
+            direction = self._determine_direction(x, y)
+            self.direction = direction
+            self.tools.force_move(self.test, x, y, self.direction)
+        self.hitbox.update_coords(self)
+        self._target_hitted()
 
     def move(self):
         self.tick = self.env.mod.tools.Tick()
@@ -78,7 +87,7 @@ class Tentacle(DefaultMonster):
             x, y, _ = self.tools.process_distance(self.target, self)
             direction = self._determine_direction(x, y)
             self.direction = direction
-            self.tools.move(self.test, self.direction)
+            self.tools.force_move(self.test, x, y, self.direction)
             self._limits()
             self.hitbox.update_coords(self)
             self._target_hitted()
@@ -86,17 +95,29 @@ class Tentacle(DefaultMonster):
                 return
             if not self.monster.lives:
                 self.lives = 0
+
         if self.following:
             self.target.lives = 0
         self.rooted = False
+        self.rapidity = 11
+        while self.degeneration:
+            if self.env.walking_dead:
+                if not self.following:
+                    self._action()
+                else:
+                    self._crawler()
+            if self._quit():
+                return
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
-            img = self.img_dead[self.direction]
-#            if self.env.walking_dead:
-#                img = self.img_possessed[self.direction]
-#            else:
+            if self.env.walking_dead and self.following:
+                img = self.img_possessed[self.direction]
+            elif self.env.walking_dead:
+                img = self.img_possessed_head[self.direction]
+            else:
+                img = self.img_dead[self.direction]
         elif self.spore and self.injured:
             img = self.img_spore_injured[self.direction]
         elif self.spore:

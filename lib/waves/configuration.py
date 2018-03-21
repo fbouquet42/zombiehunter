@@ -133,9 +133,9 @@ class   Wave6(DefaultWave):
 class   Wave7(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_3', env.height, env.height)
-        self.times = [85]
-        self.nb = [2]
-        self.next = [0]
+        self.times = [85, 185, 220, 1000, 263, 900]
+        self.nb = [3, 0, 0, 1, 0, 0]
+        self.next = [0, self.random(1), self.random(2), 0, self.random(4), self.random(5) // 2]
         env.background = env.background_shadows
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Kraken)
 
