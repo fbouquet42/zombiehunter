@@ -13,7 +13,7 @@ class Tentacle(DefaultMonster):
     name = "tentacle"
     id_nb = 9
     following = False
-    degeneration = 175
+    degeneration = 200
     spore = False
     rooted = True
 
@@ -22,7 +22,6 @@ class Tentacle(DefaultMonster):
         Tentacle.img_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_injured', Tentacle.dimensions)
         Tentacle.img_dead = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_dead', Tentacle.dimensions)
         Tentacle.img_spore = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore', Tentacle.dimensions)
-        Tentacle.img_mood = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_mood', Tentacle.dimensions)
         Tentacle.img_spore_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore_injured', Tentacle.dimensions)
         Tentacle.img_possessed = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed', Tentacle.dimensions)
         Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish.build_class(Tentacle.env)

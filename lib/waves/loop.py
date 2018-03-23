@@ -13,6 +13,7 @@ def _init(env):
     env.mod.monsters.Necromancer.build_class()
     env.mod.monsters.Harpy.build_class()
     env.mod.monsters.Ent.build_class()
+    env.mod.monsters.Piranha.build_class()
 
 def loop(env):
     buff = 0

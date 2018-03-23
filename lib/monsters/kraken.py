@@ -25,7 +25,6 @@ class Kraken(DefaultMonster):
         self.img = self.tools.set_imgs(env.img_folder + 'monsters/', self.name, self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_injured', self.dimensions)
         self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
-        self.img_mood = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_mood', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_possessed', self.dimensions)
 
@@ -38,12 +37,16 @@ class Kraken(DefaultMonster):
 
         self.spelling = 0
         self._next_spell()
-        self.spell_type = [self.sporing]
+        self.spell_type = [self.sporing, self.spawning]
 
         self.next_enlargement()
 
     def _next_spell(self):
         self.spell = randint(400, 630)
+
+    def spawning(self):
+        spawned = randint(8, 11)
+        self.env.mod.tools.spawn(env, env.mod.monsters.Piranha, spawned)
 
     def sporing(self):
         for tentacles_header in self.tentacles_headers:
@@ -56,10 +59,10 @@ class Kraken(DefaultMonster):
         for tentacles_header in self.tentacles_headers:
             tentacles_header.growing()
 
-    def mood(self):
-        super()._father_init(randint(-200, 0), randint(-200, 0))
-        for tentacles_header in self.tentacles_headers:
-            tentacles_header.spore_popping()
+#    def mood(self):
+#        super()._father_init(randint(-200, 0), randint(-200, 0))
+#        for tentacles_header in self.tentacles_headers:
+#            tentacles_header.spore_popping()
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0

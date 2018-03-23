@@ -13,6 +13,7 @@ from .undead import Undead
 from .harpy import Harpy
 from .vines import Vines
 from .ent import Ent
+from .piranha import Piranha
 from .tentacle import Tentacle
 from .base_tentacles import BaseTentacles
 from .vortex import Vortex
