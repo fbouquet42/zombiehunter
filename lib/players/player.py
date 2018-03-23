@@ -11,7 +11,7 @@ class Player:
     max_rapidity = 22
     rapidity = 22
     injured = 0
-    font = pygame.font.SysFont('Comic Sans MS', 40)
+    font = pygame.font.SysFont('Comic Sans MS', 30)
     poisoned = 0
     fixed = False
     destroy = False

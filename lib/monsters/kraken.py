@@ -46,7 +46,7 @@ class Kraken(DefaultMonster):
 
     def spawning(self):
         spawned = randint(8, 11)
-        self.env.mod.tools.spawn(env, env.mod.monsters.Piranha, spawned)
+        self.env.mod.tools.spawn(self.env, self.env.mod.monsters.Piranha, spawned)
 
     def sporing(self):
         for tentacles_header in self.tentacles_headers:

@@ -10,9 +10,9 @@ from . import set_hitbox_monster
 class Piranha(DefaultMonster):
     lives = 50
     name = "piranha"
-    id_nb = 0
+    id_nb = 10
     poison = 140
-    injured_gradient = 24
+    injured_gradient = 28
 
     @classmethod
     def build_class(cls):
@@ -52,6 +52,8 @@ class Piranha(DefaultMonster):
         if self.lives and self.injured:
             if not self.injured % 4:
                 direction = self.escape[randint(0, 2)]
+            else:
+                direction = self.direction
         else:
             direction, _ = self._sniff_fresh_flesh()
         if direction is not None:
