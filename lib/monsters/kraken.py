@@ -12,7 +12,7 @@ class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
     lives = 700
-    lives_nyx = 700
+    lives_nyx = 70
     #500 300 700
     # + 3 necromancer spawns
     rapidity_kraken = 4
@@ -30,11 +30,11 @@ class Kraken(DefaultMonster):
         self.env.background = self.env.background_shadows
         self._next_spell()
         self.rapidity = self.rapidity_kraken
-        self.hitbox = set_hitbox_monster(env, self, 0.7)
-        for i in range(1, 5):
-            self.tentacles_headers.append(BaseTentacles(env, self, i))
-        self.spell_type = [self.sporing, self.spawning]
         self.huge = True
+        self.hitbox = set_hitbox_monster(self.env, self, 0.7)
+        for i in range(1, 5):
+            self.tentacles_headers.append(BaseTentacles(self.env, self, i))
+        self.spell_type = [self.sporing, self.spawning]
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -57,11 +57,14 @@ class Kraken(DefaultMonster):
         self.tentacles_headers = []
 
         self.spelling = 0
-        self._next_spell()
+        self._next_spell_nyx()
         self.next_enlargement()
 
     def _next_spell(self):
         self.spell = randint(400, 630)
+
+    def _next_spell_nyx(self):
+        self.spell = randint(105, 170)
 
     def spawning(self):
         spawned = randint(8, 11)
@@ -151,7 +154,7 @@ class Kraken(DefaultMonster):
         direction, _ = self._sniff_fresh_flesh()
         if direction is not None:
             self.direction = direction
-            if not self.spelling and not self.tranforming:
+            if not self.spelling and not self.transforming:
                 self.tools.move(self, direction, self.rapidity + self.env.furious)
             self.hitbox.update_coords(self)
         self._target_hitted()
@@ -214,7 +217,7 @@ class Kraken(DefaultMonster):
                 t.daemon = True
                 self.env.bullets.append(bullet)
                 t.start()
-                self._next_spell()
+                self._next_spell_nyx()
 
     def update(self):
         if self.injured:

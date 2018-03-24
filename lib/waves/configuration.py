@@ -143,7 +143,7 @@ class   Wave7(DefaultWave):
         self.title = env.mod.tools.load_img(env, 'waves/wave_7', env.height, env.height)
         self.more = False
         self.times = [58, 170, 105]
-        self.nb = [4, 1, 1]
+        self.nb = [3, 1, 1]
         self.next = [0, 0, self.random(2)]
         env.background = env.background_shadows
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Kraken)
