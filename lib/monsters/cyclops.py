@@ -16,15 +16,20 @@ class   Cyclops(DefaultMonster):
     id_nb = 1
     attack = 2
 
-    def build_class():
-        Cyclops.sniff = int(Cyclops.dimensions * 1.5)
-        Cyclops.img = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name, Cyclops.dimensions)
-        Cyclops.img_injured = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_injured', Cyclops.dimensions)
-        Cyclops.img_eyeless = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_eyeless', Cyclops.dimensions)
-        Cyclops.img_eyeless_injured = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_eyeless_injured', Cyclops.dimensions)
-        Cyclops.img_dead = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_dead', Cyclops.dimensions)
-        Cyclops.img_possessed = Cyclops.tools.set_imgs(Cyclops.env.img_folder + 'monsters/', Cyclops.name + '_possessed', Cyclops.dimensions)
-        return Cyclops
+    @classmethod
+    def build_class(cls):
+        cls.sniff = int(cls.dimensions * 1.5)
+        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
+        cls.img_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_night', cls.dimensions)
+        cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
+        cls.img_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured_night', cls.dimensions)
+        cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
+        cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
+        cls.img_eyeless = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless', cls.dimensions)
+        cls.img_eyeless_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_night', cls.dimensions)
+        cls.img_eyeless_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_injured', cls.dimensions)
+        cls.img_eyeless_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_injured_night', cls.dimensions)
+        return cls
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -77,9 +82,7 @@ class   Cyclops(DefaultMonster):
             if self._quit():
                 return
 
-
-    def display(self, env):
-        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+    def _display_day(self, env, fitting):
         if not self.lives:
             if self.env.walking_dead:
                 img = self.img_possessed[self.direction]
@@ -94,4 +97,24 @@ class   Cyclops(DefaultMonster):
         else:
             img = self.img_eyeless[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+
+    def _display_night(self, env, fitting):
+        if not self.lives:
+            return
+        elif self.lives > self.eyeless and self.injured:
+            img = self.img_injured_night[self.direction]
+        elif self.lives > self.eyeless:
+            img = self.img_night[self.direction]
+        elif self.injured:
+            img = self.img_eyeless_injured_night[self.direction]
+        else:
+            img = self.img_eyeless_night[self.direction]
+        self.tools.display(self.env, img, self.x, self.y, fitting)
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if env.night:
+            self._display_night(env, fitting)
+        else:
+            self._display_day(env, fitting)
         self._debug()

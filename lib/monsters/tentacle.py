@@ -24,7 +24,7 @@ class Tentacle(DefaultMonster):
         Tentacle.img_spore = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore', Tentacle.dimensions)
         Tentacle.img_spore_injured = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_spore_injured', Tentacle.dimensions)
         Tentacle.img_possessed = Tentacle.tools.set_imgs(Tentacle.env.img_folder + 'monsters/', Tentacle.name + '_possessed', Tentacle.dimensions)
-        Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish.build_class(Tentacle.env)
+        Tentacle.bullet = Tentacle.env.mod.bullets.JellyFish
 
     def __init__(self, env, monster, base, x, y, identity):
         self.x = x

@@ -6,11 +6,14 @@ class   Arrow(DefaultBullet):
     rapidity = 39
     attack=20
     from_player = True
+    name = "arrow"
 
-    def build_class(env, player):
-        Arrow.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "arrow", player.dimensions)
-        Arrow.player = player
-        return Arrow
+    @classmethod
+    def build_class(cls, env, player):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
+        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', player.dimensions)
+        cls.player = player
+        return cls
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)

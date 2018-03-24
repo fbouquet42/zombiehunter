@@ -36,13 +36,13 @@ def game_over(env):
         if not exe:
             pass
         elif pressed[approve]:
-            if action != 1 or env.retry:
+            if action or env.retry:
                 break
-        elif action > 1 and pressed[up]:
-            action -= 1
+        elif action and pressed[up]:
+            action -= 2
             tick.sleep(0.1)
-        elif action < 2 and pressed[down]:
-            action += 1
+        elif not action and pressed[down]:
+            action += 2
             tick.sleep(0.1)
         elif pressed[left]:
             for player in env.players:
@@ -66,12 +66,13 @@ def game_over(env):
         tick.sleep()
         exe = time.time() - tick.before_loop > 0.75
 
-    if action == 1:
+    if not action:
         env.monsters.clear()
         env.bullets.clear()
         env.jerk = False
         env.furious = 0
         env.walking_dead = 0
+        env.night = False
         env.retry -= 1
         for player in env.players:
             player.lives = player.max_lives

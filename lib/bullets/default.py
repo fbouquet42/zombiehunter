@@ -20,7 +20,10 @@ class   DefaultBullet:
         self.fitting = 0.23 * self.dimensions if self.direction % 2 else 0
 
     def display(self, env):
-        self.tools.display(env, self.img[self.direction], self.x, self.y, self.fitting)
+        if env.night:
+            self.tools.display(env, self.img_night[self.direction], self.x, self.y, self.fitting)
+        else:
+            self.tools.display(env, self.img[self.direction], self.x, self.y, self.fitting)
         if env.debug:
             self.tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 

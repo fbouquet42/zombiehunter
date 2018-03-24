@@ -13,6 +13,7 @@ class Piranha(DefaultMonster):
     id_nb = 10
     poison = 140
     injured_gradient = 28
+    rooted = True
 
     @classmethod
     def build_class(cls):

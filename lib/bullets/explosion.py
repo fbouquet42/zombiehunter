@@ -8,11 +8,14 @@ class   Explosion(DefaultBullet):
     lifetime = 25
     attack = 2
     from_player = True
+    name = "explosion"
 
-    def build_class(env, player):
-        Explosion.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "explosion", player.dimensions)
-        Explosion.player = player
-        return Explosion
+    @classmethod
+    def build_class(cls, env, player):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
+        cls.img_night = cls.img
+        cls.player = player
+        return cls
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)

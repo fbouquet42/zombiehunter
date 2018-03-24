@@ -4,10 +4,13 @@ from . import DefaultBullet
 
 class   DoubleBullet(DefaultBullet):
     rapidity = 43
+    name = "double_bullet"
 
-    def build_class(env):
-        DoubleBullet.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "double_bullet", env.player_dimensions)
-        return DoubleBullet
+    @classmethod
+    def build_class(cls, env):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions)
+        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', env.player_dimensions)
+        return cls
 
     def __init__(self, x, y, direction, monster):
         super().__init__(x, y, direction)

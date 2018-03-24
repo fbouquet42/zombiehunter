@@ -9,13 +9,16 @@ class   JackLantern(DefaultMonster):
     lives = 30
     id_nb = 2
 
-    def build_class():
-        JackLantern.img = JackLantern.tools.set_imgs(JackLantern.env.img_folder + 'monsters/', JackLantern.name, JackLantern.dimensions)
-        JackLantern.img_injured = JackLantern.tools.set_imgs(JackLantern.env.img_folder + 'monsters/', JackLantern.name + '_injured', JackLantern.dimensions)
-        JackLantern.img_dead = JackLantern.tools.set_imgs(JackLantern.env.img_folder + 'monsters/', JackLantern.name + '_dead', JackLantern.dimensions)
-        JackLantern.img_possessed = JackLantern.tools.set_imgs(JackLantern.env.img_folder + 'monsters/', JackLantern.name + '_possessed', JackLantern.dimensions)
-        JackLantern.bullet = JackLantern.env.mod.bullets.DoubleBullet.build_class(JackLantern.env)
-        return JackLantern
+    @classmethod
+    def build_class(cls):
+        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
+        cls.img_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_night', cls.dimensions)
+        cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
+        cls.img_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured_night', cls.dimensions)
+        cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
+        cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
+        cls.bullet  = cls.env.mod.bullets.DoubleBullet.build_class(cls.env)
+        return cls
 
     def loading(self):
         self.next_shoot = randint(140, 280)
@@ -29,8 +32,7 @@ class   JackLantern(DefaultMonster):
         self.loading()
         self.walking_dead = False
 
-    def display(self, env):
-        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+    def _display_day(self, env, fitting):
         if not self.lives:
             if self.env.walking_dead:
                 img = self.img_possessed[self.direction]
@@ -41,6 +43,22 @@ class   JackLantern(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+
+    def _display_night(self, env, fitting):
+        if not self.lives:
+            return
+        elif self.injured:
+            img = self.img_injured_night[self.direction]
+        else:
+            img = self.img_night[self.direction]
+        self.tools.display(self.env, img, self.x, self.y, fitting)
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if env.night:
+            self._display_night(env, fitting)
+        else:
+            self._display_day(env, fitting)
         self._debug()
 
     def update(self):

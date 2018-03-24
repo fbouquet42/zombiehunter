@@ -17,6 +17,7 @@ class Env:
         self.background_basic = self.mod.tools.load_img(self, 'background_basic', self.width, self.height)
         self.background_hell = self.mod.tools.load_img(self, 'background_hell', self.width, self.height)
         self.background_shadows = self.mod.tools.load_img(self, 'background_shadows', self.width, self.height)
+        self.background_night = self.mod.tools.load_img(self, 'background_night', self.width, self.height)
         self.background = self.background_basic
 
     def __init__(self, argv, pwd):
@@ -64,6 +65,8 @@ class Env:
         self.furious = 0
         #Necromancer
         self.walking_dead = 0
+        #Nyx
+        self.night = False
 
         ###Data
         self.players = []
@@ -108,6 +111,7 @@ class Env:
         self.jerk = False
         self.furious = 0
         self.walking_dead = 0
+        self.night = False
         self.retry = 1
 
     def usage(self):

@@ -46,7 +46,9 @@ class Player:
         self.name = name
 
         self.img = self.tools.set_imgs(env.img_folder + 'players/', self.name, self.dimensions)
+        self.img_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_night', self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured', self.dimensions)
+        self.img_injured_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured_night', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_possessed', self.dimensions)
         self.possessed = False
@@ -61,7 +63,7 @@ class Player:
         return False
 
     def display_lives(self, env):
-        if not self.lives:
+        if not self.lives or env.night:
             return
         live_percent = int((self.lives / self.max_lives) * 100)
         if live_percent > 66:
@@ -86,8 +88,7 @@ class Player:
         self.tools.limits(self, self.limitx, self.limity)
         self.hitbox.update_coords(self)
 
-    def display(self, env):
-        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+    def _display_day(self, env, fitting):
         if not self.lives:
             img = self.img_dead[self.direction]
         elif self.injured:
@@ -98,6 +99,22 @@ class Player:
             self.tools.display(env, img, self.x, self.y, fitting)
         if self.lives:
             self.weapon.display(env, self.direction, self.x, self.y, fitting)
+
+    def _display_night(self, env, fitting):
+        if not self.lives:
+            return
+        elif self.injured:
+            img = self.img_injured_night[self.direction]
+        else:
+            img = self.img_night[self.direction]
+        self.tools.display(env, img, self.x, self.y, fitting)
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if env.night:
+            self._display_night(env, fitting)
+        else:
+            self._display_day(env, fitting)
         if env.debug and self.lives:
             self.tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 

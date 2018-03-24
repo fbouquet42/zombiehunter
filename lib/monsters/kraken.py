@@ -10,14 +10,31 @@ from . import Vortex
 
 class Kraken(DefaultMonster):
     name = "kraken"
-    lives = 1710
-    #450 570 690
+    name_nyx = "nyx"
+    lives = 700
+    lives_nyx = 700
+    #500 300 700
     # + 3 necromancer spawns
-    rapidity = 4
+    rapidity_kraken = 4
+    rapidity = 9
     attack = 3
     id_nb = 8
     degeneration = 550
     rooted = True
+    huge = False
+    transforming = 0
+    night = 0
+
+    def _kraken(self):
+        self.env.night = False
+        self.env.background = self.env.background_shadows
+        self._next_spell()
+        self.rapidity = self.rapidity_kraken
+        self.hitbox = set_hitbox_monster(env, self, 0.7)
+        for i in range(1, 5):
+            self.tentacles_headers.append(BaseTentacles(env, self, i))
+        self.spell_type = [self.sporing, self.spawning]
+        self.huge = True
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -27,18 +44,20 @@ class Kraken(DefaultMonster):
         self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_possessed', self.dimensions)
+        self.img_nyx = self.tools.set_imgs(env.img_folder + 'monsters/', self.name_nyx, self.dimensions)
+        self.img_nyx_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name_nyx + '_injured', self.dimensions)
+        self.img_nyx_night = self.tools.set_imgs(env.img_folder + 'monsters/', self.name_nyx + '_night', self.dimensions)
+        self.img_nyx_injured_night = self.tools.set_imgs(env.img_folder + 'monsters/', self.name_nyx + '_injured_night', self.dimensions)
+        self.img_nyx_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name_nyx + '_dead', self.dimensions)
 
-        self.hitbox = set_hitbox_monster(env, self, 0.7)
+        self.hitbox = set_hitbox_monster(env, self)
+        self.bullet = env.mod.bullets.JellyFish.build_class(Tentacle.env)
         Tentacle.build_class()
         Vortex.build_class(self.env, self)
         self.tentacles_headers = []
-        for i in range(1, 5):
-            self.tentacles_headers.append(BaseTentacles(env, self, i))
 
         self.spelling = 0
         self._next_spell()
-        self.spell_type = [self.sporing, self.spawning]
-
         self.next_enlargement()
 
     def _next_spell(self):
@@ -59,22 +78,12 @@ class Kraken(DefaultMonster):
         for tentacles_header in self.tentacles_headers:
             tentacles_header.growing()
 
-#    def mood(self):
-#        super()._father_init(randint(-200, 0), randint(-200, 0))
-#        for tentacles_header in self.tentacles_headers:
-#            tentacles_header.spore_popping()
-
-    def display(self, env):
-        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+    def _display_kraken(self, env, fitting):
         if not self.lives:
             if self.env.walking_dead:
                 img = self.img_possessed[self.direction]
             else:
                 img = self.img_dead[self.direction]
-#        elif self.furious:
-#            img = self.img_furious[self.direction]
-#        elif self.spelling:
-#            img = self.img_spelling[self.direction]
         elif self.spelling:
             img = self.img_spelling[self.direction]
         elif self.injured:
@@ -82,9 +91,55 @@ class Kraken(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(env, img, self.x, self.y, fitting)
+
+    def _display_wizard(self, env, fitting):
+        if not self.lives_nyx:
+            img = self.img_nyx_dead[self.direction]
+        elif self.injured:
+            if self.night:
+                img = self.img_nyx_injured_night[self.direction]
+            else:
+                img = self.img_nyx_injured[self.direction]
+        else:
+            if self.night:
+                img = self.img_nyx_night[self.direction]
+            else:
+                img = self.img_nyx[self.direction]
+        self.tools.display(env, img, self.x, self.y, fitting)
+
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
+        if self.huge:
+            self._display_kraken(env, fitting)
+        else:
+            self._display_wizard(env, fitting)
         self._debug()
 
+    def affected(self, bullet):
+        if self.transforming:
+            return False
+        if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
+            return True
+        return False
+
+    def _dark_power(self):
+        self.night = 450
+        self.env.background = self.env.background_night
+        self.env.night = True
+
+    def _hitted_wizard(self, attack):
+        self.injured = 12
+        if self.lives_nyx > 300 and self.lives_nyx - attack <= 300:
+            self._dark_power()
+        elif self.lives_nyx > 600 and self.lives_nyx - attack <= 600:
+            self._dark_power()
+        self.lives_nyx -= attack
+        self.lives_nyx = 0 if self.lives_nyx < 0 else self.lives_nyx
+        return self.id_nb, attack
+
     def hitted(self, attack=1):
+        if not self.huge:
+            return self._hitted_wizard(attack)
         if self.lives and not self.spelling:
             self.injured = 12
             self.lives -= attack
@@ -96,7 +151,7 @@ class Kraken(DefaultMonster):
         direction, _ = self._sniff_fresh_flesh()
         if direction is not None:
             self.direction = direction
-            if not self.spelling:
+            if not self.spelling and not self.tranforming:
                 self.tools.move(self, direction, self.rapidity + self.env.furious)
             self.hitbox.update_coords(self)
         self._target_hitted()
@@ -118,26 +173,15 @@ class Kraken(DefaultMonster):
             if self._quit():
                 return
 
-    def update(self):
-        if self.injured:
-            self.injured -= 1
-        if not self.lives and self.degeneration:
-            self.degeneration -= 1
-        if self.lives and self.poisoned:
-            self.poisoned -= 1
-            if not self.poisoned % 20:
-                self.lives -= 1
-                self.injured += 5
+    def _update_kraken(self):
         if not self.lives:
-            pass
-        elif self.expand:
+            return
+        if self.expand:
             self.expand -= 1
         else:
             self.growing()
             self.next_enlargement()
-        if not self.lives:
-            pass
-        elif self.spelling:
+        if self.spelling:
             self.spelling -= 1
         else:
             self.spell -= 1
@@ -149,3 +193,40 @@ class Kraken(DefaultMonster):
                 t = Thread(target=vortex.update, args=())
                 t.daemon = True
                 t.start()
+
+    def _update_wizard(self):
+        if self.night:
+            self.night -= 1
+            if not self.night:
+                self.env.night = False
+                self.env.background = self.env.background_shadows
+        if not self.lives_nyx and self.transforming:
+            self.transforming -= 1
+            if not self.transforming:
+                self._kraken()
+        elif not self.lives_nyx:
+            self.transforming = 50
+        else:
+            self.spell -= 1
+            if not self.spell:
+                bullet = self.bullet(self.x, self.y, self.direction, self)
+                t = Thread(target=bullet.move, args=())
+                t.daemon = True
+                self.env.bullets.append(bullet)
+                t.start()
+                self._next_spell()
+
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        if self.lives and self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5
+        if self.huge:
+            self._update_kraken()
+        else:
+            self._update_wizard()

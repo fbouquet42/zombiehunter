@@ -5,11 +5,14 @@ from . import DefaultBullet
 class   Bullet(DefaultBullet):
     rapidity = 50
     from_player = True
+    name = "bullet"
 
-    def build_class(env, player):
-        Bullet.player = player
-        Bullet.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "bullet", env.player_dimensions)
-        return Bullet
+    @classmethod
+    def build_class(cls, env, player):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
+        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', player.dimensions)
+        cls.player = player
+        return cls
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)

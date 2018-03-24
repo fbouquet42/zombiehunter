@@ -11,12 +11,15 @@ from . import DefaultBullet
 class   Rocket(DefaultBullet):
     rapidity = 30
     from_player=True
+    name = "rocket"
 
-    def build_class(env, player):
-        Rocket.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", "rocket", player.dimensions)
-        Rocket.player = player
-        Rocket.explosion = Explosion.build_class(env, player)
-        return Rocket
+    @classmethod
+    def build_class(cls, env, player):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
+        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', player.dimensions)
+        cls.player = player
+        cls.explosion = Explosion.build_class(env, player)
+        return cls
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)

@@ -133,11 +133,18 @@ class   Wave6(DefaultWave):
         return False
 
 class   Wave7(DefaultWave):
+    def _more_monsters(self):
+        self.more = True
+        self.times = [90, 260, 220, 1480, 333, 2300]
+        self.nb = [2, 1, 1, 1, 2, 1]
+        self.next = [self.next[0], self.next[1], self.next[2], self.random(3), self.random(4) // 2, self.random(5) // 2]
+
     def __init__(self, env):
-        self.title = env.mod.tools.load_img(env, 'waves/wave_3', env.height, env.height)
-        self.times = [85, 185, 220, 1000, 263, 900]
-        self.nb = [3, 0, 0, 1, 0, 0]
-        self.next = [0, self.random(1), self.random(2), 0, self.random(4), self.random(5) // 2]
+        self.title = env.mod.tools.load_img(env, 'waves/wave_7', env.height, env.height)
+        self.more = False
+        self.times = [58, 170, 105]
+        self.nb = [4, 1, 1]
+        self.next = [0, 0, self.random(2)]
         env.background = env.background_shadows
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Kraken)
 
@@ -147,6 +154,8 @@ class   Wave7(DefaultWave):
                 self.spawn(env, i)
             else:
                 self.next[i] -= 1
+        if not self.more and not self.objective.lives_nyx:
+            self._more_monsters()
         if not self.objective.lives:
             env.background = env.background_basic
             return False
