@@ -17,9 +17,9 @@ class Kraken(DefaultMonster):
     # + 3 necromancer spawns
     rapidity_kraken = 4
     rapidity = 9
-    attack = 3
-    id_kraken = 8
-    id_nyx = 11
+    attack = 2
+    id_kraken = 11
+    id_nyx = 8
     degeneration = 550
     rooted = True
     huge = False
