@@ -14,6 +14,7 @@ class Vines(DefaultMonster):
     forest = True
     rooted = True
     degeneration = 200
+    rapidity = 0
 
     def build_class():
         Vines.img = Vines.tools.set_imgs(Vines.env.img_folder + 'monsters/', Vines.name, Vines.dimensions)

@@ -11,14 +11,15 @@ from . import Vortex
 class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
-    lives = 700
-    lives_nyx = 70
+    lives = 600
+    lives_nyx = 700
     #500 300 700
     # + 3 necromancer spawns
     rapidity_kraken = 4
     rapidity = 9
     attack = 3
-    id_nb = 8
+    id_kraken = 8
+    id_nyx = 11
     degeneration = 550
     rooted = True
     huge = False
@@ -67,7 +68,7 @@ class Kraken(DefaultMonster):
         self.spell = randint(105, 170)
 
     def spawning(self):
-        spawned = randint(8, 11)
+        spawned = randint(5, 7)
         self.env.mod.tools.spawn(self.env, self.env.mod.monsters.Piranha, spawned)
 
     def sporing(self):
@@ -138,7 +139,7 @@ class Kraken(DefaultMonster):
             self._dark_power()
         self.lives_nyx -= attack
         self.lives_nyx = 0 if self.lives_nyx < 0 else self.lives_nyx
-        return self.id_nb, attack
+        return self.id_nyx, attack
 
     def hitted(self, attack=1):
         if not self.huge:
@@ -147,7 +148,7 @@ class Kraken(DefaultMonster):
             self.injured = 12
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
-            return self.id_nb, attack
+            return self.id_kraken, attack
         return None, None
 
     def _action(self):

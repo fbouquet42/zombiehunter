@@ -11,7 +11,7 @@ class Piranha(DefaultMonster):
     lives = 50
     name = "piranha"
     id_nb = 10
-    poison = 140
+    poison = 80
     injured_gradient = 28
     rooted = True
 
