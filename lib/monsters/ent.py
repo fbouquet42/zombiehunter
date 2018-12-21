@@ -96,6 +96,12 @@ class   Ent(DefaultMonster):
             if self._quit():
                 return
 
+        while self.degeneration:
+            if self.env.walking_dead:
+                self._action()
+            if self._quit():
+                return
+
     def update(self):
         if self.injured:
             self.injured -= 1
