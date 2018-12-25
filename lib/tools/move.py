@@ -1,8 +1,9 @@
 
-def move(obj, direction, rapidity=0):
+def move(obj, direction, rapidity=0, set_direction=True):
     if not rapidity:
         rapidity = obj.rapidity
-    obj.direction = direction
+    if set_direction:
+        obj.direction = direction
     if direction == 0:
         obj.y -= rapidity
     elif direction == 1:
