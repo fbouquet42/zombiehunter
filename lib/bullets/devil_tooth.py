@@ -3,8 +3,8 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   DevilTooth(DefaultBullet):
-    rapidity = 33
-    attack=20
+    rapidity = 46
+    attack=10
     from_player = True
     name = "devil_tooth"
 

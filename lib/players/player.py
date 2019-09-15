@@ -19,7 +19,7 @@ class Player:
 
     def _get_weapon(self, env):
         if self.name == 'jack':
-            return env.mod.weapons.Aguni(env, self)
+            return env.mod.weapons.Crossbow(env, self)
         if self.name == 'baltazar':
             return env.mod.weapons.SubmachineGun(env, self)
 

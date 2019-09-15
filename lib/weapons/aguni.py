@@ -10,7 +10,7 @@ class   Aguni(DefaultWeapon):
         self.player = player
         self.dimensions = player.dimensions
 
-        self.delay = 12
+        self.delay = 9
         self.cooldown = 0
         self.fury = 0
         self.player_lives = player.lives
@@ -65,5 +65,5 @@ class   Aguni(DefaultWeapon):
         elif self.player_lives < self.player.lives:
             self.player.lives = self.player.lives
         elif self.player_lives > self.player.lives:
-            self.fury = 140
+            self.fury = 180
             self.player.rage = True
