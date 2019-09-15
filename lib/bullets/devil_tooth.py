@@ -41,3 +41,21 @@ class   DevilTooth(DefaultBullet):
                 return self._dead()
             if self._quit():
                 return
+
+    def _target_hitted(self):
+        ret = False
+        for player in self.env.players:
+            if not player.lives:
+                continue
+            if player is not self.player and player.affected(self):
+                player.hitted(attack = self.attack // 2 if self.from_player else self.attack)
+                ret = True
+        for monster in self.env.monsters:
+            if not monster.lives:
+                continue
+            if monster.affected(self):
+                id_nb, value = monster.hitted(attack=self.attack)
+                if id_nb is not None:
+                    self.player.score.kills[id_nb] += value
+                ret = True
+        return ret
