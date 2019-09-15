@@ -15,10 +15,11 @@ class Player:
     poisoned = 0
     fixed = False
     destroy = False
+    rage = False
 
     def _get_weapon(self, env):
         if self.name == 'jack':
-            return env.mod.weapons.Crossbow(env, self)
+            return env.mod.weapons.Aguni(env, self)
         if self.name == 'baltazar':
             return env.mod.weapons.SubmachineGun(env, self)
 
@@ -46,7 +47,9 @@ class Player:
         self.name = name
 
         self.img = self.tools.set_imgs(env.img_folder + 'players/', self.name, self.dimensions)
+        self.img_enraged = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_enraged', self.dimensions)
         self.img_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_night', self.dimensions)
+        self.img_enraged_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_enraged_night', self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured', self.dimensions)
         self.img_injured_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured_night', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_dead', self.dimensions)
@@ -83,6 +86,8 @@ class Player:
     def move(self, direction, rapidity=0):
         if rapidity:
             self.tools.move(self, direction, rapidity=rapidity)
+        elif self.rage:
+            self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:
             self.tools.move(self, direction)
         self.tools.limits(self, self.limitx, self.limity)
@@ -91,6 +96,8 @@ class Player:
     def _display_day(self, env, fitting):
         if not self.lives:
             img = self.img_dead[self.direction]
+        elif self.rage:
+            img = self.img_enraged[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
@@ -103,6 +110,8 @@ class Player:
     def _display_night(self, env, fitting):
         if not self.lives:
             return
+        elif self.rage:
+            img = self.img_enraged_night[self.direction]
         elif self.injured:
             img = self.img_injured_night[self.direction]
         else:

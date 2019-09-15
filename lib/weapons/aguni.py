@@ -7,30 +7,25 @@ class   Aguni(DefaultWeapon):
     def __init__(self, env, player):
         self.tools = env.mod.tools
 
+        self.player = player
         self.dimensions = player.dimensions
 
-        self.delay = 11
+        self.delay = 12
         self.cooldown = 0
-        self.rage = 99
-        self.count = 0
+        self.fury = 0
+        self.player_lives = player.lives
 
         self.img_calm = self.tools.set_imgs(env.img_folder + 'weapons/', self.name + '_calm', self.dimensions)
-        self.img_angry = self.tools.set_imgs(env.img_folder + 'weapons/', self.name + '_angry', self.dimensions)
         self.img_enraged = self.tools.set_imgs(env.img_folder + 'weapons/', self.name + '_enraged', self.dimensions)
         self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
         self.devil_tooth = env.mod.bullets.DevilTooth.build_class(env, player, self)
 
     def display(self, env, direction, x, y, fitting):
-        if self.rage < 5:
+        if not self.fury:
             img = self.img_calm[direction]
-        elif self.rage < 9:
-            img = self.img_angry[direction]
         else:
             img = self.img_enraged[direction]
         self.tools.display(env, img, x, y, fitting)
-
-    def bringOn(self):
-        self.rage += 1
 
     def _greatShoot(self, env, player, bullet):
         left = bullet(player.x, player.y, player.direction, 0)
@@ -53,16 +48,22 @@ class   Aguni(DefaultWeapon):
         if self.cooldown:
             return
         self.cooldown = self.delay
-        if self.rage < 9:
+        if not self.fury:
             self._shoot(env, player, self.tooth)
         else:
-            if self.count < 2:
-                self.count += 1
-            else:
-                self.rage = 0
-                self.count = 0
             self._greatShoot(env, player, self.devil_tooth) 
 
     def update(self):
         if self.cooldown:
             self.cooldown -= 1
+        if self.fury:
+            if self.player_lives > self.player.lives:
+                self.player_lives = self.player.lives
+            self.fury -= 1
+            if not self.fury:
+                self.player.rage = False
+        elif self.player_lives < self.player.lives:
+            self.player.lives = self.player.lives
+        elif self.player_lives > self.player.lives:
+            self.fury = 140
+            self.player.rage = True

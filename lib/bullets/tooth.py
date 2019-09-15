@@ -21,18 +21,3 @@ class   Tooth(DefaultBullet):
         self.hitbox = set_hitbox_bullet(self.env, self)
         self.tools.move(self, self.direction)
 
-    def _target_hitted(self):
-        ret = False
-        for player in self.env.players:
-            if player is not self.player and player.affected(self):
-                player.hitted(attack = self.attack // 2 if self.from_player else self.attack)
-                ret = True
-        for monster in self.env.monsters:
-            if monster.affected(self):
-                id_nb, value = monster.hitted(attack=self.attack)
-                if id_nb is not None:
-                    self.player.score.kills[id_nb] += value
-                    if monster.lives <= 0:
-                        self.weapon.rage += 1
-                ret = True
-        return ret
