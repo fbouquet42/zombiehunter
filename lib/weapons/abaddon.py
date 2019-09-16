@@ -32,9 +32,9 @@ class   Abaddon(DefaultWeapon):
             img = self.img_big[direction]
         elif self.loading > self.third:
             img = self.img_third[direction]
-        elif self.loading > self.second:
+        elif self.loading > self.second or self.delay > 4:
             img = self.img_second[direction]
-        elif self.loading > self.first:
+        elif self.loading > self.first or self.delay:
             img = self.img_first[direction]
         else:
             img = self.img_empty[direction]
