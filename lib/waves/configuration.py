@@ -11,7 +11,8 @@ class   DefaultWave:
         if not self.nb[i]:
             return 0
         spawned = randint(1, self.nb[i])
-        env.mod.tools.spawn(env, env.mod.monsters.tab[i], spawned)
+#        env.mod.tools.spawn(env, env.mod.monsters.tab[i], spawned)
+        env.mod.tools.spawn(env, env.mod.monsters.DarkKnight, 1)
         self.next[i] = self.random(i)
         return spawned
 

@@ -2,6 +2,7 @@ from .hitbox import set_hitbox_monster
 from .default import DefaultMonster
 
 from .zombie import Zombie
+from .dark_knight import DarkKnight
 from .cyclops import Cyclops
 from .jack_lantern import JackLantern
 from .minion import Minion
