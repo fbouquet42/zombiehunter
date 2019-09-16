@@ -45,7 +45,7 @@ class Tentacle(DefaultMonster):
         self.test.rapidity += identity
 
     def loading(self):
-        self.sporing = randint(50, 95)
+        self.sporing = randint(75, 115)
 
     def hitted(self, attack=1):
         if self.lives:

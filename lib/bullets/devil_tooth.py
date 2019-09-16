@@ -4,7 +4,7 @@ from . import DefaultBullet
 
 class   DevilTooth(DefaultBullet):
     rapidity = 46
-    attack=15
+    attack=20
     from_player = True
     name = "devil_tooth"
 
@@ -29,11 +29,11 @@ class   DevilTooth(DefaultBullet):
             if self.style == 1:
                 self.tools.move(self, self.direction)
             elif self.style == 0:
-                self.tools.move(self, self.direction, int(self.rapidity * 0.85))
-                self.tools.move(self, (self.direction + 1) % 8, int(self.rapidity * 0.15), False)
+                self.tools.move(self, self.direction, int(self.rapidity * 0.8))
+                self.tools.move(self, (self.direction + 1) % 8, int(self.rapidity * 0.2), False)
             elif self.style == 2:
-                self.tools.move(self, self.direction, int(self.rapidity * 0.85))
-                self.tools.move(self, (self.direction + 7) % 8, int(self.rapidity * 0.15), False)
+                self.tools.move(self, self.direction, int(self.rapidity * 0.8))
+                self.tools.move(self, (self.direction + 7) % 8, int(self.rapidity * 0.2), False)
             if self._limits_reached():
                 return self._dead()
             self.hitbox.update_coords(self)

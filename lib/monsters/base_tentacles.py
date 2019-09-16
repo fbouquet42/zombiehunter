@@ -14,8 +14,7 @@ class BaseTentacles:
         self.update()
 
         self.tentacles = []
-        for i in range(0, 6):
-            self.growing()
+        self.growing()
 
     def mood(self, i):
         self.tentacles.clear()

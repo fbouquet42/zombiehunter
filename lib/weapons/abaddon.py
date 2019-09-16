@@ -3,8 +3,8 @@ from threading import Thread
 
 class   Abaddon(DefaultWeapon):
     first = 16
-    second = 23
-    third = 27
+    second = 25
+    third = 30
     big = 56
     explodes = 72
 

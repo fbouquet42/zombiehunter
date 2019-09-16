@@ -1,4 +1,6 @@
 from random import randint
+#
+#
 
 class   DefaultWave:
     def random(self, i):
@@ -135,15 +137,15 @@ class   Wave6(DefaultWave):
 class   Wave7(DefaultWave):
     def _more_monsters(self):
         self.more = True
-        self.times = [90, 260, 220, 1480, 333, 2300]
+        self.times = [90, 290, 245, 1480, 350, 2300]
         self.nb = [2, 1, 1, 1, 2, 1]
         self.next = [self.next[0], self.next[1], self.next[2], self.random(3), self.random(4) // 2, self.random(5) // 2]
 
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_7', env.height, env.height)
         self.more = False
-        self.times = [58, 170, 105]
-        self.nb = [3, 1, 1]
+        self.times = [58, 220, 155]
+        self.nb = [2, 1, 1]
         self.next = [0, 0, self.random(2)]
         env.background = env.background_shadows
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Kraken)

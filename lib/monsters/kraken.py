@@ -11,7 +11,7 @@ from . import Vortex
 class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
-    lives = 600
+    lives = 400
     lives_nyx = 700
     #500 300 700
     # + 3 necromancer spawns
@@ -62,13 +62,13 @@ class Kraken(DefaultMonster):
         self.next_enlargement()
 
     def _next_spell(self):
-        self.spell = randint(400, 630)
+        self.spell = randint(420, 640)
 
     def _next_spell_nyx(self):
         self.spell = randint(105, 170)
 
     def spawning(self):
-        spawned = randint(5, 7)
+        spawned = randint(4, 6)
         self.env.mod.tools.spawn(self.env, self.env.mod.monsters.Piranha, spawned)
 
     def sporing(self):
@@ -76,7 +76,7 @@ class Kraken(DefaultMonster):
             tentacles_header.spore_popping()
 
     def next_enlargement(self):
-        self.expand = randint(100, 230)
+        self.expand = randint(400, 490)
 
     def growing(self):
         for tentacles_header in self.tentacles_headers:
