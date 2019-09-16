@@ -16,4 +16,5 @@ def wave(env, obj):
         time.sleep(0.3)
     for player in env.players:
         player.lives = player.max_lives
+    obj.loot(env)
     return not env.quit

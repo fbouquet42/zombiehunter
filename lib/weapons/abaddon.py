@@ -7,6 +7,7 @@ class   Abaddon(DefaultWeapon):
     third = 30
     big = 56
     explodes = 72
+    name = 'abaddon'
 
     def __init__(self, env, player):
         self.tools = env.mod.tools

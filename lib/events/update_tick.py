@@ -8,6 +8,9 @@ def update_tick(env):
         for monster in env.monsters:
             monster.update()
 
+        for obj in env.objects:
+            obj.update()
+
         tick.sleep()
         while env.pause:
             tick.sleep()

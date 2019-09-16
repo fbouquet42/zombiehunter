@@ -25,6 +25,14 @@ def display(env):
         if player.lives:
             env.players_alive += 1
 
+    i = 0
+    while i != len(env.objects):
+        if env.objects[i].disappear:
+            del env.objects[i]
+        else:
+            env.objects[i].display(env)
+            i += 1
+
     for title in env.titles:
         env.mod.tools.display(env, title, env.title_position, 0)
 

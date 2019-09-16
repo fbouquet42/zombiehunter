@@ -15,8 +15,8 @@ class   Aguni(DefaultWeapon):
         self.fury = 0
         self.player_lives = player.lives
 
-        self.img_calm = self.tools.set_imgs(env.img_folder + 'weapons/', self.name + '_calm', self.dimensions)
-        self.img_enraged = self.tools.set_imgs(env.img_folder + 'weapons/', self.name + '_enraged', self.dimensions)
+        self.img_calm = self.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_calm', self.dimensions)
+        self.img_enraged = self.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_enraged', self.dimensions)
         self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
         self.devil_tooth = env.mod.bullets.DevilTooth.build_class(env, player, self)
 

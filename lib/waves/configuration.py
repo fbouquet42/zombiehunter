@@ -1,4 +1,5 @@
 from random import randint
+import time
 #
 #
 
@@ -13,6 +14,9 @@ class   DefaultWave:
         env.mod.tools.spawn(env, env.mod.monsters.tab[i], spawned)
         self.next[i] = self.random(i)
         return spawned
+
+    def loot(self, **kwargs):
+        pass
 
 class   Wave1(DefaultWave):
     def __init__(self, env):
@@ -54,14 +58,19 @@ class   Wave2(DefaultWave):
             return True
         return False
 
+
 class   Wave3(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_3', env.height, env.height)
+        self.looting_title = env.mod.tools.load_img(env, 'waves/looting_wave_3', env.height, env.height)
+        self.cross = env.mod.objects.Cross.build_class(env, 'waves/cross_wave_3')
+        self.weapons = [env.mod.weapons.Abaddon, env.mod.weapons.Aguni]
         self.times = [80, 230, 185]
         self.nb = [2, 1, 1]
         self.next = [0, self.random(1), self.random(2)]
         env.background = env.background_hell
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Daemon)
+        self.objective.lives = 0
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -73,6 +82,22 @@ class   Wave3(DefaultWave):
             env.background = env.background_basic
             return False
         return True
+
+    def loot(self, env):
+        env.titles.append(self.looting_title)
+        env.objects.append(self.cross(x=int(0.2* env.width), y=int(0.5 *env.height)))
+        if len(env.players) > 1:
+            env.objects.append(self.cross(x=int(0.7* env.width), y=int(0.5 *env.height)))
+        while len(env.objects):
+            time.sleep(0.3)
+
+        rand = randint(0, 1)
+        env.objects.append(env.mod.objects.Weapon(env, x=int(0.2* env.width), y=int(0.5 *env.height), builder=self.weapons[rand]))
+        if len(env.players) > 1:
+            env.objects.append(env.mod.objects.Weapon(env, x=int(0.7* env.width), y=int(0.5 *env.height), builder=self.weapons[(rand + 1) % 2]))
+        while len(env.objects):
+            time.sleep(0.3)
+        env.titles.remove(self.looting_title)
 
 class   Wave4(DefaultWave):
     def __init__(self, env):

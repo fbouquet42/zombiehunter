@@ -6,14 +6,26 @@ from . import _waves
 from . import wave
 
 def _init(env):
+    title = env.mod.tools.load_img(env, 'waves/loading_0', env.height, env.height)
+    env.titles.append(title)
     env.mod.monsters.DefaultMonster.build_class(env)
     env.mod.monsters.Zombie.build_class()
+    env.titles.remove(title)
+    title = env.mod.tools.load_img(env, 'waves/loading_1', env.height, env.height)
+    env.titles.append(title)
     env.mod.monsters.Cyclops.build_class()
     env.mod.monsters.JackLantern.build_class()
+    env.titles.remove(title)
+    title = env.mod.tools.load_img(env, 'waves/loading_2', env.height, env.height)
+    env.titles.append(title)
     env.mod.monsters.Necromancer.build_class()
     env.mod.monsters.Harpy.build_class()
+    env.titles.remove(title)
+    title = env.mod.tools.load_img(env, 'waves/loading_3', env.height, env.height)
+    env.titles.append(title)
     env.mod.monsters.Ent.build_class()
     env.mod.monsters.Piranha.build_class()
+    env.titles.remove(title)
 
 def loop(env):
     buff = 0

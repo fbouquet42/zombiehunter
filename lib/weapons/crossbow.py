@@ -1,6 +1,8 @@
 from . import DefaultWeapon
 
 class   Crossbow(DefaultWeapon):
+    name = 'crossbow_unloaded'
+
     def __init__(self, env, player):
         self.tools = env.mod.tools
         self.dimensions = player.dimensions

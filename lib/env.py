@@ -11,6 +11,7 @@ from . import players
 from . import menus
 from . import events
 from . import waves
+from . import objects
 
 class Env:
     def set_imgs(self):
@@ -54,6 +55,7 @@ class Env:
             menus = menus
             events = events
             waves = waves
+            objects = objects
 
         self.mod = LocalModules
 
@@ -72,6 +74,7 @@ class Env:
         self.players = []
         self.monsters = []
         self.bullets = []
+        self.objects = []
         self.titles = []
 
         #Set Images
@@ -109,6 +112,7 @@ class Env:
             player.rage = False
         self.players.clear()
         self.bullets.clear()
+        self.objects.clear()
         self.jerk = False
         self.furious = 0
         self.walking_dead = 0

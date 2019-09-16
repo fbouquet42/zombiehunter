@@ -209,6 +209,7 @@ class Kraken(DefaultMonster):
             if not self.transforming:
                 self._kraken()
         elif not self.lives_nyx:
+            self.env.night = False
             self.transforming = 50
         else:
             self.spell -= 1

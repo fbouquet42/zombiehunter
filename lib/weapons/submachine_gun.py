@@ -1,6 +1,8 @@
 from . import DefaultWeapon
 
 class   SubmachineGun(DefaultWeapon):
+    name = 'submachine_gun_full'
+
     def __init__(self, env, player):
         self.tools = env.mod.tools
 
