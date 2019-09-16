@@ -8,7 +8,7 @@ class   DevilExplosion(DefaultBullet):
     lifetime = 25
     attack = 2
     from_player = True
-    name = "explosion"
+    name = "devil_explosion"
 
     @classmethod
     def build_class(cls, env, player):
@@ -19,7 +19,7 @@ class   DevilExplosion(DefaultBullet):
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)
-        self.hitbox = set_hitbox_bullet(self.env, self, 0.88)
+        self.hitbox = set_hitbox_bullet(self.env, self, 0.66)
 
     def _target_hitted(self):
         for player in self.env.players:

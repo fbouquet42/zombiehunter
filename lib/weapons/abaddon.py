@@ -5,8 +5,8 @@ class   Abaddon(DefaultWeapon):
     first = 16
     second = 23
     third = 27
-    big = 88
-    explodes = 119
+    big = 56
+    explodes = 72
 
     def __init__(self, env, player):
         self.tools = env.mod.tools

@@ -10,7 +10,7 @@ class   Aguni(DefaultWeapon):
         self.player = player
         self.dimensions = player.dimensions
 
-        self.delay = 9
+        self.delay = 8
         self.cooldown = 0
         self.fury = 0
         self.player_lives = player.lives
