@@ -11,3 +11,6 @@ from .hell_star import HellStar
 from .rocket import Rocket
 from .thorns import Thorns
 from .jellyfish import JellyFish
+from .devil_explosion import DevilExplosion
+from .devil_fire import DevilFire
+from .fire_ball import FireBall
