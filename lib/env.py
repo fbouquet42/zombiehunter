@@ -106,6 +106,7 @@ class Env:
         self.monsters.clear()
         for player in self.players:
             player.destroy = True
+            player.rage = False
         self.players.clear()
         self.bullets.clear()
         self.jerk = False
