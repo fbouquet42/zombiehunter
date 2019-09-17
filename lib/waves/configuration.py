@@ -11,8 +11,7 @@ class   DefaultWave:
         if not self.nb[i]:
             return 0
         spawned = randint(1, self.nb[i])
-        #env.mod.tools.spawn(env, env.mod.monsters.tab[i], spawned)
-        env.mod.tools.spawn(env, env.mod.monsters.DarkKnight, 1)
+        env.mod.tools.spawn(env, env.mod.monsters.tab[i], spawned)
         self.next[i] = self.random(i)
         return spawned
 
@@ -23,8 +22,7 @@ class   Wave1(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_1', env.height, env.height)
         self.objective = 70
-#        self.times = [45, 178]
-        self.times = [300, 300]
+        self.times = [45, 178]
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
 
