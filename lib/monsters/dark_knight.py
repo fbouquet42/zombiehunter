@@ -79,6 +79,9 @@ class DarkKnight(DefaultMonster):
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
+                if self.charge:
+                    self.charge = False
+                    self.rapidity -= 21
                 return self.id_nb, 1
         return None, None
 

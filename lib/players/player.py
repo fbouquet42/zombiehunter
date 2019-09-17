@@ -84,6 +84,8 @@ class Player:
             self.injured = 22
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
+            if not self.lives:
+                self.rage = False
 
     def move(self, direction, rapidity=0):
         if rapidity:
