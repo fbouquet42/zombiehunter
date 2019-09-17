@@ -8,10 +8,10 @@ from . import set_hitbox_monster
 
 
 class DarkKnight(DefaultMonster):
-    lives = 150
-    without_helmet = 70
+    lives = 160
+    without_helmet = 90
     name = "dark_knight"
-    id_nb = 10
+    id_nb = 12
     attack = 2
 
     @classmethod
@@ -30,10 +30,15 @@ class DarkKnight(DefaultMonster):
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
-        self.hitbox = set_hitbox_monster(env, self)
+        self.hitbox = set_hitbox_monster(env, self, 0.30)
 
-        self.rapidity = randint(11, 14)
-        self.rapidity = 10 if self.rapidity > 10 else self.rapidity
+        self.limitx = env.width - self.half
+        self.limity = env.height - self.half
+
+        self.rapidity = randint(11, 13)
+        self.next_spell = 0
+        self.spelling = 0
+        self.charge = False
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -67,7 +72,8 @@ class DarkKnight(DefaultMonster):
     def hitted(self, attack=1):
         if self.lives >= self.without_helmet and self.lives - attack < self.without_helmet:
             self.attack = 3
-            self.rapidity += 4
+            self.next_spell = randint(65, 90)
+            self.rapidity -= 1
         if self.lives:
             self.injured = self.injured_gradient
             self.lives -= attack
@@ -75,3 +81,47 @@ class DarkKnight(DefaultMonster):
             if not self.lives:
                 return self.id_nb, 1
         return None, None
+
+    def _action(self):
+        if not self.charge:
+            direction, _ = self._sniff_fresh_flesh()
+        else:
+            direction = self.direction
+        if direction is not None:
+            self.direction = direction
+            if not self.spelling:
+                self.tools.move(self, direction, self.rapidity + self.env.furious)
+            self.hitbox.update_coords(self)
+        self._target_hitted()
+
+    def _limits_reached(self):
+        if self.x < -self.half or self.y < -self.half or self.y > self.limity or self.x > self.limitx:
+            return True
+        return False
+
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        if self.lives and self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5
+        if not self.lives:
+            pass
+        elif self.next_spell:
+            self.next_spell -= 1
+            if not self.next_spell:
+                self.spelling = 32
+        elif self.spelling:
+            self.spelling -= 1
+            if not self.spelling:
+                self.charge = True
+                self.rapidity += 21
+        elif self.charge:
+            if self._limits_reached():
+                self.charge = False
+                self.rapidity -= 21
+                self.next_spell = randint(80, 100)
