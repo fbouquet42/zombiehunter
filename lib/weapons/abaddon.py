@@ -35,6 +35,17 @@ class   Abaddon(DefaultWeapon):
         self.ball = env.mod.bullets.FireBall.build_class(env, player)
         self.explosion = env.mod.bullets.DevilExplosion.build_class(env, player)
 
+        self.player.max_lives += 82
+        self.player.lives += 82
+        self.player.hitbox = env.mod.players.set_hitbox_player(env, self.player, 0.26)
+        self.player.abaddon = True
+
+    def desequip(self):
+        self.player.max_lives -= 82
+        self.player.lives -= 82
+        self.hitbox = set_hitbox_player(env, self.player)
+        self.player.abaddon = False
+
     def display(self, env, direction, x, y, fitting):
         if self.loading > self.big:
             img = self.img_big[direction]

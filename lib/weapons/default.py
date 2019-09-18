@@ -17,3 +17,6 @@ class   DefaultWeapon:
         t.daemon = True
         env.bullets.append(obj)
         t.start()
+
+    def desequip(self):
+        pass

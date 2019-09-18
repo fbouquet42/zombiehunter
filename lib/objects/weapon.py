@@ -34,6 +34,7 @@ class   Weapon:
         for player in self.env.players:
             if player.affected(self):
                 self.disappear = True
+                player.weapon.desequip()
                 player.weapon = self.builder(self.env, player)
                 return
         self.time += 1
