@@ -9,8 +9,11 @@ class   Tooth(DefaultBullet):
     name = "tooth"
 
     @classmethod
+    def pre_build(cls, env):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions)
+
+    @classmethod
     def build_class(cls, env, player, weapon):
-        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
         cls.img_night = cls.img
         cls.player = player
         cls.weapon = weapon

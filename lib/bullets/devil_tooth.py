@@ -9,8 +9,11 @@ class   DevilTooth(DefaultBullet):
     name = "devil_tooth"
 
     @classmethod
+    def pre_build(cls, env):
+        cls.imgs = [env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_left', env.player_dimensions), env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions), env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_right', env.player_dimensions) ]
+
+    @classmethod
     def build_class(cls, env, player, weapon):
-        cls.imgs = [env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_left', player.dimensions), env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions), env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_right', player.dimensions) ]
         cls.player = player
         cls.weapon = weapon
         return cls

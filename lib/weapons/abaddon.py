@@ -1,6 +1,8 @@
 from . import DefaultWeapon
 from threading import Thread
 
+#Idea : more life ?
+
 class   Abaddon(DefaultWeapon):
     first = 16
     second = 25
@@ -9,21 +11,26 @@ class   Abaddon(DefaultWeapon):
     explodes = 72
     name = 'abaddon'
 
-    def __init__(self, env, player):
-        self.tools = env.mod.tools
-        self.dimensions = player.dimensions
+    @classmethod
+    def build_class(cls, env):
+        cls.tools = env.mod.tools
+        cls.dimensions = env.player_dimensions
+        cls.img_empty = cls.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_empty", cls.dimensions)
+        cls.img_first = cls.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_1", cls.dimensions)
+        cls.img_second = cls.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_2", cls.dimensions)
+        cls.img_third = cls.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_3", cls.dimensions)
+        cls.img_big = cls.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_big", cls.dimensions)
 
+        env.mod.bullets.FireBall.pre_build(env)
+        env.mod.bullets.DevilExplosion.pre_build(env)
+
+    def __init__(self, env, player):
         self.player = player
         self.env = env
 
         self.loading = 0
         self.delay = 0
 
-        self.img_empty = self.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_empty", self.dimensions)
-        self.img_first = self.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_1", self.dimensions)
-        self.img_second = self.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_2", self.dimensions)
-        self.img_third = self.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_3", self.dimensions)
-        self.img_big = self.tools.set_imgs(env.img_folder + 'weapons/', "abaddon_big", self.dimensions)
 
         self.ball = env.mod.bullets.FireBall.build_class(env, player)
         self.explosion = env.mod.bullets.DevilExplosion.build_class(env, player)
@@ -57,7 +64,7 @@ class   Abaddon(DefaultWeapon):
     def not_pressed(self, env, player):
         if self.loading > self.third:
             self._shoot(env, player, self.ball)
-            self.delay = 7
+            self.delay = 6
         elif self.loading > self.second:
             self._shoot(env, player, self.ball)
             self.delay = 3
@@ -69,5 +76,5 @@ class   Abaddon(DefaultWeapon):
         if not self.delay:
             return
         self.delay -= 1
-        if not self.delay % 4:
+        if not self.delay % 3:
             self._shoot(self.env, self.player, self.ball)

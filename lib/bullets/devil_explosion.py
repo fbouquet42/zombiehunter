@@ -11,8 +11,11 @@ class   DevilExplosion(DefaultBullet):
     name = "devil_explosion"
 
     @classmethod
+    def pre_build(cls, env):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions)
+
+    @classmethod
     def build_class(cls, env, player):
-        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
         cls.img_night = cls.img
         cls.player = player
         return cls
@@ -24,7 +27,7 @@ class   DevilExplosion(DefaultBullet):
     def _target_hitted(self):
         for player in self.env.players:
             if player.affected(self):
-                player.hitted(attack=self.attack)
+                player.hitted(attack=self.attack // 2)
         for monster in self.env.monsters:
             if monster.affected(self):
                 id_nb, value = monster.hitted(attack=self.attack)

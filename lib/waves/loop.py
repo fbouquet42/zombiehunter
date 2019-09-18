@@ -19,6 +19,8 @@ def _init(env):
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_2', env.height, env.height)
     env.titles.append(title)
+    env.mod.weapons.Aguni.build_class(env)
+    env.mod.weapons.Abaddon.build_class(env)
     env.mod.monsters.Necromancer.build_class()
     env.mod.monsters.Harpy.build_class()
     env.titles.remove(title)

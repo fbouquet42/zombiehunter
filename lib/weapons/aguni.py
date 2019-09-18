@@ -4,19 +4,24 @@ from threading import Thread
 class   Aguni(DefaultWeapon):
     name = 'aguni'
 
-    def __init__(self, env, player):
-        self.tools = env.mod.tools
+    @classmethod
+    def build_class(cls, env):
+        cls.tools = env.mod.tools
+        cls.dimensions = env.player_dimensions
+        cls.img_calm = cls.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_calm', cls.dimensions)
+        cls.img_enraged = cls.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_enraged', cls.dimensions)
 
+        env.mod.bullets.Tooth.pre_build(env)
+        env.mod.bullets.DevilTooth.pre_build(env)
+
+    def __init__(self, env, player):
         self.player = player
-        self.dimensions = player.dimensions
 
         self.delay = 14
         self.cooldown = 0
         self.fury = 0
         self.player_lives = player.lives
 
-        self.img_calm = self.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_calm', self.dimensions)
-        self.img_enraged = self.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_enraged', self.dimensions)
         self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
         self.devil_tooth = env.mod.bullets.DevilTooth.build_class(env, player, self)
 
@@ -59,6 +64,7 @@ class   Aguni(DefaultWeapon):
         if self.fury:
             if self.player_lives > self.player.lives:
                 self.player_lives = self.player.lives
+                self.fury = 167
             self.fury -= 1
             if not self.fury:
                 self.player.rage = False

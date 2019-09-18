@@ -15,9 +15,13 @@ class   FireBall(DefaultBullet):
     name = "devil_ball"
 
     @classmethod
+    def pre_build(cls, env):
+        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions)
+        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', env.player_dimensions)
+        env.mod.bullets.DevilFire.pre_build(env)
+
+    @classmethod
     def build_class(cls, env, player):
-        cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
-        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', player.dimensions)
         cls.player = player
         cls.fire = DevilFire.build_class(env, player)
         return cls
