@@ -5,7 +5,7 @@ import time
 
 class   AdditionalSpawn:
     def random(self, nb):
-        return randint(nb, nb * 4)
+        return randint(nb, nb * 3)
 
     def __init__(self, dark_knight):
         self.dark_min, self.dark_max, self.dark_time = dark_knight
@@ -13,8 +13,6 @@ class   AdditionalSpawn:
         self.next = self.random(self.dark_time)
 
     def process(self, env):
-        if not self.dark_nb:
-            return
         if not self.next:
             env.mod.tools.spawn(env, env.mod.monsters.DarkKnight, randint(self.dark_min, self.dark_max))
             self.next = self.random(self.dark_time)
@@ -43,7 +41,7 @@ class   Wave1(DefaultWave):
         self.times = [45, 178]
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
-        self.add = AdditionalSpawn((0, 1, 888))
+        self.add = AdditionalSpawn((0, 1, 799))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -65,7 +63,7 @@ class   Wave2(DefaultWave):
         self.times = [58, 180, 105]
         self.nb = [3, 1, 2]
         self.next = [0, self.random(1), self.random(2)]
-        self.add = AdditionalSpawn((0, 1, 999))
+        self.add = AdditionalSpawn((0, 1, 888))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -129,7 +127,7 @@ class   Wave4(DefaultWave):
         self.times = [69, 180, 220, 850]
         self.nb = [3, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3)]
-        self.add = AdditionalSpawn((0, 2, 888))
+        self.add = AdditionalSpawn((0, 2, 799))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -173,7 +171,7 @@ class   Wave6(DefaultWave):
         self.times = [71, 185, 220, 1280, 263, 900]
         self.nb = [3, 1, 1, 1, 2, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2]
-        self.add = AdditionalSpawn((0, 2, 888))
+        self.add = AdditionalSpawn((0, 2, 799))
 
     def process(self, env):
         for i, value in enumerate(self.next):
