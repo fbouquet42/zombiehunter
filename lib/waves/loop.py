@@ -26,6 +26,7 @@ def _init(env):
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_3', env.height, env.height)
     env.titles.append(title)
+    env.mod.monsters.Villager.build_class()
     env.mod.monsters.Ent.build_class()
     env.mod.monsters.Piranha.build_class()
     env.titles.remove(title)

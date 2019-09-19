@@ -19,5 +19,7 @@ from .tentacle import Tentacle
 from .base_tentacles import BaseTentacles
 from .vortex import Vortex
 from .kraken import Kraken
+from .garou import Garou
+from .villager import Villager
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager]

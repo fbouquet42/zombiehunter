@@ -125,7 +125,7 @@ class   Wave4(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_4', env.height, env.height)
         self.objective = 5
-        self.times = [69, 180, 220, 850]
+        self.times = [69, 180, 220, 820]
         self.nb = [3, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3)]
         self.add = AdditionalSpawn((0, 2, 799))
@@ -218,3 +218,25 @@ class   Wave7(DefaultWave):
             env.background = env.background_basic
             return False
         return True
+
+class   Wave8(DefaultWave):
+    def __init__(self, env):
+        self.title = env.mod.tools.load_img(env, 'waves/wave_8', env.height, env.height)
+        self.objective = 48
+        self.times = [89, 185, 220, 1220, 263, 1540, 138]
+        self.nb = [2, 1, 1, 1, 2, 1, 2]
+        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, 0]
+        self.add = AdditionalSpawn((0, 2, 829))
+
+    def process(self, env):
+        for i, value in enumerate(self.next):
+            if not value:
+                spawned = self.spawn(env, i)
+                if i == 6:
+                    self.objective -= spawned
+            else:
+                self.next[i] -= 1
+        self.add.process(env)
+        if self.objective > 0:
+            return True
+        return False
