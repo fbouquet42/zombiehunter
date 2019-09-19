@@ -3,12 +3,13 @@ from threading import Thread
 class   DefaultWeapon:
 
     xp = 0
+    level_up = 1000
 
     def build_class(env):
         env.mod.bullets.DefaultBullet.build_class(env)
 
     def update(self, **kwargs):
-        if int(self.xp) > 4:
+        if int(self.xp) > level_up:
             self.evolve()
 
     def not_pressed(self, **kwargs):

@@ -18,15 +18,17 @@ class Player:
     rage = False
     abaddon = False
     stoned = False
+    shadow = False
 
     def _get_weapon(self, env):
-        env.mod.weapons.MagicWand.build_class(env)
+        #env.mod.weapons.MagicWand.build_class(env)
+        env.mod.weapons.ShadowDaggers.build_class(env)
         if self.name == 'jack':
             #return env.mod.weapons.Crossbow(env, self)
 #            return env.mod.weapons.Aguni(env, self)
 #            return env.mod.weapons.Abaddon(env, self)
 #            return env.mod.weapons.SubmachineGun(env, self)
-            return env.mod.weapons.MagicWand(env, self)
+            return env.mod.weapons.ShadowDaggers(env, self)
         if self.name == 'baltazar':
             return env.mod.weapons.SubmachineGun(env, self)
 
@@ -63,6 +65,7 @@ class Player:
         self.img_injured_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured_night', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_possessed', self.dimensions)
+        self.img_shadow = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_shadow', self.dimensions)
         self.possessed = False
 
         self.hitbox = set_hitbox_player(env, self)
@@ -70,6 +73,8 @@ class Player:
         self.score = Score(env, self, x, y, dimensions)
 
     def affected(self, bullet):
+        if self.shadow:
+            return False
         if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
             return True
         return False
@@ -97,7 +102,7 @@ class Player:
     def move(self, direction, rapidity=0):
         if rapidity:
             self.tools.move(self, direction, rapidity=rapidity if not self.stoned and not self.fixed else self.rapidity - 7)
-        elif self.rage:
+        elif self.rage or self.shadow:
             self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:
             self.tools.move(self, direction)
@@ -107,6 +112,8 @@ class Player:
     def _display_day(self, env, fitting):
         if not self.lives:
             img = self.img_dead[self.direction]
+        elif self.shadow:
+            img = self.img_shadow[self.direction]
         elif self.rage:
             img = self.img_enraged[self.direction]
         elif self.injured:

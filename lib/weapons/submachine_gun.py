@@ -68,7 +68,7 @@ class   SubmachineGun(DefaultWeapon):
         if self.cooldown:
             self.cooldown -= 1
 
-        if int(self.xp) > 4:
+        if int(self.xp) > self.level_up:
             self.evolve()
 
     def evolve(self):

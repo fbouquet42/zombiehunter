@@ -6,3 +6,4 @@ from .crossbow import Crossbow
 from .aguni import Aguni
 from .abaddon import Abaddon
 from .magic_wand import MagicWand
+from .shadow_daggers import ShadowDaggers

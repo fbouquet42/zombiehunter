@@ -20,3 +20,5 @@ from .devil_fire import DevilFire
 from .fire_ball import FireBall
 from .magic_ball import MagicBall
 from .sonic_ball import SonicBall
+from .shadow_daggers import ShadowDaggers
+from .assassination import Assassination
