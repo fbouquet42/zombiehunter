@@ -9,7 +9,7 @@ class   DefaultWeapon:
         env.mod.bullets.DefaultBullet.build_class(env)
 
     def update(self, **kwargs):
-        if int(self.xp) > level_up:
+        if int(self.xp) > self.level_up:
             self.evolve()
 
     def not_pressed(self, **kwargs):

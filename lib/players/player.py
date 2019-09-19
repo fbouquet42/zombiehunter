@@ -21,14 +21,15 @@ class Player:
     shadow = False
 
     def _get_weapon(self, env):
-        #env.mod.weapons.MagicWand.build_class(env)
-        env.mod.weapons.ShadowDaggers.build_class(env)
+#        env.mod.weapons.MagicWand.build_class(env)
+#        env.mod.weapons.ShadowDaggers.build_class(env)
         if self.name == 'jack':
-            #return env.mod.weapons.Crossbow(env, self)
+            return env.mod.weapons.Crossbow(env, self)
 #            return env.mod.weapons.Aguni(env, self)
 #            return env.mod.weapons.Abaddon(env, self)
 #            return env.mod.weapons.SubmachineGun(env, self)
-            return env.mod.weapons.ShadowDaggers(env, self)
+#            return env.mod.weapons.ShadowDaggers(env, self)
+#            return env.mod.weapons.MagicWand(env, self)
         if self.name == 'baltazar':
             return env.mod.weapons.SubmachineGun(env, self)
 

@@ -197,6 +197,9 @@ class   Wave7(DefaultWave):
 
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_7', env.height, env.height)
+        self.looting_title = env.mod.tools.load_img(env, 'waves/looting_wave_7', env.height, env.height)
+        self.cross = env.mod.objects.Cross.build_class(env, 'waves/cross_wave_7')
+        self.weapons = [env.mod.weapons.MagicWand, env.mod.weapons.ShadowDaggers]
         self.more = False
         self.times = [58, 220, 155]
         self.nb = [2, 1, 1]
@@ -219,11 +222,27 @@ class   Wave7(DefaultWave):
             return False
         return True
 
+    def loot(self, env):
+        env.titles.append(self.looting_title)
+        env.objects.append(self.cross(x=int(0.2* env.width), y=int(0.5 *env.height)))
+        if len(env.players) > 1:
+            env.objects.append(self.cross(x=int(0.7* env.width), y=int(0.5 *env.height)))
+        while len(env.objects):
+            time.sleep(0.3)
+
+        rand = randint(0, 1)
+        env.objects.append(env.mod.objects.Weapon(env, x=int(0.2* env.width), y=int(0.5 *env.height), builder=self.weapons[rand]))
+        if len(env.players) > 1:
+            env.objects.append(env.mod.objects.Weapon(env, x=int(0.7* env.width), y=int(0.5 *env.height), builder=self.weapons[(rand + 1) % 2]))
+        while len(env.objects):
+            time.sleep(0.3)
+        env.titles.remove(self.looting_title)
+
 class   Wave8(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_8', env.height, env.height)
         self.objective = 48
-        self.times = [89, 185, 220, 1220, 263, 1540, 148]
+        self.times = [89, 185, 220, 1220, 263, 1540, 138]
         self.nb = [2, 1, 1, 1, 2, 1, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, 0]
         self.add = AdditionalSpawn((0, 2, 829))
