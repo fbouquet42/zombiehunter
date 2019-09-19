@@ -69,6 +69,20 @@ class   JackLantern(DefaultMonster):
             self.walking_dead = False
         if self.injured:
             self.injured -= 1
+
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        if self.lives and self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
+            self.loading()
+        elif self.stoned:
+            return
+
         if self.next_shoot:
             if self.lives or self.env.walking_dead:
                 self.next_shoot -= 1
@@ -81,10 +95,3 @@ class   JackLantern(DefaultMonster):
             self.loading()
         else:
             self.loading()
-        if not self.lives and self.degeneration:
-            self.degeneration -= 1
-        if self.lives and self.poisoned:
-            self.poisoned -= 1
-            if not self.poisoned % 20:
-                self.lives -= 1
-                self.injured += 5

@@ -2,11 +2,11 @@
 from . import set_hitbox_bullet
 from . import DefaultBullet
 
-class   Arrow(DefaultBullet):
-    rapidity = 39
-    attack=20
+class   ArrowUp(DefaultBullet):
+    rapidity = 44
+    attack=30
     from_player = True
-    name = "arrow"
+    name = "arrow_tier2"
 
     @classmethod
     def build_class(cls, env, player, weapon):
@@ -20,4 +20,3 @@ class   Arrow(DefaultBullet):
         super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self)
         self.tools.move(self, self.direction)
-

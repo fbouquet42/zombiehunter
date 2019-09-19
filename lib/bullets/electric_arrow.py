@@ -4,30 +4,30 @@ from threading import Thread
 import time
 
 #Current Module
-from . import Explosion
+from . import ElectricOvercharge
 from . import set_hitbox_bullet
 from . import DefaultBullet
 
-class   Rocket(DefaultBullet):
-    rapidity = 30
+class   ElectricArrow(DefaultBullet):
+    rapidity = 44
     from_player=True
-    name = "rocket"
-    attack=20
+    name = "electric_arrow_tier2"
+    attack=30
 
     @classmethod
     def build_class(cls, env, player, weapon):
         cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
         cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', player.dimensions)
         cls.player = player
-        cls.explosion = Explosion.build_class(env, player, weapon)
+        cls.explosion = ElectricOvercharge.build_class(env, player, weapon)
         cls.weapon = weapon
         return cls
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)
-        self.hitbox = set_hitbox_bullet(self.env, self, 0.14)
+        self.hitbox = set_hitbox_bullet(self.env, self)
         self.tools.move(self, self.direction)
-        self.acceleration = 0.
+        self.acceleration = 0
 
     def _explose(self):
         explosion = self.explosion(self.x, self.y, self.direction)
@@ -55,8 +55,8 @@ class   Rocket(DefaultBullet):
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while True:
-            self.tools.move(self, self.direction, int(self.rapidity + self.acceleration))
-            if self.acceleration < 30:
+            self.tools.move(self, self.direction, int(self.rapidity - self.acceleration))
+            if self.acceleration < 15:
                 self.acceleration += 1
             if self._limits_reached():
                 return self._dead()

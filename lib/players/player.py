@@ -17,6 +17,7 @@ class Player:
     destroy = False
     rage = False
     abaddon = False
+    stoned = False
 
     def _get_weapon(self, env):
         if self.name == 'jack':
@@ -92,7 +93,7 @@ class Player:
 
     def move(self, direction, rapidity=0):
         if rapidity:
-            self.tools.move(self, direction, rapidity=rapidity)
+            self.tools.move(self, direction, rapidity=rapidity if not self.stoned else self.rapidity - 5)
         elif self.rage:
             self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:
@@ -141,6 +142,8 @@ class Player:
             self.tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
     def update(self):
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
         if self.injured:
             self.injured -= 1
         self.weapon.update()

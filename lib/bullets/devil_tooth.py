@@ -60,5 +60,6 @@ class   DevilTooth(DefaultBullet):
                 id_nb, value = monster.hitted(attack=self.attack)
                 if id_nb is not None:
                     self.player.score.kills[id_nb] += value
+                    self.weapon.xp += self.player.score.values[id_nb] * value
                 ret = True
         return ret

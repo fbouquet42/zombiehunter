@@ -60,17 +60,18 @@ class   Cyclops(DefaultMonster):
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
-            direction, distance = self._sniff_fresh_flesh()
-            if self.lives <= self.eyeless:
-                direction = self._no_eye(direction, distance)
+            if not self.stoned:
+                direction, distance = self._sniff_fresh_flesh()
+                if self.lives <= self.eyeless:
+                    direction = self._no_eye(direction, distance)
 
-            if direction is not None and direction < 8:
-                self.direction = direction
-                self.tools.move(self, direction, self.rapidity + self.env.furious)
-                self.hitbox.update_coords(self)
+                if direction is not None and direction < 8:
+                    self.direction = direction
+                    self.tools.move(self, direction, self.rapidity + self.env.furious)
+                    self.hitbox.update_coords(self)
 
-            if self.lives <= self.eyeless:
-                self.tools.limits(self, self.limitx, self.limity)
+                if self.lives <= self.eyeless:
+                    self.tools.limits(self, self.limitx, self.limity)
             self._target_hitted()
             if self._quit():
                 return

@@ -19,6 +19,7 @@ class DefaultMonster:
     poisoned = 0
     forest = False
     rooted = False
+    stoned = False
 
     def build_class(env):
         DefaultMonster.env = env
@@ -105,11 +106,12 @@ class DefaultMonster:
 
 
     def _action(self):
-        direction, _ = self._sniff_fresh_flesh()
-        if direction is not None:
-            self.direction = direction
-            self.tools.move(self, direction, self.rapidity + self.env.furious)
-            self.hitbox.update_coords(self)
+        if not self.stoned:
+            direction, _ = self._sniff_fresh_flesh()
+            if direction is not None:
+                self.direction = direction
+                self.tools.move(self, direction, self.rapidity + self.env.furious)
+                self.hitbox.update_coords(self)
         self._target_hitted()
 
     def _quit(self):
@@ -141,6 +143,8 @@ class DefaultMonster:
 
 
     def update(self):
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
         if self.injured:
             self.injured -= 1
         if not self.lives and self.degeneration:

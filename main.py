@@ -7,8 +7,8 @@ pygame.init()
 #Local Lib
 from lib import Env
 
-#TOADJUST: machinegun? explosion? waves? bosslive?
 pwd = os.path.dirname(os.path.realpath(__file__))
+#Singleton should be very better
 env = Env(sys.argv, pwd)
 
 clock = pygame.time.Clock()

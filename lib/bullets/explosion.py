@@ -11,10 +11,11 @@ class   Explosion(DefaultBullet):
     name = "explosion"
 
     @classmethod
-    def build_class(cls, env, player):
+    def build_class(cls, env, player, weapon):
         cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, player.dimensions)
         cls.img_night = cls.img
         cls.player = player
+        cls.weapon = weapon
         return cls
 
     def __init__(self, x, y, direction):
@@ -30,6 +31,7 @@ class   Explosion(DefaultBullet):
                 id_nb, value = monster.hitted(attack=self.attack)
                 if id_nb is not None:
                     self.player.score.kills[id_nb] += value
+                    self.weapon.xp += self.player.score.values[id_nb] * value
 
     def explose(self):
         self.tick = self.env.mod.tools.Tick()

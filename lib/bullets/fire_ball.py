@@ -17,13 +17,14 @@ class   FireBall(DefaultBullet):
     @classmethod
     def pre_build(cls, env):
         cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions)
-        cls.img_night = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + '_night', env.player_dimensions)
         env.mod.bullets.DevilFire.pre_build(env)
 
     @classmethod
-    def build_class(cls, env, player):
+    def build_class(cls, env, player, weapon):
+        cls.img_night = cls.img
         cls.player = player
-        cls.fire = DevilFire.build_class(env, player)
+        cls.fire = DevilFire.build_class(env, player, weapon)
+        cls.weapon = weapon
         return cls
 
     def __init__(self, x, y, direction):
@@ -49,6 +50,7 @@ class   FireBall(DefaultBullet):
                 id_nb, value = monster.hitted(attack=self.attack)
                 if id_nb is not None:
                     self.player.score.kills[id_nb] += value
+                    self.weapon.xp += self.player.score.values[id_nb] * value
                 self._burn()
                 return True
         return False

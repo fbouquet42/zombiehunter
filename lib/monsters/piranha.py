@@ -50,17 +50,18 @@ class Piranha(DefaultMonster):
         return False
 
     def _action(self):
-        if self.lives and self.injured:
-            if not self.injured % 4:
-                direction = self.escape[randint(0, 2)]
+        if not self.stoned:
+            if self.lives and self.injured:
+                if not self.injured % 4:
+                    direction = self.escape[randint(0, 2)]
+                else:
+                    direction = self.direction
             else:
-                direction = self.direction
-        else:
-            direction, _ = self._sniff_fresh_flesh()
-        if direction is not None:
-            self.direction = direction
-            self.tools.move(self, direction, self.rapidity + self.env.furious)
-            self.hitbox.update_coords(self)
+                direction, _ = self._sniff_fresh_flesh()
+            if direction is not None:
+                self.direction = direction
+                self.tools.move(self, direction, self.rapidity + self.env.furious)
+                self.hitbox.update_coords(self)
         self._target_hitted()
 
     def display(self, env):

@@ -73,12 +73,13 @@ class Tentacle(DefaultMonster):
         self.test.y = self.y
 
     def _crawler(self):
-        x, y, distance = self.tools.process_distance(self.target, self)
-        if distance > self.hitbox.dimensions:
-            direction = self._determine_direction(x, y)
-            self.direction = direction
-            self.tools.force_move(self, x, y, self.direction, rapidity = distance - self.hitbox.dimensions)
-        self.hitbox.update_coords(self)
+        if self.lives or not self.stoned:
+            x, y, distance = self.tools.process_distance(self.target, self)
+            if distance > self.hitbox.dimensions:
+                direction = self._determine_direction(x, y)
+                self.direction = direction
+                self.tools.force_move(self, x, y, self.direction, rapidity = distance - self.hitbox.dimensions)
+            self.hitbox.update_coords(self)
         self._target_hitted()
 
     def move(self):

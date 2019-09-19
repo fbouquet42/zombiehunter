@@ -24,7 +24,7 @@ class   SubmachineGun(DefaultWeapon):
         self.img_yellow = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_2", self.dimensions)
         self.img_green = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_3", self.dimensions)
         self.img_blue = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_full", self.dimensions)
-        self.bullet = env.mod.bullets.Bullet.build_class(env, player)
+        self.bullet = env.mod.bullets.Bullet.build_class(env, player, self)
 
     def display(self, env, direction, x, y, fitting):
         if not self.overheating:

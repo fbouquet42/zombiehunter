@@ -1,26 +1,23 @@
 from . import DefaultWeapon
-from . import CrossbowUp
 
-class   Crossbow(DefaultWeapon):
-    name = 'crossbow_unloaded'
+class   CrossbowUp(DefaultWeapon):
+    name = 'crossbow_tier2_unloaded'
 
     def __init__(self, env, player):
         self.tools = env.mod.tools
         self.dimensions = player.dimensions
         self.player = player
-        self.env = env
 
         self.loading = 0
         self.loaded = 13
-        self.overloaded = 142
+        self.overloaded = 122
 
-        self.img_unloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_unloaded", self.dimensions)
-        self.img_loaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_loaded", self.dimensions)
-        self.img_overloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_overloaded", self.dimensions)
+        self.img_unloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_tier2_unloaded", self.dimensions)
+        self.img_loaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_tier2_loaded", self.dimensions)
+        self.img_overloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_tier2_overloaded", self.dimensions)
 
-        self.arrow = env.mod.bullets.Arrow.build_class(env, player, self)
-        self.rocket = env.mod.bullets.Rocket.build_class(env, player, self)
-        self.up = CrossbowUp(self.env, self.player)
+        self.arrow = env.mod.bullets.ArrowUp.build_class(env, player, self)
+        self.electric_arrow = env.mod.bullets.ElectricArrow.build_class(env, player, self)
 
     def display(self, env, direction, x, y, fitting):
         if self.loading > self.overloaded:
@@ -36,11 +33,7 @@ class   Crossbow(DefaultWeapon):
 
     def not_pressed(self, env, player):
         if self.loading > self.overloaded:
-            self._shoot(env, player, self.rocket)
+            self._shoot(env, player, self.electric_arrow)
         elif self.loading > self.loaded:
             self._shoot(env, player, self.arrow)
         self.loading = 0
-
-    def evolve(self):
-        self.desequip()
-        self.player.weapon = self.up

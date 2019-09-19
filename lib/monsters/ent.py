@@ -86,12 +86,13 @@ class   Ent(DefaultMonster):
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
-            direction, _ = self._sniff_fresh_flesh()
-            if direction is not None:
-                self.direction = direction
-                if not self.spelling:
-                    self.tools.move(self, direction, self.rapidity + self.env.furious)
-                    self.hitbox.update_coords(self)
+            if not self.stoned:
+                direction, _ = self._sniff_fresh_flesh()
+                if direction is not None:
+                    self.direction = direction
+                    if not self.spelling:
+                        self.tools.move(self, direction, self.rapidity + self.env.furious)
+                        self.hitbox.update_coords(self)
             self._target_hitted()
             if self._quit():
                 return
@@ -103,11 +104,18 @@ class   Ent(DefaultMonster):
                 return
 
     def update(self):
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
+            if self.spelling:
+                self.cradling = 0
+                self.thorny = 0
+                self.spelling = False
+                self.spell = randint(80, 380)
         if self.injured:
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if not self.lives:
+        if not self.lives or self.stoned:
             pass
         elif self.cradling:
             self.cradling -= 1

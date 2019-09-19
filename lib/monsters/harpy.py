@@ -77,11 +77,12 @@ class Harpy(DefaultMonster):
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
-            direction, _ = self._sniff_fresh_flesh()
-            if direction is not None:
-                self.direction = direction
-                self.tools.move(self, direction, 3 if not self.ultimatum else self.rapidity)
-                self.hitbox.update_coords(self)
+            if not self.stoned:
+                direction, _ = self._sniff_fresh_flesh()
+                if direction is not None:
+                    self.direction = direction
+                    self.tools.move(self, direction, 3 if not self.ultimatum else self.rapidity)
+                    self.hitbox.update_coords(self)
             if self._target_hitted():
                 self.ultimatum = 0
             if self._quit():
@@ -115,11 +116,15 @@ class Harpy(DefaultMonster):
         self._debug()
 
     def update(self):
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
         if self.injured:
             self.injured -= 1
         if not self.lives:
             if self.degeneration:
                 self.degeneration -= 1
+        elif self.stoned:
+            pass
         elif self.ultimatum:
             self.ultimatum -= 1
         else:

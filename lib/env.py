@@ -13,6 +13,8 @@ from . import events
 from . import waves
 from . import objects
 
+#Singleton should be very better
+
 class Env:
     def set_imgs(self):
         self.background_basic = self.mod.tools.load_img(self, 'background_basic', self.width, self.height)
@@ -63,6 +65,8 @@ class Env:
         self.player_dimensions = int(self.width / 7.35)
         #Explosion
         self.jerk = False
+        #Electric Overcharge
+        self.stoned = False
         #Daemon
         self.furious = 0
         #Necromancer
@@ -113,6 +117,7 @@ class Env:
         self.bullets.clear()
         self.objects.clear()
         self.jerk = False
+        self.stoned = False
         self.furious = 0
         self.walking_dead = 0
         self.night = False

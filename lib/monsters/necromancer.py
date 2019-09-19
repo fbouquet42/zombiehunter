@@ -67,6 +67,8 @@ class   Necromancer(DefaultMonster):
         self._debug()
 
     def update(self):
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
         if self.injured:
             self.injured -= 1
         if self.lives and self.poisoned:

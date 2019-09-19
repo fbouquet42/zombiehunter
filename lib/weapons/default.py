@@ -2,11 +2,14 @@ from threading import Thread
 
 class   DefaultWeapon:
 
+    xp = 0
+
     def build_class(env):
         env.mod.bullets.DefaultBullet.build_class(env)
 
     def update(self, **kwargs):
-        pass
+        if int(self.xp) > 4:
+            self.evolve()
 
     def not_pressed(self, **kwargs):
         pass
@@ -19,4 +22,7 @@ class   DefaultWeapon:
         t.start()
 
     def desequip(self):
+        pass
+
+    def evolve(self):
         pass

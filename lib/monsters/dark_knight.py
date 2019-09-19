@@ -30,7 +30,7 @@ class DarkKnight(DefaultMonster):
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
-        self.hitbox = set_hitbox_monster(env, self, 0.30)
+        self.hitbox = set_hitbox_monster(env, self, 0.28)
 
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
@@ -79,6 +79,7 @@ class DarkKnight(DefaultMonster):
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
+                self.spelling = 0
                 if self.charge:
                     self.charge = False
                     self.rapidity -= 21
@@ -86,15 +87,16 @@ class DarkKnight(DefaultMonster):
         return None, None
 
     def _action(self):
-        if not self.charge:
-            direction, _ = self._sniff_fresh_flesh()
-        else:
-            direction = self.direction
-        if direction is not None:
-            self.direction = direction
-            if not self.spelling:
-                self.tools.move(self, direction, self.rapidity + self.env.furious)
-            self.hitbox.update_coords(self)
+        if not self.stoned or self.lives >= self.self.without_helmet:
+            if not self.charge:
+                direction, _ = self._sniff_fresh_flesh()
+            else:
+                direction = self.direction
+            if direction is not None:
+                self.direction = direction
+                if not self.spelling:
+                    self.tools.move(self, direction, self.rapidity + self.env.furious)
+                self.hitbox.update_coords(self)
         self._target_hitted()
 
     def _limits_reached(self):
@@ -112,6 +114,18 @@ class DarkKnight(DefaultMonster):
             if not self.poisoned % 20:
                 self.lives -= 1
                 self.injured += 5
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
+        elif self.stoned:
+            if self.charge:
+                self.charge = False
+                self.rapidity -= 21
+                self.next_spell = randint(80, 100)
+            elif self.spelling:
+                self.spelling = 0
+                self.next_spell = randint(40, 65)
+            return
+
         if not self.lives:
             pass
         elif self.next_spell:

@@ -91,7 +91,7 @@ class   Wave3(DefaultWave):
         self.add = AdditionalSpawn((0, 1, 1222))
         env.background = env.background_hell
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Daemon)
-        self.objective.lives = 0
+#        self.objective.lives = 0
 
     def process(self, env):
         for i, value in enumerate(self.next):

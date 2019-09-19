@@ -32,8 +32,8 @@ class   Abaddon(DefaultWeapon):
         self.delay = 0
 
 
-        self.ball = env.mod.bullets.FireBall.build_class(env, player)
-        self.explosion = env.mod.bullets.DevilExplosion.build_class(env, player)
+        self.ball = env.mod.bullets.FireBall.build_class(env, player, self)
+        self.explosion = env.mod.bullets.DevilExplosion.build_class(env, player, self)
 
         self.player.max_lives += 82
         self.player.lives += 82
