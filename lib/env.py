@@ -65,6 +65,7 @@ class Env:
         self.player_dimensions = int(self.width / 7.35)
         #Explosion
         self.jerk = False
+        self.jerk_fitting = 23
         #Electric Overcharge
         self.stoned = False
         #Daemon

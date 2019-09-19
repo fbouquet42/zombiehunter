@@ -9,6 +9,7 @@ class   Crossbow(DefaultWeapon):
         self.dimensions = player.dimensions
         self.player = player
         self.env = env
+        env.jerk_fitting = 23
 
         self.loading = 0
         self.loaded = 13

@@ -40,7 +40,7 @@ class   ElectricOvercharge(DefaultBullet):
         self.tick = self.env.mod.tools.Tick()
         while True:
             self.lifetime -= 1
-            if not self.lifetime % 5:
+            if not self.lifetime % 3:
                 self.env.jerk = not self.env.jerk
             if not self.lifetime:
                 self.env.jerk = False

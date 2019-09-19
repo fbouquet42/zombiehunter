@@ -1,9 +1,11 @@
 from . import DefaultWeapon
+from . import SubmachineGunUp
 
 class   SubmachineGun(DefaultWeapon):
     name = 'submachine_gun_full'
 
     def __init__(self, env, player):
+        self.player = player
         self.tools = env.mod.tools
 
         self.dimensions = player.dimensions
@@ -25,6 +27,7 @@ class   SubmachineGun(DefaultWeapon):
         self.img_green = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_3", self.dimensions)
         self.img_blue = self.tools.set_imgs(env.img_folder + 'weapons/', "submachine_gun_full", self.dimensions)
         self.bullet = env.mod.bullets.Bullet.build_class(env, player, self)
+        self.up = SubmachineGunUp(env, player)
 
     def display(self, env, direction, x, y, fitting):
         if not self.overheating:
@@ -64,3 +67,10 @@ class   SubmachineGun(DefaultWeapon):
             self.overheating = False
         if self.cooldown:
             self.cooldown -= 1
+
+        if int(self.xp) > 4:
+            self.evolve()
+
+    def evolve(self):
+        self.desequip()
+        self.player.weapon = self.up

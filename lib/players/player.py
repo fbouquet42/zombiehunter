@@ -21,9 +21,10 @@ class Player:
 
     def _get_weapon(self, env):
         if self.name == 'jack':
-            return env.mod.weapons.Crossbow(env, self)
+            #return env.mod.weapons.Crossbow(env, self)
 #            return env.mod.weapons.Aguni(env, self)
 #            return env.mod.weapons.Abaddon(env, self)
+            return env.mod.weapons.SubmachineGun(env, self)
         if self.name == 'baltazar':
             return env.mod.weapons.SubmachineGun(env, self)
 
@@ -93,7 +94,7 @@ class Player:
 
     def move(self, direction, rapidity=0):
         if rapidity:
-            self.tools.move(self, direction, rapidity=rapidity if not self.stoned else self.rapidity - 5)
+            self.tools.move(self, direction, rapidity=rapidity if not self.stoned else self.rapidity - 7)
         elif self.rage:
             self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:

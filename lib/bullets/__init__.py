@@ -4,6 +4,7 @@ from .default import DefaultBullet
 from .explosion import Explosion
 from .electric_overcharge import ElectricOvercharge
 from .bullet import Bullet
+from .bullet_up import BulletUp
 from .arrow import Arrow
 from .arrow_up import ArrowUp
 from .tooth import Tooth

@@ -7,6 +7,7 @@ class   CrossbowUp(DefaultWeapon):
         self.tools = env.mod.tools
         self.dimensions = player.dimensions
         self.player = player
+        env.jerk_fitting = 13
 
         self.loading = 0
         self.loaded = 13

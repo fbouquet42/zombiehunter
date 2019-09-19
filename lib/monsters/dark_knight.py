@@ -87,7 +87,7 @@ class DarkKnight(DefaultMonster):
         return None, None
 
     def _action(self):
-        if not self.stoned or self.lives >= self.self.without_helmet:
+        if not self.stoned or self.lives >= self.without_helmet:
             if not self.charge:
                 direction, _ = self._sniff_fresh_flesh()
             else:
