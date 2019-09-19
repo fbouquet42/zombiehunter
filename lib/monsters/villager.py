@@ -12,7 +12,6 @@ class Villager(DefaultMonster):
     lives = 30
     name = "villager"
     id_nb = 13
-    turn = 20
 
     @classmethod
     def build_class(cls):
@@ -39,16 +38,7 @@ class Villager(DefaultMonster):
         self.transforming = 0
         self.ultimatum = randint(119, 225)
         self.follow = True
-        self.wait = self.turn
         self.random = randint(0, 12)
-
-    def _random_direction(self):
-        if not self.wait:
-            self.random = randint(0, 12)
-            self.wait = self.turn
-        else:
-            self.wait -= 1
-        return self.random
 
     def _center_reached(self):
         if self.x < -self.half or self.y < -self.half or self.y > self.limity or self.x > self.limitx:
@@ -60,7 +50,7 @@ class Villager(DefaultMonster):
         while self.lives:
             if not self.stoned and not self.transforming:
                 if not self.follow:
-                    direction = self._random_direction()
+                    direction = self.random
                 else:
                     direction, _ = self._sniff_fresh_flesh()
 
@@ -104,6 +94,8 @@ class Villager(DefaultMonster):
                 self.transforming = 115
             elif not self.ultimatum % 50:
                 self.follow = not self.follow
+                if self.follow:
+                    self.random = randint(0, 12)
         elif self.transforming:
             self.transforming -= 1
             if not self.transforming:

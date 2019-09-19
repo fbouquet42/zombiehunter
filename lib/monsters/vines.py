@@ -9,7 +9,7 @@ from . import set_hitbox_monster
 
 
 class Vines(DefaultMonster):
-    lives = 15
+    lives = 14
     name = "vines"
     forest = True
     rooted = True

@@ -11,7 +11,7 @@ class   CrossbowUp(DefaultWeapon):
 
         self.loading = 0
         self.loaded = 13
-        self.overloaded = 122
+        self.overloaded = 119
 
         self.img_unloaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_tier2_unloaded", self.dimensions)
         self.img_loaded = self.tools.set_imgs(env.img_folder + 'weapons/', "crossbow_tier2_loaded", self.dimensions)

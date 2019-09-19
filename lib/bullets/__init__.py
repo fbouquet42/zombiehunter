@@ -18,3 +18,5 @@ from .jellyfish import JellyFish
 from .devil_explosion import DevilExplosion
 from .devil_fire import DevilFire
 from .fire_ball import FireBall
+from .magic_ball import MagicBall
+from .sonic_ball import SonicBall

@@ -223,7 +223,7 @@ class   Wave8(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_8', env.height, env.height)
         self.objective = 48
-        self.times = [89, 185, 220, 1220, 263, 1540, 138]
+        self.times = [89, 185, 220, 1220, 263, 1540, 148]
         self.nb = [2, 1, 1, 1, 2, 1, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, 0]
         self.add = AdditionalSpawn((0, 2, 829))

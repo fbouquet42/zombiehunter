@@ -24,8 +24,6 @@ def keys_manager(env, player):
 
         if direction < 0:
             pass
-        elif player.fixed:
-            player.move(direction, player.rapidity // 2)
         else:
             player.move(direction)
         if pressed[player.shoot]:

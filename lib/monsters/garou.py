@@ -8,7 +8,7 @@ from . import set_hitbox_monster
 
 
 class Garou(DefaultMonster):
-    lives = 90
+    lives = 80
     name = "garou"
     id_nb = 14
     attack = 2
@@ -30,7 +30,7 @@ class Garou(DefaultMonster):
         self.env = env
         self.hitbox = set_hitbox_monster(env, self, 0.46)
 
-        self.rapidity = randint(9, 13)
+        self.rapidity = randint(9, 12)
         self.rapidity = 11 if self.rapidity > 11 else self.rapidity
 
     def display(self, env):
