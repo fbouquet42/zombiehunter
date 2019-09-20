@@ -1,33 +1,29 @@
 from . import DefaultWeapon
-from . import AguniUp
 from threading import Thread
 
-class   Aguni(DefaultWeapon):
-    name = 'aguni'
+class   AguniUp(DefaultWeapon):
+    name = 'aguni_tier2'
 
     @classmethod
     def build_class(cls, env):
         cls.tools = env.mod.tools
         cls.dimensions = env.player_dimensions
-        cls.img_calm = cls.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_calm', cls.dimensions)
-        cls.img_enraged = cls.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_enraged', cls.dimensions)
+        cls.img_calm = cls.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_calm_tier2', cls.dimensions)
+        cls.img_enraged = cls.tools.set_imgs(env.img_folder + 'weapons/', 'aguni_enraged_tier2', cls.dimensions)
 
-        env.mod.bullets.Tooth.pre_build(env)
-        env.mod.bullets.DevilTooth.pre_build(env)
-        AguniUp.build_class(env)
+        env.mod.bullets.ToothUp.pre_build(env)
+        env.mod.bullets.DevilToothUp.pre_build(env)
 
     def __init__(self, env, player):
-        self.env = env
         self.player = player
 
-        self.delay = 14
+        self.delay = 11
         self.cooldown = 0
         self.fury = 0
         self.player_lives = player.lives
 
-        self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
-        self.devil_tooth = env.mod.bullets.DevilTooth.build_class(env, player, self)
-        self.up = AguniUp
+        self.tooth = env.mod.bullets.ToothUp.build_class(env, player, self)
+        self.devil_tooth = env.mod.bullets.DevilToothUp.build_class(env, player, self)
 
     def display(self, env, direction, x, y, fitting):
         if not self.fury:
@@ -60,20 +56,15 @@ class   Aguni(DefaultWeapon):
         if not self.fury:
             self._shoot(env, player, self.tooth)
         else:
-            self._greatShoot(env, player, self.devil_tooth)
-
-    def evolve(self):
-        self.player.weapon = self.up(self.env, self.player)
+            self._greatShoot(env, player, self.devil_tooth) 
 
     def update(self):
-        if int(self.xp) > self.level_up:
-            self.evolve()
         if self.cooldown:
             self.cooldown -= 1
         if self.fury:
             if self.player_lives > self.player.lives:
                 self.player_lives = self.player.lives
-                self.fury = 147
+                self.fury = 197
             self.fury -= 1
             if not self.fury:
                 self.player.rage = False
@@ -82,5 +73,5 @@ class   Aguni(DefaultWeapon):
         elif self.player_lives < self.player.lives:
             self.player_lives = self.player.lives
         elif self.player_lives > self.player.lives:
-            self.fury = 146
+            self.fury = 186
             self.player.rage = True

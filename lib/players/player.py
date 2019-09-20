@@ -24,6 +24,7 @@ class Player:
 #        env.mod.weapons.MagicWand.build_class(env)
 #        env.mod.weapons.ShadowDaggers.build_class(env)
 #        env.mod.weapons.Abaddon.build_class(env)
+#        env.mod.weapons.Aguni.build_class(env)
         if self.name == 'jack':
             return env.mod.weapons.Crossbow(env, self)
 #            return env.mod.weapons.Aguni(env, self)

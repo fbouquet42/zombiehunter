@@ -7,7 +7,9 @@ from .bullet import Bullet
 from .bullet_up import BulletUp
 from .arrow import Arrow
 from .arrow_up import ArrowUp
+from .tooth_up import ToothUp
 from .tooth import Tooth
+from .devil_tooth_up import DevilToothUp
 from .devil_tooth import DevilTooth
 from .double_bullet import DoubleBullet
 from .hell_star import HellStar
