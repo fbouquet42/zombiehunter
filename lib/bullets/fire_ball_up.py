@@ -4,11 +4,11 @@ from threading import Thread
 import time
 
 #Current Module
-from . import DevilFire
+from . import DevilFireUp
 from . import set_hitbox_bullet
 from . import DefaultBullet
 
-class   FireBall(DefaultBullet):
+class   FireBallUp(DefaultBullet):
     rapidity = 35
     attack = 10
     from_player=True
@@ -17,13 +17,13 @@ class   FireBall(DefaultBullet):
     @classmethod
     def pre_build(cls, env):
         cls.img = env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name, env.player_dimensions)
-        env.mod.bullets.DevilFire.pre_build(env)
+        env.mod.bullets.DevilFireUp.pre_build(env)
 
     @classmethod
     def build_class(cls, env, player, weapon):
         cls.img_night = cls.img
         cls.player = player
-        cls.fire = DevilFire.build_class(env, player, weapon)
+        cls.fire = DevilFireUp.build_class(env, player, weapon)
         cls.weapon = weapon
         return cls
 

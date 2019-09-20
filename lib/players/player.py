@@ -23,6 +23,7 @@ class Player:
     def _get_weapon(self, env):
 #        env.mod.weapons.MagicWand.build_class(env)
 #        env.mod.weapons.ShadowDaggers.build_class(env)
+#        env.mod.weapons.Abaddon.build_class(env)
         if self.name == 'jack':
             return env.mod.weapons.Crossbow(env, self)
 #            return env.mod.weapons.Aguni(env, self)
@@ -58,11 +59,13 @@ class Player:
 
         self.img = self.tools.set_imgs(env.img_folder + 'players/', self.name, self.dimensions)
         self.img_abaddon = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon', self.dimensions)
+        self.img_abaddon_tier2 = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon_tier2', self.dimensions)
         self.img_enraged = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_enraged', self.dimensions)
         self.img_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_night', self.dimensions)
         self.img_enraged_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_enraged_night', self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured', self.dimensions)
         self.img_abaddon_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon_injured', self.dimensions)
+        self.img_abaddon_tier2_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon_tier2_injured', self.dimensions)
         self.img_injured_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured_night', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_possessed', self.dimensions)

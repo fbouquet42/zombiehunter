@@ -17,9 +17,9 @@ class   ShadowDaggers(DefaultWeapon):
     def __init__(self, env, player):
         self.player = player
 
-        self.delay = 8
+        self.delay = 9
         self.cooldown = 0
-        self.next_shadow = randint(1, 39)
+        self.next_shadow = randint(1, 36)
         self.shadow = 0
 
         self.daggers = env.mod.bullets.ShadowDaggers.build_class(env, player, self)
@@ -37,7 +37,7 @@ class   ShadowDaggers(DefaultWeapon):
     def _assassination(self):
         self.assassination.process()
         self.player.shadow = False
-        self.next_shadow = randint(1, 39)
+        self.next_shadow = randint(1, 36)
 
     def pressed(self, env, player):
         if self.shadow:

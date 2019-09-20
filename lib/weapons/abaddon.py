@@ -1,4 +1,6 @@
 from . import DefaultWeapon
+from . import AbaddonUp
+
 from threading import Thread
 
 #Idea : more life ?
@@ -23,6 +25,7 @@ class   Abaddon(DefaultWeapon):
 
         env.mod.bullets.FireBall.pre_build(env)
         env.mod.bullets.DevilExplosion.pre_build(env)
+        cls.up = AbaddonUp.pre_build(env)
 
     def __init__(self, env, player):
         self.player = player
@@ -35,14 +38,14 @@ class   Abaddon(DefaultWeapon):
         self.ball = env.mod.bullets.FireBall.build_class(env, player, self)
         self.explosion = env.mod.bullets.DevilExplosion.build_class(env, player, self)
 
-        self.player.max_lives += 82
-        self.player.lives += 82
+        self.player.max_lives += 41
+        self.player.lives += 41
         self.player.hitbox = env.mod.players.set_hitbox_player(env, self.player, 0.26)
         self.player.abaddon = True
 
     def desequip(self):
-        self.player.max_lives -= 82
-        self.player.lives -= 82
+        self.player.max_lives -= 41
+        self.player.lives -= 41
         self.hitbox = set_hitbox_player(env, self.player)
         self.player.abaddon = False
 
@@ -83,7 +86,12 @@ class   Abaddon(DefaultWeapon):
             self._shoot(env, player, self.ball)
         self.loading = 0
 
+    def evolve(self):
+        self.player.weapon = self.up(self.env, self.player)
+
     def update(self):
+        if int(self.xp) > self.level_up:
+            self.evolve()
         if not self.delay:
             return
         self.delay -= 1

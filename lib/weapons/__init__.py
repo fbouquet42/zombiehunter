@@ -4,6 +4,7 @@ from .submachine_gun import SubmachineGun
 from .crossbow_up import CrossbowUp
 from .crossbow import Crossbow
 from .aguni import Aguni
+from .abaddon_up import AbaddonUp
 from .abaddon import Abaddon
 from .magic_wand import MagicWand
 from .shadow_daggers import ShadowDaggers

@@ -15,8 +15,11 @@ from .rocket import Rocket
 from .electric_arrow import ElectricArrow
 from .thorns import Thorns
 from .jellyfish import JellyFish
+from .devil_explosion_up import DevilExplosionUp
 from .devil_explosion import DevilExplosion
+from .devil_fire_up import DevilFireUp
 from .devil_fire import DevilFire
+from .fire_ball_up import FireBallUp
 from .fire_ball import FireBall
 from .magic_ball import MagicBall
 from .sonic_ball import SonicBall

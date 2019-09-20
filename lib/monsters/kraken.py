@@ -11,7 +11,7 @@ from . import Vortex
 class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
-    lives = 400
+    lives = 425
     lives_nyx = 700
     #500 300 700
     # + 3 necromancer spawns
