@@ -36,7 +36,7 @@ class Vines(DefaultMonster):
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
-            if not self.monster.lives or not self.target.lives:
+            if not self.monster.lives or not self.target.lives or self.target.shadow:
                 break
             self.x = self.target.x
             self.y = self.target.y

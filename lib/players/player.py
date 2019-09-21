@@ -105,8 +105,10 @@ class Player:
                 self.rage = False
 
     def move(self, direction, rapidity=0):
+        if self.fixed:
+            self.tools.move(self, direction, rapidity=rapidity if not self.stoned and not self.fixed else (self.rapidity - 9))
         if rapidity:
-            self.tools.move(self, direction, rapidity=rapidity if not self.stoned and not self.fixed else self.rapidity - 7)
+            self.tools.move(self, direction, rapidity=rapidity if not self.stoned else (self.rapidity - 8))
         elif self.rage or self.shadow:
             self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:

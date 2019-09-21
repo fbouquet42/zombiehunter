@@ -64,9 +64,13 @@ class   Necromancer(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(env, img, self.x, self.y, fitting)
+        if self.lives and self.invulnerable:
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def update(self):
+        if self.invulnerable:
+            self.invulnerable -= 1
         if self.stoned and not self.env.stoned:
             self.stoned = False
         if self.injured:

@@ -50,6 +50,7 @@ class Env:
         ###Modules
         class   LocalModules:
             tools = tools
+            objects = objects
             bullets = bullets
             weapons = weapons
             monsters = monsters
@@ -57,7 +58,6 @@ class Env:
             menus = menus
             events = events
             waves = waves
-            objects = objects
 
         self.mod = LocalModules
 

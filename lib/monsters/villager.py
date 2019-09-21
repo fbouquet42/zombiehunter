@@ -9,7 +9,7 @@ from . import set_hitbox_monster
 from . import Garou
 
 class Villager(DefaultMonster):
-    lives = 30
+    lives = 10
     name = "villager"
     id_nb = 13
 
@@ -75,6 +75,8 @@ class Villager(DefaultMonster):
                 return
 
     def update(self):
+        if self.invulnerable:
+            self.invulnerable -= 1
         if self.stoned and not self.env.stoned:
             self.stoned = False
         if self.injured:
@@ -121,5 +123,7 @@ class Villager(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+        if self.lives and self.invulnerable:
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
         self._debug()
 

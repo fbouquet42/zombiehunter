@@ -3,7 +3,7 @@ from threading import Thread
 class   DefaultWeapon:
 
     xp = 0
-    level_up = 1000
+    level_up = 800
 
     def build_class(env):
         env.mod.bullets.DefaultBullet.build_class(env)

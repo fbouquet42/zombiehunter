@@ -20,10 +20,14 @@ class DefaultMonster:
     forest = False
     rooted = False
     stoned = False
+    potion_effect = True
+    invulnerable = 0
 
     def build_class(env):
         DefaultMonster.env = env
         DefaultMonster.dimensions = env.player_dimensions
+        DefaultMonster.img_invulnerable = env.mod.tools.set_imgs(env.img_folder + 'monsters/', 'invulnerable', DefaultMonster.dimensions)
+        DefaultMonster.img_invulnerable_large = env.mod.tools.set_imgs(env.img_folder + 'monsters/', 'invulnerable_large', DefaultMonster.dimensions)
         DefaultMonster.half = DefaultMonster.dimensions // 2
         DefaultMonster.tools = env.mod.tools
         return DefaultMonster
@@ -40,6 +44,8 @@ class DefaultMonster:
 
 
     def hitted(self, attack=1):
+        if self.invulnerable:
+            return None, None
         if self.lives:
             self.injured = self.injured_gradient
             self.lives -= attack
@@ -143,6 +149,8 @@ class DefaultMonster:
 
 
     def update(self):
+        if self.invulnerable:
+            self.invulnerable -= 1
         if self.stoned and not self.env.stoned:
             self.stoned = False
         if self.injured:

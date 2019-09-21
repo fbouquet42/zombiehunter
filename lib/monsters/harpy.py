@@ -38,6 +38,7 @@ class Harpy(DefaultMonster):
         self.shadow = shadow
         self.hitbox = self.list_hitbox[self.shadow]
         self.dimensions = self.list_dimensions[self.shadow]
+        self.potion_effect = False
 
     def _fly(self):
         if not self.lives:
@@ -57,6 +58,7 @@ class Harpy(DefaultMonster):
         self.rapidity = self.rapidity_onground
         self.ultimatum = self.ultimatum_onground
         self.gradient = self.gradient_max
+        self.potion_effect = True
 
     def affected(self, bullet):
         if self.flying or not self.ultimatum:
@@ -113,9 +115,16 @@ class Harpy(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(env, img, self.x, self.y, fitting - (self.list_dimensions[8] - self.dimensions) // 2)
+        if self.lives and self.invulnerable:
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def update(self):
+        if self.invulnerable:
+            if self.ultimatum or self.flying:
+                self.invulnerable = 0
+            else:
+                self.invulnerable -= 1
         if self.stoned and not self.env.stoned:
             self.stoned = False
         if self.injured:

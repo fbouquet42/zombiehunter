@@ -82,5 +82,5 @@ class   Aguni(DefaultWeapon):
         elif self.player_lives < self.player.lives:
             self.player_lives = self.player.lives
         elif self.player_lives > self.player.lives:
-            self.fury = 146
+            self.fury = 136
             self.player.rage = True

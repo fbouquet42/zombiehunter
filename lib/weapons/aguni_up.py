@@ -17,7 +17,7 @@ class   AguniUp(DefaultWeapon):
     def __init__(self, env, player):
         self.player = player
 
-        self.delay = 11
+        self.delay = 12
         self.cooldown = 0
         self.fury = 0
         self.player_lives = player.lives
@@ -73,5 +73,5 @@ class   AguniUp(DefaultWeapon):
         elif self.player_lives < self.player.lives:
             self.player_lives = self.player.lives
         elif self.player_lives > self.player.lives:
-            self.fury = 186
+            self.fury = 176
             self.player.rage = True

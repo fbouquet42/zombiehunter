@@ -21,5 +21,6 @@ from .vortex import Vortex
 from .kraken import Kraken
 from .garou import Garou
 from .villager import Villager
+from .alchemist import Alchemist
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist]

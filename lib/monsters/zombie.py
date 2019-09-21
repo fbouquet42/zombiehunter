@@ -41,6 +41,8 @@ class Zombie(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+        if self.lives and self.invulnerable:
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
 
     def _display_night(self, env, fitting):
         if not self.lives:

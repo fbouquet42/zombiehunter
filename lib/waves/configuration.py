@@ -60,7 +60,7 @@ class   Wave2(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_2', env.height, env.height)
         self.objective = 25
-        self.times = [58, 180, 105]
+        self.times = [58, 180, 120]
         self.nb = [3, 1, 2]
         self.next = [0, self.random(1), self.random(2)]
         self.add = AdditionalSpawn((0, 1, 888))
@@ -241,17 +241,39 @@ class   Wave7(DefaultWave):
 class   Wave8(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_8', env.height, env.height)
-        self.objective = 32
-        self.times = [89, 185, 220, 1220, 263, 1540, 138]
-        self.nb = [2, 1, 1, 1, 2, 1, 2]
-        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, 0]
-        self.add = AdditionalSpawn((0, 2, 829))
+        self.objective = 42
+        self.times = [79, 177, 212, 1180, 255, 1320, 88]
+        self.nb = [3, 1, 1, 1, 2, 1, 3]
+        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), 0]
+        self.add = AdditionalSpawn((0, 2, 788))
 
     def process(self, env):
         for i, value in enumerate(self.next):
             if not value:
                 spawned = self.spawn(env, i)
                 if i == 6:
+                    self.objective -= spawned
+            else:
+                self.next[i] -= 1
+        self.add.process(env)
+        if self.objective > 0:
+            return True
+        return False
+
+class   Wave9(DefaultWave):
+    def __init__(self, env):
+        self.title = env.mod.tools.load_img(env, 'waves/wave_9', env.height, env.height)
+        self.objective = 13
+        self.times = [79, 177, 212, 1180, 255, 1320, 90, 144]
+        self.nb = [3, 1, 1, 1, 2, 1, 2, 2]
+        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), self.random(6) // 2, 0]
+        self.add = AdditionalSpawn((0, 2, 788))
+
+    def process(self, env):
+        for i, value in enumerate(self.next):
+            if not value:
+                spawned = self.spawn(env, i)
+                if i == 7:
                     self.objective -= spawned
             else:
                 self.next[i] -= 1

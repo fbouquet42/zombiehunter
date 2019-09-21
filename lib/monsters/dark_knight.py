@@ -67,9 +67,13 @@ class DarkKnight(DefaultMonster):
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if helmet is not None:
             self.tools.display(self.env, helmet, self.x, self.y, fitting)
+        if self.lives and self.invulnerable:
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def hitted(self, attack=1):
+        if self.invulnerable:
+            return None, None
         if self.lives >= self.without_helmet and self.lives - attack < self.without_helmet:
             self.attack = 3
             self.next_spell = randint(65, 90)
@@ -105,6 +109,8 @@ class DarkKnight(DefaultMonster):
         return False
 
     def update(self):
+        if self.invulnerable:
+            self.invulnerable -= 1
         if self.injured:
             self.injured -= 1
         if not self.lives and self.degeneration:

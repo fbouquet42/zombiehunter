@@ -43,6 +43,8 @@ class   JackLantern(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+        if self.lives and self.invulnerable:
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
 
     def _display_night(self, env, fitting):
         if not self.lives:
@@ -62,6 +64,8 @@ class   JackLantern(DefaultMonster):
         self._debug()
 
     def update(self):
+        if self.invulnerable:
+            self.invulnerable -= 1
         if self.env.walking_dead and not self.walking_dead:
             self.loading()
             self.walking_dead = True
