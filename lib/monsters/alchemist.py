@@ -27,8 +27,8 @@ class Alchemist(DefaultMonster):
         cls.img_invulnerable = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'invulnerable_vial', cls.dimensions)
         cls.fog = env.mod.objects.Fog.build_class(env)
         cls.fog_vial = Vial(cls.img_fog, cls.fog)
-        cls.invulnerable = env.mod.objects.InvulnerableVial.build_class(env)
-        cls.invulnerable_vial = Vial(cls.img_invulnerable, cls.invulnerable)
+        cls.invulnerable_class = env.mod.objects.InvulnerableVial.build_class(env)
+        cls.invulnerable_vial = Vial(cls.img_invulnerable, cls.invulnerable_class)
         cls.vials = [cls.fog_vial, cls.invulnerable_vial]
         return cls
 
@@ -56,7 +56,7 @@ class Alchemist(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
-        if self.vial is not None:
+        if self.vial is not None :
             self.tools.display(self.env, self.vial.img[self.direction], self.x, self.y, fitting)
         self._debug()
 
@@ -73,6 +73,9 @@ class Alchemist(DefaultMonster):
                 self.lives -= 1
                 self.injured += 5
         if not self.lives or self.stoned:
+            if not self.lives and self.vial:
+                self.env.objects.insert(0, self.vial.effect(self.x, self.y))
+                self.vial = None
             pass
         elif self.spelling:
             self.spelling -= 1

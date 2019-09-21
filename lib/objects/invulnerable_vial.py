@@ -24,7 +24,7 @@ class   InvulnerableVial:
         self.time += 1
         if self.time > 32:
             for monster in self.env.monsters:
-                if monster.affected(self):
+                if monster.affected(self) and monster.potion_effect:
                     monster.invulnerable = 118
             self.disappear = True
 

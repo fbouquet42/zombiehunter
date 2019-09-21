@@ -11,8 +11,8 @@ from . import Vortex
 class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
-    lives = 477
-    lives_nyx = 700
+    lives = 899
+    lives_nyx = 800
     #500 300 700
     # + 3 necromancer spawns
     rapidity_kraken = 4
@@ -76,7 +76,7 @@ class Kraken(DefaultMonster):
             tentacles_header.spore_popping()
 
     def next_enlargement(self):
-        self.expand = randint(400, 490)
+        self.expand = randint(310, 390)
 
     def growing(self):
         for tentacles_header in self.tentacles_headers:
@@ -133,9 +133,9 @@ class Kraken(DefaultMonster):
 
     def _hitted_wizard(self, attack):
         self.injured = 12
-        if self.lives_nyx > 300 and self.lives_nyx - attack <= 300:
+        if self.lives_nyx > 350 and self.lives_nyx - attack <= 350:
             self._dark_power()
-        elif self.lives_nyx > 600 and self.lives_nyx - attack <= 600:
+        elif self.lives_nyx > 650 and self.lives_nyx - attack <= 650:
             self._dark_power()
         self.lives_nyx -= attack
         self.lives_nyx = 0 if self.lives_nyx < 0 else self.lives_nyx
