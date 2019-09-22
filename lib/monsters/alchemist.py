@@ -4,6 +4,7 @@ from random import randint
 
 #Current Module
 from . import DefaultMonster
+from . import Zombie
 from . import set_hitbox_monster
 
 class Vial:
@@ -25,11 +26,14 @@ class Alchemist(DefaultMonster):
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.img_fog = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'fog_vial', cls.dimensions)
         cls.img_invulnerable = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'invulnerable_vial', cls.dimensions)
-        cls.fog = env.mod.objects.Fog.build_class(env)
-        cls.fog_vial = Vial(cls.img_fog, cls.fog)
+        cls.img_summoning = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'summoning_vial', cls.dimensions)
+        cls.fog_class = env.mod.objects.Fog.build_class(env)
+        cls.fog_vial = Vial(cls.img_fog, cls.fog_class)
+        cls.summoning_class = env.mod.objects.SummoningVial.build_class(env, Zombie)
+        cls.summoning_vial = Vial(cls.img_summoning, cls.summoning_class)
         cls.invulnerable_class = env.mod.objects.InvulnerableVial.build_class(env)
         cls.invulnerable_vial = Vial(cls.img_invulnerable, cls.invulnerable_class)
-        cls.vials = [cls.fog_vial, cls.invulnerable_vial]
+        cls.vials = [cls.fog_vial, cls.invulnerable_vial, cls.summoning_vial]
         return cls
 
 

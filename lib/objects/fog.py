@@ -2,7 +2,7 @@ import pygame
 
 class   Fog:
     disappear = False
-    time_fog = 45
+    time_fog = 32
 
     @classmethod
     def build_class(cls, env):
@@ -23,6 +23,6 @@ class   Fog:
 
     def update(self):
         self.time += 1
-        if self.time > 499:
+        if self.time > 488:
             self.disappear = True
 

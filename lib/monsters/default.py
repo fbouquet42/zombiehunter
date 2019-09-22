@@ -7,7 +7,7 @@ import time
 from . import set_hitbox_monster
 
 #Monster idea
-#dark_knight (??) -- garou (24 lives) 1200 (2400) madness -- spider -- octopus -- rat king -- dog (dammage zone) -- millipede -- virus -- shadow -- weapons
+#1200 (2400) madness -- spider -- octopus -- rat king -- dog (dammage zone) -- millipede -- virus -- display something on target
 
 class DefaultMonster:
     injured = 0

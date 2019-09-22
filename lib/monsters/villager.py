@@ -36,7 +36,7 @@ class Villager(DefaultMonster):
         self.limity = env.height - self.half
 
         self.transforming = 0
-        self.ultimatum = randint(119, 225)
+        self.ultimatum = randint(114, 215)
         self.follow = True
         self.random = randint(0, 12)
 
@@ -93,7 +93,7 @@ class Villager(DefaultMonster):
         elif self.ultimatum:
             self.ultimatum -= 1
             if not self.ultimatum:
-                self.transforming = 115
+                self.transforming = 105
             elif not self.ultimatum % 50:
                 self.follow = not self.follow
                 if self.follow:

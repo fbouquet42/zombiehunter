@@ -11,6 +11,7 @@ class Zombie(DefaultMonster):
     lives = 20
     name = "zombie"
     id_nb = 0
+    direction_blocked = 0
 
     @classmethod
     def build_class(cls):
@@ -23,12 +24,21 @@ class Zombie(DefaultMonster):
         return cls
 
 
-    def __init__(self, env, x, y):
-        self._father_init(x, y)
+    def __init__(self, env, x, y, direction_summoning=9):
+        if direction_summoning == 9:
+            self._father_init(x, y)
+        else:
+            self.x = x
+            self.y = y
+            self.target = self.env.players[0]
         self.hitbox = set_hitbox_monster(env, self)
 
         self.rapidity = randint(5, 13)
         self.rapidity = 10 if self.rapidity > 10 else self.rapidity
+
+        if direction_summoning < 8:
+            self.direction = direction_summoning
+            self.direction_blocked = 6
 
     def _display_day(self, env, fitting):
         if not self.lives:
@@ -60,3 +70,32 @@ class Zombie(DefaultMonster):
         else:
             self._display_day(env, fitting)
         self._debug()
+
+    def _action(self):
+        if not self.stoned:
+            if self.direction_blocked:
+                direction = self.direction
+            else:
+                direction, _ = self._sniff_fresh_flesh()
+            if direction is not None:
+                self.direction = direction
+                self.tools.move(self, direction, self.rapidity + self.env.furious)
+                self.hitbox.update_coords(self)
+        self._target_hitted()
+
+    def update(self):
+        if self.direction_blocked:
+            self.direction_blocked -= 1
+        if self.invulnerable:
+            self.invulnerable -= 1
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        if self.lives and self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5
