@@ -7,10 +7,7 @@ from . import welcome
 def game_over(env):
     env.quit = True
     go_title = env.mod.tools.load_img(env, 'menus/' + 'GO_menu', env.height, env.height)
-    if env.retry:
-        retry_title = env.mod.tools.load_img(env, 'menus/' + 'fire_goblet', env.height, env.height)
-    else:
-        retry_title = env.mod.tools.load_img(env, 'menus/' + 'fire_goblet_off', env.height, env.height)
+    retry_title = env.mod.tools.load_img(env, 'menus/' + 'fire_goblet', env.height, env.height)
     title_position = (env.width - env.height) // 2
     selection = env.mod.tools.load_img(env, 'menus/' + 'selection_failure', env.height, env.height)
     position = [(title_position,0), (title_position, env.height * 0.15), (title_position, env.height * 0.3)]
@@ -36,8 +33,7 @@ def game_over(env):
         if not exe:
             pass
         elif pressed[approve]:
-            if action or env.retry:
-                break
+            break
         elif action and pressed[up]:
             action -= 2
             tick.sleep(0.1)
@@ -74,7 +70,6 @@ def game_over(env):
         env.furious = 0
         env.walking_dead = 0
         env.night = False
-        env.retry -= 1
         for player in env.players:
             player.lives = player.max_lives
             player.score.total = 0

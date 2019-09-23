@@ -109,6 +109,7 @@ class Player:
             self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
                 self.rage = False
+                self.score.kills[-1] += 1
 
     def move(self, direction, rapidity=0):
         if self.fixed:

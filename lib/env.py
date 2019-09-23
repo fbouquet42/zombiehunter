@@ -43,7 +43,6 @@ class Env:
         self.height = info.current_h
 
         ###Menus
-        self.retry = 1
         self.credits = False
         self.pause = False
         self.quit = False
