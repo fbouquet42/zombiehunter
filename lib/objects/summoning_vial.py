@@ -28,7 +28,8 @@ class   SummoningVial:
     def update(self):
         self.time += 1
         if self.time == 32:
-            for _ in range(0, 3):
+            rand = randint(3, 4)
+            for _ in range(0, rand):
                 obj = self.zombie(self.env, self.x, self.y, randint(0, 8))
                 t = Thread(target=obj.move, args=())
                 t.daemon = True

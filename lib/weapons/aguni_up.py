@@ -3,6 +3,7 @@ from threading import Thread
 
 class   AguniUp(DefaultWeapon):
     name = 'aguni_tier2'
+    tier_up = True
 
     @classmethod
     def build_class(cls, env):

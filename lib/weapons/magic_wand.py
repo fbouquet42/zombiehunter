@@ -4,6 +4,7 @@ class   MagicWand(DefaultWeapon):
     name = 'magic_wand'
     sonic_delay = 96
     magic_delay = 10
+    tier_up = True
 
     @classmethod
     def build_class(cls, env):

@@ -7,17 +7,28 @@ class   AdditionalSpawn:
     def random(self, nb):
         return randint(nb, nb * 3)
 
-    def __init__(self, dark_knight):
+    def __init__(self, dark_knight, fly=None):
         self.dark_min, self.dark_max, self.dark_time = dark_knight
-
-        self.next = self.random(self.dark_time)
+        self.dark_next = self.random(self.dark_time)
+        if fly is not None:
+            self.fly_min, self.fly_max, self.fly_time = fly
+            self.fly_next = self.random(self.fly_time)
+        else:
+            self.fly_next = -1
 
     def process(self, env):
-        if not self.next:
+        if not self.dark_next:
             env.mod.tools.spawn(env, env.mod.monsters.DarkKnight, randint(self.dark_min, self.dark_max))
-            self.next = self.random(self.dark_time)
+            self.dark_next = self.random(self.dark_time)
         else:
-            self.next -= 1
+            self.dark_next -= 1
+
+        if self.fly_next >= 0:
+            if not self.fly_next:
+                env.mod.tools.spawn(env, env.mod.monsters.Fly, randint(self.fly_min, self.fly_max))
+                self.fly_next = self.random(self.fly_time)
+            else:
+                self.fly_next -= 1
 
 class   DefaultWave:
     def random(self, i):
@@ -41,7 +52,7 @@ class   Wave1(DefaultWave):
         self.times = [45, 178]
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
-        self.add = AdditionalSpawn((0, 1, 799))
+        self.add = AdditionalSpawn((0, 1, 799), (0, 1, 899))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -63,7 +74,7 @@ class   Wave2(DefaultWave):
         self.times = [58, 180, 120]
         self.nb = [3, 1, 2]
         self.next = [0, self.random(1), self.random(2)]
-        self.add = AdditionalSpawn((0, 1, 888))
+        self.add = AdditionalSpawn((0, 1, 888), (0, 1, 999))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -88,7 +99,7 @@ class   Wave3(DefaultWave):
         self.times = [80, 230, 185]
         self.nb = [2, 1, 1]
         self.next = [0, self.random(1), self.random(2)]
-        self.add = AdditionalSpawn((0, 1, 1222))
+        self.add = AdditionalSpawn((0, 1, 1222), (0, 1, 1444))
         env.background = env.background_hell
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Daemon)
 #        self.objective.lives = 0
@@ -128,7 +139,7 @@ class   Wave4(DefaultWave):
         self.times = [69, 180, 220, 820]
         self.nb = [3, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3)]
-        self.add = AdditionalSpawn((0, 2, 799))
+        self.add = AdditionalSpawn((0, 2, 799), (0, 2, 811))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -146,11 +157,11 @@ class   Wave4(DefaultWave):
 class   Wave5(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_5', env.height, env.height)
-        self.objective = 27
+        self.objective = 28
         self.times = [69, 180, 215, 1280, 102]
         self.nb = [3, 1, 1, 1, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4)]
-        self.add = AdditionalSpawn((0, 2, 888))
+        self.add = AdditionalSpawn((0, 2, 888), (0, 2, 888))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -169,10 +180,10 @@ class   Wave6(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_6', env.height, env.height)
         self.objective = 4
-        self.times = [71, 185, 220, 1280, 263, 900]
+        self.times = [71, 185, 220, 1280, 220, 900]
         self.nb = [3, 1, 1, 1, 2, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2]
-        self.add = AdditionalSpawn((0, 2, 799))
+        self.add = AdditionalSpawn((0, 2, 799), (0, 2, 666))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -190,10 +201,10 @@ class   Wave6(DefaultWave):
 class   Wave7(DefaultWave):
     def _more_monsters(self):
         self.more = True
-        self.times = [90, 290, 245, 1480, 350, 2300]
-        self.nb = [2, 1, 1, 1, 2, 1]
+        self.times = [88, 260, 235, 1460, 290, 1750]
+        self.nb = [3, 1, 1, 1, 2, 1]
         self.next = [self.next[0], self.next[1], self.next[2], self.random(3), self.random(4) // 2, self.random(5) // 2]
-        self.add = AdditionalSpawn((0, 1, 1222))
+        self.add = AdditionalSpawn((0, 1, 999), (0, 2, 777))
 
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_7', env.height, env.height)
@@ -242,10 +253,10 @@ class   Wave8(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_8', env.height, env.height)
         self.objective = 42
-        self.times = [79, 177, 212, 1180, 255, 1320, 88]
+        self.times = [72, 177, 212, 1180, 235, 1320, 81]
         self.nb = [3, 1, 1, 1, 2, 1, 3]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), 0]
-        self.add = AdditionalSpawn((0, 2, 788))
+        self.add = AdditionalSpawn((0, 2, 788), (1, 4, 599))
 
     def process(self, env):
         for i, value in enumerate(self.next):
@@ -263,11 +274,11 @@ class   Wave8(DefaultWave):
 class   Wave9(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_9', env.height, env.height)
-        self.objective = 13
-        self.times = [79, 177, 212, 1180, 255, 1320, 90, 144]
+        self.objective = 29
+        self.times = [79, 177, 212, 1180, 235, 1320, 92, 105]
         self.nb = [3, 1, 1, 1, 2, 1, 2, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), self.random(6) // 2, 0]
-        self.add = AdditionalSpawn((0, 2, 788))
+        self.add = AdditionalSpawn((0, 2, 833), (0, 3, 822))
 
     def process(self, env):
         for i, value in enumerate(self.next):

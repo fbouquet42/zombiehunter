@@ -69,6 +69,7 @@ def game_over(env):
     if not action:
         env.monsters.clear()
         env.bullets.clear()
+        env.objects.clear()
         env.jerk = False
         env.furious = 0
         env.walking_dead = 0

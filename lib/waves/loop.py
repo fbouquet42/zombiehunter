@@ -14,6 +14,7 @@ def _init(env):
     title = env.mod.tools.load_img(env, 'waves/loading_1', env.height, env.height)
     env.titles.append(title)
     env.mod.monsters.DarkKnight.build_class()
+    env.mod.monsters.Fly.build_class()
     env.mod.monsters.Cyclops.build_class()
     env.mod.monsters.JackLantern.build_class()
     env.titles.remove(title)

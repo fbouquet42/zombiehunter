@@ -11,7 +11,7 @@ from . import Vortex
 class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
-    lives = 899
+    lives = 1099
     lives_nyx = 800
     #500 300 700
     # + 3 necromancer spawns
@@ -76,7 +76,7 @@ class Kraken(DefaultMonster):
             tentacles_header.spore_popping()
 
     def next_enlargement(self):
-        self.expand = randint(310, 390)
+        self.expand = randint(275, 345)
 
     def growing(self):
         for tentacles_header in self.tentacles_headers:

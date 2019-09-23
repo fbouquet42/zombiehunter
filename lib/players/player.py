@@ -88,12 +88,18 @@ class Player:
         if not self.lives or env.night:
             return
         live_percent = int((self.lives / self.max_lives) * 100)
+        weapon_xp = ""
+        for i in range(1, 4):
+            if not self.weapon.tier_up and self.weapon.xp > (self.weapon.level_up // 4) * i:
+                weapon_xp += "."
+            else:
+                break
         if live_percent > 66:
-            img = self.font.render(str(live_percent), False, (13, 115, 5))
+            img = self.font.render(str(live_percent) + weapon_xp, False, (13, 115, 5))
         elif live_percent > 33:
-            img = self.font.render(str(live_percent), False, (222, 146, 13))
+            img = self.font.render(str(live_percent) + weapon_xp, False, (222, 146, 13))
         else:
-            img = self.font.render(str(live_percent), False, (152, 25, 0))
+            img = self.font.render(str(live_percent) + weapon_xp, False, (152, 25, 0))
         self.tools.display(env, img, self.x, self.y)
 
     def hitted(self, attack=1):

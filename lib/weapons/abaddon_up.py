@@ -10,6 +10,7 @@ class   AbaddonUp(DefaultWeapon):
     big = 56
     explodes = 72
     name = 'abaddon_tier2'
+    tier_up = True
 
     @classmethod
     def pre_build(cls, env):

@@ -2,6 +2,7 @@ from . import DefaultWeapon
 
 class   CrossbowUp(DefaultWeapon):
     name = 'crossbow_tier2_unloaded'
+    tier_up = True
 
     def __init__(self, env, player):
         self.tools = env.mod.tools

@@ -3,7 +3,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   Assassination(DefaultBullet):
-    attack=90
+    attack=110
     from_player = True
     name = "shadow_daggers"
 
@@ -13,7 +13,7 @@ class   Assassination(DefaultBullet):
         self.weapon = weapon
         self.x = self.player.x
         self.y = self.player.y
-        self.hitbox = set_hitbox_bullet(self.env, self, 0.46)
+        self.hitbox = set_hitbox_bullet(self.env, self, 0.88)
 
     def process(self):
         self.x = self.player.x

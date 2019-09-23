@@ -2,6 +2,7 @@ from . import DefaultWeapon
 
 class   SubmachineGunUp(DefaultWeapon):
     name = 'submachine_gun_tier2'
+    tier_up = True
 
     def __init__(self, env, player):
         self.tools = env.mod.tools

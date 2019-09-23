@@ -22,5 +22,6 @@ from .kraken import Kraken
 from .garou import Garou
 from .villager import Villager
 from .alchemist import Alchemist
+from .fly import Fly
 
 tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist]

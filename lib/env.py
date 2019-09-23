@@ -26,6 +26,7 @@ class Env:
     def __init__(self, argv, pwd):
         ##Init
         info = pygame.display.Info()
+        pygame.mouse.set_visible(0)
 
         ###Debug
         self.debug = False

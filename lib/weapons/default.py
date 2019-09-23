@@ -4,6 +4,7 @@ class   DefaultWeapon:
 
     xp = 0
     level_up = 800
+    tier_up = False
 
     def build_class(env):
         env.mod.bullets.DefaultBullet.build_class(env)

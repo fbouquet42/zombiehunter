@@ -3,6 +3,7 @@ from random import randint
 
 class   ShadowDaggers(DefaultWeapon):
     name = 'shadow_daggers'
+    tier_up = True
 
     @classmethod
     def build_class(cls, env):
