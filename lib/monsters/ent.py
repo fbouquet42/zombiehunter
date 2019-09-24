@@ -13,6 +13,7 @@ class   Ent(DefaultMonster):
     max_thorny = 30
     nb_thorns = 3
     forest = True
+    degeneration = 550
 
     def build_class():
         Ent.img = Ent.tools.set_imgs(Ent.env.img_folder + 'monsters/', Ent.name, Ent.dimensions)

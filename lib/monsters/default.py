@@ -14,7 +14,7 @@ class DefaultMonster:
     injured_gradient = 16
     attack = 1
     direction = 0
-    degeneration = 450
+    degeneration = 400
     hunt = True
     poisoned = 0
     forest = False
@@ -22,6 +22,7 @@ class DefaultMonster:
     stoned = False
     potion_effect = True
     invulnerable = 0
+    insect = False
 
     def build_class(env):
         DefaultMonster.env = env

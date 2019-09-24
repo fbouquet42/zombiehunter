@@ -23,5 +23,6 @@ from .garou import Garou
 from .villager import Villager
 from .alchemist import Alchemist
 from .fly import Fly
+from .fly_queen import FlyQueen
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Fly, FlyQueen]

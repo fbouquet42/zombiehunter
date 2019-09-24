@@ -12,6 +12,7 @@ class Garou(DefaultMonster):
     name = "garou"
     id_nb = 14
     attack = 2
+    degeneration = 500
 
     @classmethod
     def build_class(cls):

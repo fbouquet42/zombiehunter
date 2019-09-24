@@ -12,16 +12,19 @@ class Fly(DefaultMonster):
     name = "fly"
     id_nb = 16
     degeneration = 250
+    insect = True
 
     @classmethod
     def build_class(cls):
         cls.sniff = int(cls.dimensions * 1.5)
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
+        cls.img_healed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_healed', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.img_big = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'big_' + cls.name, cls.dimensions)
         cls.img_big_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'big_' + cls.name + '_injured', cls.dimensions)
+        cls.img_big_healed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'big_' + cls.name + '_healed', cls.dimensions)
         return cls
 
 
@@ -39,6 +42,7 @@ class Fly(DefaultMonster):
         self.ultimatum = randint(114, 215)
         self.follow = True
         self.random = randint(0, 12)
+        self.healed = 0
 
     def _find_target(self):
         d_objective = -1
@@ -99,21 +103,29 @@ class Fly(DefaultMonster):
     def _target_hitted(self):
         for player in self.env.players:
             if player.affected(self):
-                if self.lives and self.lives < self.max_lives and not player.lives:
+                if self.lives and self.lives < self.max_lives and not self.stoned and not player.lives:
                     if self.lives < self.lives_big and self.lives + 1 == self.lives_big:
                         self.hitbox = self.hitbox_big
                         self.attack = 2
                     self.lives += 1
                 player.hitted(attack=self.attack)
 
-        if self.lives:
+        if self.lives and self.lives < self.lives_big and not self.stoned:
             for monster in self.env.monsters:
-                if self.lives < self.max_lives and not monster.lives and monster.affected(self):
+                if not monster.lives and monster.affected(self):
                     if self.lives < self.lives_big and self.lives + 1 == self.lives_big:
                         self.hitbox = self.hitbox_big
                         self.attack = 2
                     self.lives += 1
                     monster.degeneration = monster.degeneration - 25 if monster.degeneration > 25 else 0
+
+    def is_healed(self):
+        if self.lives and self.lives < self.max_lives:
+            if self.lives < self.lives_big and self.lives + 1 == self.lives_big:
+                self.hitbox = self.hitbox_big
+                self.attack = 2
+            self.lives += 1
+            self.healed = 5
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -125,15 +137,24 @@ class Fly(DefaultMonster):
         elif self.lives >= self.lives_big:
             if self.injured:
                 img = self.img_big_injured[self.direction]
+            elif self.healed:
+                self.healed -= 1
+                img = self.img_big_healed[self.direction]
             else:
                 img = self.img_big[self.direction]
         else:
             if self.injured:
                 img = self.img_injured[self.direction]
+            elif self.healed:
+                self.healed -= 1
+                img = self.img_healed[self.direction]
             else:
                 img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
-            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+            if self.lives < self.lives_big:
+                self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+            else:
+                self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
         self._debug()
 

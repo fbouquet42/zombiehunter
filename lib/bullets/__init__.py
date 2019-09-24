@@ -17,6 +17,7 @@ from .rocket import Rocket
 from .electric_arrow import ElectricArrow
 from .thorns import Thorns
 from .jellyfish import JellyFish
+from .locust import Locust
 from .devil_explosion_up import DevilExplosionUp
 from .devil_explosion import DevilExplosion
 from .devil_fire_up import DevilFireUp

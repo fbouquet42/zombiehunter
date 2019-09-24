@@ -9,7 +9,7 @@ from . import FireBall
 
 class Daemon(DefaultMonster):
     name = "daemon"
-    degeneration = 550
+    degeneration = 600
     lives = 1350
     fury_1 = 900
     fury_2 = 450

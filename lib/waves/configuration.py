@@ -274,8 +274,8 @@ class   Wave8(DefaultWave):
 class   Wave9(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_9', env.height, env.height)
-        self.objective = 29
-        self.times = [79, 177, 212, 1180, 235, 1320, 92, 105]
+        self.objective = 21
+        self.times = [82, 187, 212, 1180, 235, 1320, 102, 125]
         self.nb = [3, 1, 1, 1, 2, 1, 2, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), self.random(6) // 2, 0]
         self.add = AdditionalSpawn((0, 2, 833), (0, 3, 822))
@@ -288,6 +288,29 @@ class   Wave9(DefaultWave):
                     self.objective -= spawned
             else:
                 self.next[i] -= 1
+        self.add.process(env)
+        if self.objective > 0:
+            return True
+        return False
+
+class   Wave10(DefaultWave):
+    def __init__(self, env):
+        self.title = env.mod.tools.load_img(env, 'waves/wave_10', env.height, env.height)
+        self.objective = 15
+        self.times = [0, 0, 0, 1180, 235, 1320, 102, 233, 88, 188]
+        self.nb = [0, 0, 0, 1, 2, 1, 2, 1, 1, 1]
+        self.next = [0, 0, 0, self.random(3), self.random(4), self.random(5), self.random(6) // 2, self.random(7) // 2, 0, self.random(9) // 2]
+        self.add = AdditionalSpawn((0, 2, 833))
+
+    def process(self, env):
+        for i, value in enumerate(self.next):
+            if self.nb[i]:
+                if not value:
+                    spawned = self.spawn(env, i)
+                    if i == 9:
+                        self.objective -= spawned
+                else:
+                    self.next[i] -= 1
         self.add.process(env)
         if self.objective > 0:
             return True

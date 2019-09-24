@@ -15,6 +15,7 @@ class   Cyclops(DefaultMonster):
     hunt = True
     id_nb = 1
     attack = 2
+    degeneration = 500
 
     @classmethod
     def build_class(cls):

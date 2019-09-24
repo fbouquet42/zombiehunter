@@ -20,7 +20,7 @@ class Kraken(DefaultMonster):
     attack = 2
     id_kraken = 11
     id_nyx = 8
-    degeneration = 550
+    degeneration = 600
     rooted = True
     huge = False
     transforming = 0
