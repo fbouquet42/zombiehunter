@@ -19,6 +19,7 @@ class Player:
     abaddon = False
     stoned = False
     shadow = False
+    is_player = True
 
     def _get_weapon(self, env):
 #        env.mod.weapons.MagicWand.build_class(env)

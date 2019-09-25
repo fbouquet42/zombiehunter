@@ -39,9 +39,6 @@ class Fly(DefaultMonster):
         self.rapidity = 7 if self.rapidity < 7 else self.rapidity
 
         self.lives = 40
-        self.ultimatum = randint(114, 215)
-        self.follow = True
-        self.random = randint(0, 12)
         self.healed = 0
 
     def _find_target(self):
@@ -91,7 +88,7 @@ class Fly(DefaultMonster):
             return None, None
         if self.lives:
             if self.lives >= self.lives_big and self.lives - attack < self.lives_big:
-                self.hitbox = self.hitbox_small
+                self.hitbox = self.hitbox_small.update_coords(self)
                 self.attack = 1
             self.injured = self.injured_gradient
             self.lives -= attack
@@ -105,7 +102,7 @@ class Fly(DefaultMonster):
             if player.affected(self):
                 if self.lives and self.lives < self.max_lives and not self.stoned and not player.lives:
                     if self.lives < self.lives_big and self.lives + 1 == self.lives_big:
-                        self.hitbox = self.hitbox_big
+                        self.hitbox = self.hitbox_big.update_coords(self)
                         self.attack = 2
                     self.lives += 1
                 player.hitted(attack=self.attack)
@@ -114,18 +111,18 @@ class Fly(DefaultMonster):
             for monster in self.env.monsters:
                 if not monster.lives and monster.affected(self):
                     if self.lives < self.lives_big and self.lives + 1 == self.lives_big:
-                        self.hitbox = self.hitbox_big
+                        self.hitbox = self.hitbox_big.update_coords(self)
                         self.attack = 2
                     self.lives += 1
                     monster.degeneration = monster.degeneration - 25 if monster.degeneration > 25 else 0
 
     def is_healed(self):
         if self.lives and self.lives < self.max_lives:
-            if self.lives < self.lives_big and self.lives + 1 == self.lives_big:
-                self.hitbox = self.hitbox_big
+            if self.lives < self.lives_big and self.lives + 10 >= self.lives_big:
+                self.hitbox = self.hitbox_big.update_coords(self)
                 self.attack = 2
-            self.lives += 1
-            self.healed = 5
+            self.lives = self.lives + 10 if self.lives + 10 < self.max_lives else self.max_lives
+            self.healed = 18
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0

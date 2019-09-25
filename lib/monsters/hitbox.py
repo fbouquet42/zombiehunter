@@ -4,6 +4,7 @@ class _HitboxMonster:
     def update_coords(self, monster):
         self.x = int(monster.x + self.resize)
         self.y = int(monster.y + self.resize)
+        return self
 
     def __init__(self, monster, resize):
         self.resize = int(monster.dimensions * ((1.00 - resize) / 2))

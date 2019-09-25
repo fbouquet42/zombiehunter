@@ -76,7 +76,7 @@ class FlyQueen(DefaultMonster):
                 self.spelling = self.next_spell()
 
             self.heals += 1
-            if self.heals == 10:
+            if self.heals == 110:
                 self.heals = 0
                 for monster in self.env.monsters:
                     if monster.insect:
