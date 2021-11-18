@@ -5,6 +5,7 @@ from .crossbow_up import CrossbowUp
 from .crossbow import Crossbow
 from .aguni_up import AguniUp
 from .aguni import Aguni
+from .dragon_head import DragonHead
 from .abaddon_up import AbaddonUp
 from .abaddon import Abaddon
 from .magic_wand import MagicWand

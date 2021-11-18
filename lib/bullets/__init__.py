@@ -23,6 +23,7 @@ from .devil_explosion import DevilExplosion
 from .devil_fire_up import DevilFireUp
 from .devil_fire import DevilFire
 from .fire_ball_up import FireBallUp
+from .smoke_cloud import SmokeCloud
 from .fire_ball import FireBall
 from .magic_ball import MagicBall
 from .sonic_ball import SonicBall
