@@ -101,6 +101,8 @@ class   Cyclops(DefaultMonster):
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
 
     def _display_night(self, env, fitting):
         if not self.lives:
@@ -114,6 +116,8 @@ class   Cyclops(DefaultMonster):
         else:
             img = self.img_eyeless_night[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+        if self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0

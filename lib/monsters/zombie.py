@@ -101,11 +101,11 @@ class Zombie(DefaultMonster):
         if self.lives and self.inflamed:
             self.inflamed -= 1
             if self.inflamed == 0:
-                if randint(0, 6):
-                    self.inflamed = 12
-            if not self.inflamed % 12:
+                if randint(0, 5):
+                    self.inflamed = 7
+            if not self.inflamed % 7:
                 self.lives -= 1
-                self.injured += 6
+                self.injured += 3
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:
