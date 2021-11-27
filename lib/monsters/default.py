@@ -2,6 +2,7 @@
 #Python Lib
 import pygame
 import time
+from random import randint
 
 #Current Module
 from . import set_hitbox_monster
@@ -17,6 +18,7 @@ class DefaultMonster:
     degeneration = 400
     hunt = True
     poisoned = 0
+    inflamed = 0
     forest = False
     rooted = False
     stoned = False
@@ -29,6 +31,8 @@ class DefaultMonster:
         DefaultMonster.dimensions = env.player_dimensions
         DefaultMonster.img_invulnerable = env.mod.tools.set_imgs(env.img_folder + 'monsters/', 'invulnerable', DefaultMonster.dimensions)
         DefaultMonster.img_invulnerable_large = env.mod.tools.set_imgs(env.img_folder + 'monsters/', 'invulnerable_large', DefaultMonster.dimensions)
+        DefaultMonster.img_inflamed = env.mod.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed', DefaultMonster.dimensions)
+        DefaultMonster.img_inflamed_large = env.mod.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed_large', DefaultMonster.dimensions)
         DefaultMonster.half = DefaultMonster.dimensions // 2
         DefaultMonster.tools = env.mod.tools
         return DefaultMonster
@@ -149,6 +153,15 @@ class DefaultMonster:
             self.tools.display(self.env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
 
+    def reset_bad_effect(self):
+        self.poisoned = 0
+        self.inflamed = 0
+        self.injured = 0
+
+    def set_on_fire(self, n):
+        if not self.invulnerable:
+            self.inflamed = n
+
     def update(self):
         if self.invulnerable:
             self.invulnerable -= 1
@@ -158,6 +171,14 @@ class DefaultMonster:
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+        if self.lives and self.inflamed:
+            self.inflamed -= 1
+            if self.inflamed == 0:
+                if randint(0, 6):
+                    self.inflamed = 12
+            if not self.inflamed % 12:
+                self.lives -= 1
+                self.injured += 6
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

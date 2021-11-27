@@ -53,6 +53,8 @@ class Zombie(DefaultMonster):
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
 
     def _display_night(self, env, fitting):
         if not self.lives:
@@ -62,6 +64,8 @@ class Zombie(DefaultMonster):
         else:
             img = self.img_night[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+        if self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -94,6 +98,14 @@ class Zombie(DefaultMonster):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+        if self.lives and self.inflamed:
+            self.inflamed -= 1
+            if self.inflamed == 0:
+                if randint(0, 6):
+                    self.inflamed = 12
+            if not self.inflamed % 12:
+                self.lives -= 1
+                self.injured += 6
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

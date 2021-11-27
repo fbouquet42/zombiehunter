@@ -24,6 +24,22 @@ class   FireBall(DefaultBullet):
         cls.weapon = weapon
         return cls
 
+    def _target_hitted(self):
+        ret = False
+        for player in self.env.players:
+            if player is not self.player and player.affected(self):
+                player.hitted(attack = self.attack // 2 if self.from_player else self.attack)
+                ret = True
+        for monster in self.env.monsters:
+            if monster.affected(self):
+                monster.set_on_fire(25)
+                id_nb, value = monster.hitted(attack=self.attack)
+                if id_nb is not None:
+                    self.player.score.kills[id_nb] += value
+                    self.weapon.xp += self.player.score.values[id_nb] * value
+                ret = True
+        return ret
+
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)
         self.hitbox = set_hitbox_bullet(self.env, self, 0.15)
