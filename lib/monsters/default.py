@@ -183,7 +183,7 @@ class DefaultMonster:
                 if randint(0, 6):
                     self.inflamed = 12
             if not self.inflamed % 12:
-                self.lives -= 1
+                self.lives -= 2
                 self.injured += 6
         if self.lives and self.poisoned:
             self.poisoned -= 1
