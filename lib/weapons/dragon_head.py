@@ -13,6 +13,7 @@ class   DragonHead(DefaultWeapon):
         cls.img_sleep = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_sleep', cls.dimensions)
 
         env.mod.bullets.FireBall.pre_build(env)
+        env.mod.bullets.Tooth.pre_build(env)
 
     def __init__(self, env, player):
         self.env = env
@@ -20,12 +21,14 @@ class   DragonHead(DefaultWeapon):
 
         self.delay = 6
         self.cooldown = 0
-        self.suffocating_max = 99 * 2.5
-        self.suffocating = self.suffocating_max
+        self.suffocating = 0
+        self.release = False
+        self.wants_to_breathe = 0
         self.breathing = 0
         self.sleeping = 0
 
         self.fire_ball = env.mod.bullets.FireBall.build_class(env, player, self)
+        self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
         self.smoke_cloud = env.mod.bullets.SmokeCloud.build_class(env, player, self)
 
     def display(self, env, direction, x, y, fitting):
@@ -37,28 +40,40 @@ class   DragonHead(DefaultWeapon):
             img = self.img_apnea[direction]
         self.tools.display(env, img, x, y, fitting)
 
-######
+    def not_pressed(self, env, player):
+        if self.suffocating:
+            self.release = True
+
+    #spam shoot to breathe
     def pressed(self, env, player):
+        if self.suffocating and self.release:
+            self.wants_to_breathe += 1
+            self.suffocating = 0
+            self.release = False
+            self._shoot(self.env, self.player, self.smoke_cloud)
         if not self.sleeping and not self.breathing:
-            self.suffocating -= 2.5
+            self.suffocating = 4
         if self.cooldown or self.sleeping:
             return
-        if self.breathing:
-            self.cooldown = 2
         else:
             self.cooldown = self.delay
-        self._shoot(env, player, self.fire_ball)
-
+        if self.breathing:
+            self._shoot(env, player, self.fire_ball)
+        else:
+            self._shoot(env, player, self.tooth)
 
     def update(self):
         if self.cooldown:
             self.cooldown -= 1
 
-        if self.suffocating < self.suffocating_max:
-            if self.suffocating < 0:
-                self.breathing = 155
-                self.suffocating = self.suffocating_max
-            self.suffocating += 1
+        if self.suffocating:
+            self.suffocating -= 1
+            if not self.suffocating:
+                self.wants_to_breathe = 0
+
+        if self.wants_to_breathe > 3:
+            self.breathing = 205
+            self.wants_to_breathe = 0
 
         if self.breathing:
             self.breathing -= 1

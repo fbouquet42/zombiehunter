@@ -8,7 +8,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   FireBall(DefaultBullet):
-    rapidity = 35
+    rapidity = 31
     attack = 10
     from_player=True
     name = "dragon_ball"
