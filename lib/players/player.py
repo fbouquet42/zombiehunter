@@ -35,11 +35,14 @@ class Player:
 #            return env.mod.weapons.Aguni(env, self)
 #            return env.mod.weapons.Abaddon(env, self)
 #            return env.mod.weapons.SubmachineGun(env, self)
-            env.mod.weapons.MagicWand.build_class(env)
+            #env.mod.weapons.MagicWand.build_class(env)
+            env.mod.weapons.DevilBlade.build_class(env)
 #            return env.mod.weapons.ShadowDaggers(env, self)
-            return env.mod.weapons.MagicWand(env, self)
+            return env.mod.weapons.DevilBlade(env, self)
         if self.name == 'baltazar':
-            return env.mod.weapons.SubmachineGun(env, self)
+            env.mod.weapons.DragonHead.build_class(env)
+            return env.mod.weapons.DragonHead(env, self)
+            #return env.mod.weapons.SubmachineGun(env, self)
 
     def undead(self, env):
         obj = env.mod.monsters.Undead(env, self)
@@ -123,7 +126,7 @@ class Player:
             self.tools.move(self, direction, rapidity=rapidity if not self.stoned and not self.fixed else (self.rapidity - 9))
         elif rapidity:
             self.tools.move(self, direction, rapidity=rapidity if not self.stoned else (self.rapidity - 8))
-        elif self.rage or self.shadow:
+        elif self.shadow:
             self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:
             self.tools.move(self, direction)
