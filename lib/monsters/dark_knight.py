@@ -69,6 +69,8 @@ class DarkKnight(DefaultMonster):
             self.tools.display(self.env, helmet, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def hitted(self, attack=1):
@@ -115,6 +117,7 @@ class DarkKnight(DefaultMonster):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+        self._perform_fire()
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

@@ -2,7 +2,7 @@ from threading import Thread
 
 class   DefaultWeapon:
 
-    xp = 0
+    xp = 799
     level_up = 800
     tier_up = False
 

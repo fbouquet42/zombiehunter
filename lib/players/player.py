@@ -1,5 +1,6 @@
 import pygame
 from threading import Thread
+from random import randint
 
 from . import set_hitbox_player
 from . import Score
@@ -13,6 +14,7 @@ class Player:
     injured = 0
     font = pygame.font.SysFont('Comic Sans MS', 30)
     poisoned = 0
+    inflamed = 0
     fixed = False
     destroy = False
     rage = False
@@ -27,14 +29,15 @@ class Player:
 #        env.mod.weapons.Abaddon.build_class(env)
 #        env.mod.weapons.Aguni.build_class(env)
         if self.name == 'jack':
-            #return env.mod.weapons.Crossbow(env, self)
-            env.mod.weapons.DragonHead.build_class(env)
-            return env.mod.weapons.DragonHead(env, self)
+#            return env.mod.weapons.Crossbow(env, self)
+#            env.mod.weapons.DragonHead.build_class(env)
+#            return env.mod.weapons.DragonHead(env, self)
 #            return env.mod.weapons.Aguni(env, self)
 #            return env.mod.weapons.Abaddon(env, self)
 #            return env.mod.weapons.SubmachineGun(env, self)
+            env.mod.weapons.MagicWand.build_class(env)
 #            return env.mod.weapons.ShadowDaggers(env, self)
-#            return env.mod.weapons.MagicWand(env, self)
+            return env.mod.weapons.MagicWand(env, self)
         if self.name == 'baltazar':
             return env.mod.weapons.SubmachineGun(env, self)
 
@@ -74,6 +77,7 @@ class Player:
         self.img_dead = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_possessed', self.dimensions)
         self.img_shadow = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_shadow', self.dimensions)
+        self.img_inflamed = self.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed', self.dimensions)
         self.possessed = False
 
         self.hitbox = set_hitbox_player(env, self)
@@ -145,6 +149,8 @@ class Player:
                 img = self.img[self.direction]
         if not self.possessed:
             self.tools.display(env, img, self.x, self.y, fitting)
+        if self.lives and self.inflamed:
+            self.tools.display(env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         if self.lives:
             self.weapon.display(env, self.direction, self.x, self.y, fitting)
 
@@ -174,6 +180,14 @@ class Player:
         if self.injured:
             self.injured -= 1
         self.weapon.update()
+        if self.lives and self.inflamed:
+            self.inflamed -= 1
+            if self.inflamed == 0:
+                if randint(0, 5):
+                    self.inflamed = 7
+            if not self.inflamed % 7:
+                self.lives -= 1
+                self.injured += 3
         if self.poisoned:
             self.poisoned -= 1
             if self.lives and not self.poisoned % 20:

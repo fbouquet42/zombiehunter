@@ -98,14 +98,7 @@ class Zombie(DefaultMonster):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if self.lives and self.inflamed:
-            self.inflamed -= 1
-            if self.inflamed == 0:
-                if randint(0, 5):
-                    self.inflamed = 7
-            if not self.inflamed % 7:
-                self.lives -= 2
-                self.injured += 3
+        self._perform_fire()
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

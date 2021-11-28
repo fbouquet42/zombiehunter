@@ -153,5 +153,10 @@ class Fly(DefaultMonster):
                 self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
             else:
                 self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            if self.lives < self.lives_big:
+                self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
+            else:
+                self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
         self._debug()
 

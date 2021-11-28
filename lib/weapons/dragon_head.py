@@ -10,7 +10,7 @@ class   DragonHead(DefaultWeapon):
         cls.dimensions = env.player_dimensions
         cls.img_apnea = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_apnea', cls.dimensions)
         cls.img_breathe = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_breathe', cls.dimensions)
-        cls.img_sleep = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_sleep', cls.dimensions)
+        cls.img_suffocate = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_suffocate', cls.dimensions)
 
         env.mod.bullets.FireBall.pre_build(env)
         env.mod.bullets.Tooth.pre_build(env)
@@ -25,7 +25,6 @@ class   DragonHead(DefaultWeapon):
         self.release = False
         self.wants_to_breathe = 0
         self.breathing = 0
-        self.sleeping = 0
 
         self.fire_ball = env.mod.bullets.FireBall.build_class(env, player, self)
         self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
@@ -34,8 +33,8 @@ class   DragonHead(DefaultWeapon):
     def display(self, env, direction, x, y, fitting):
         if self.breathing:
             img = self.img_breathe[direction]
-        elif self.sleeping:
-            img = self.img_sleep[direction]
+        elif self.wants_to_breathe:
+            img = self.img_suffocate[direction]
         else:
             img = self.img_apnea[direction]
         self.tools.display(env, img, x, y, fitting)
@@ -51,9 +50,9 @@ class   DragonHead(DefaultWeapon):
             self.suffocating = 0
             self.release = False
             self._shoot(self.env, self.player, self.smoke_cloud)
-        if not self.sleeping and not self.breathing:
-            self.suffocating = 4
-        if self.cooldown or self.sleeping:
+        if not self.breathing:
+            self.suffocating = 5
+        if self.cooldown:
             return
         else:
             self.cooldown = self.delay
@@ -70,17 +69,13 @@ class   DragonHead(DefaultWeapon):
             self.suffocating -= 1
             if not self.suffocating:
                 self.wants_to_breathe = 0
+                self.release = False
 
-        if self.wants_to_breathe > 3:
+        if self.wants_to_breathe > 4:
             self.breathing = 205
             self.wants_to_breathe = 0
 
         if self.breathing:
             self.breathing -= 1
-            if not self.breathing:
-                self.sleeping = 101
-                
-        if self.sleeping:
-            if not self.sleeping % 11:
-                self._shoot(self.env, self.player, self.smoke_cloud)
-            self.sleeping -= 1
+            #if not self.breathing:
+            #    self.sleeping = 101

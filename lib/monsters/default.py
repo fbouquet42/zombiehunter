@@ -114,12 +114,14 @@ class DefaultMonster:
         for player in self.env.players:
             if player.affected(self):
                 player.hitted(attack=self.attack)
+                if self.inflamed and not randint(0, 3):
+                    player.inflamed = 1
         if self.inflamed:
             for monster in self.env.monsters:
                 if monster == self:
                     continue
                 elif monster.affected(self) and not monster.inflamed:
-                    if not randint(0, 4):
+                    if not randint(0, 3):
                         monster.set_on_fire(1)
 
     def _action(self):
@@ -168,6 +170,16 @@ class DefaultMonster:
         if not self.invulnerable:
             self.inflamed = n
 
+    def _perform_fire(self):
+        if self.lives and self.inflamed:
+            self.inflamed -= 1
+            if self.inflamed == 0:
+                if randint(0, 6):
+                    self.inflamed = 7
+            if not self.inflamed % 7:
+                self.lives -= 2
+                self.injured += 6
+
     def update(self):
         if self.invulnerable:
             self.invulnerable -= 1
@@ -177,14 +189,7 @@ class DefaultMonster:
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
-        if self.lives and self.inflamed:
-            self.inflamed -= 1
-            if self.inflamed == 0:
-                if randint(0, 6):
-                    self.inflamed = 12
-            if not self.inflamed % 12:
-                self.lives -= 2
-                self.injured += 6
+        self._perform_fire()
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

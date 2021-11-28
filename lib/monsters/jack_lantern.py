@@ -45,6 +45,8 @@ class   JackLantern(DefaultMonster):
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
 
     def _display_night(self, env, fitting):
         if not self.lives:
@@ -54,6 +56,8 @@ class   JackLantern(DefaultMonster):
         else:
             img = self.img_night[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
+        if self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -76,6 +80,7 @@ class   JackLantern(DefaultMonster):
 
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+        self._perform_fire()
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:
