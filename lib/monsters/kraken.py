@@ -12,7 +12,7 @@ class Kraken(DefaultMonster):
     name = "kraken"
     name_nyx = "nyx"
     lives = 1099
-    lives_nyx = 800
+    lives_nyx = 1000
     #500 300 700
     # + 3 necromancer spawns
     rapidity_kraken = 4
@@ -62,7 +62,7 @@ class Kraken(DefaultMonster):
         self.next_enlargement()
 
     def _next_spell(self):
-        self.spell = randint(420, 640)
+        self.spell = randint(410, 630)
 
     def _next_spell_nyx(self):
         self.spell = randint(105, 170)
@@ -76,7 +76,7 @@ class Kraken(DefaultMonster):
             tentacles_header.spore_popping()
 
     def next_enlargement(self):
-        self.expand = randint(275, 345)
+        self.expand = randint(165, 275)
 
     def growing(self):
         for tentacles_header in self.tentacles_headers:
@@ -133,9 +133,9 @@ class Kraken(DefaultMonster):
 
     def _hitted_wizard(self, attack):
         self.injured = 12
-        if self.lives_nyx > 350 and self.lives_nyx - attack <= 350:
+        if self.lives_nyx > 390 and self.lives_nyx - attack <= 390:
             self._dark_power()
-        elif self.lives_nyx > 650 and self.lives_nyx - attack <= 650:
+        elif self.lives_nyx > 720 and self.lives_nyx - attack <= 720:
             self._dark_power()
         self.lives_nyx -= attack
         self.lives_nyx = 0 if self.lives_nyx < 0 else self.lives_nyx
@@ -220,6 +220,9 @@ class Kraken(DefaultMonster):
                 self.env.bullets.append(bullet)
                 t.start()
                 self._next_spell_nyx()
+
+    def set_on_fire(self, n):
+        pass
 
     def update(self):
         if self.injured:

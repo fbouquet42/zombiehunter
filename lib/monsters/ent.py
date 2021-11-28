@@ -94,6 +94,8 @@ class   Ent(DefaultMonster):
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def hitted(self, attack=1):
@@ -138,6 +140,7 @@ class   Ent(DefaultMonster):
                 self.spell = randint(80, 380)
         if self.injured:
             self.injured -= 1
+        self._perform_fire()
         if not self.lives and self.degeneration:
             self.degeneration -= 1
         if not self.lives or self.stoned:

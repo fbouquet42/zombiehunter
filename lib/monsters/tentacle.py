@@ -136,6 +136,9 @@ class Tentacle(DefaultMonster):
         self.tools.display(self.env, img, self.x, self.y, fitting)
         self._debug()
 
+    def set_on_fire(self, n):
+        pass
+
     def update(self):
         super().update()
         if self.lives and self.spore:

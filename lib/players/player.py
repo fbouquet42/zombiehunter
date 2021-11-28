@@ -118,7 +118,7 @@ class Player:
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
             if not self.lives:
-                self.rage = False
+                self.inflamed = 0
                 self.score.kills[-1] += 1
 
     def move(self, direction, rapidity=0):
@@ -183,7 +183,7 @@ class Player:
         if self.injured:
             self.injured -= 1
         self.weapon.update()
-        if self.lives and self.inflamed:
+        if self.inflamed:
             self.inflamed -= 1
             if self.inflamed == 0:
                 if randint(0, 5):
