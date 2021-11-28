@@ -122,7 +122,7 @@ class DefaultMonster:
                     continue
                 elif monster.affected(self) and not monster.inflamed:
                     if not randint(0, 3):
-                        monster.set_on_fire(1)
+                        monster.set_on_fire(1, self.master_of_flames)
 
     def _action(self):
         if not self.stoned:
@@ -166,9 +166,10 @@ class DefaultMonster:
         self.inflamed = 0
         self.injured = 0
 
-    def set_on_fire(self, n):
+    def set_on_fire(self, n, player):
         if not self.invulnerable:
             self.inflamed = n
+            self.master_of_flames = player
 
     def _perform_fire(self):
         if self.lives and self.inflamed:
@@ -177,7 +178,10 @@ class DefaultMonster:
                 if randint(0, 6):
                     self.inflamed = 7
             if not self.inflamed % 7:
-                self.lives -= 2
+                id_nb, value = self.hitted(attack=2)
+                if id_nb is not None:
+                    self.master_of_flames.score.kills[id_nb] += value
+                    self.master_of_flames.weapon.xp += self.master_of_flames.score.values[id_nb] * value
                 self.injured += 6
 
     def update(self):
