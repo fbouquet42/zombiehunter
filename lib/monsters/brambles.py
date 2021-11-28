@@ -1,5 +1,6 @@
 
 #Python Lib
+import pygame
 from random import randint
 from threading import Thread
 
@@ -8,12 +9,12 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 
 
-class BramblesWall(DefaultMonster):
+class Brambles(DefaultMonster):
     lives = 40
-    name = "brambles_wall"
+    name = "brambles"
 #    id_nb = 9
     degeneration = 200
-    lifetime = 300
+    lifetime = 330
     rooted = True
     forest = True
 
@@ -25,18 +26,32 @@ class BramblesWall(DefaultMonster):
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         return cls
 
-    def __init__(self, monster, number):
+    def __init__(self, monster, number, direction=None):
         self.monster = monster
         self.x = monster.x
         self.y = monster.y
         self.number = number
-        self.direction = monster.direction
+        self.hitbox = set_hitbox_monster(self.env, self)
         self.spawn_next = 4
 
-        self.hitbox = set_hitbox_monster(self.env, self)
-        self.rapidity = int(self.hitbox.dimensions * 0.9)
+        if direction is None:
+            self.direction = monster.direction
+            self.rapidity = int(self.hitbox.dimensions * 0.9)
+            self._action()
+        else:
+            self.target = None
+            self.direction = direction
+            self.rapidity = int(self.monster.hitbox.dimensions * 1.2)
+            self.tools.move(self, self.direction, self.rapidity)
+            self.hitbox.update_coords(self)
+            self._target_hitted()
 
-        self._action()
+
+    def _debug(self):
+        if self.env.debug and self.lives:
+            if self.target is not None and self.spawn_next:
+                pygame.draw.line(self.env.GameWindow, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+            self.tools.display(self.env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
     def hitted(self, attack=1):
         if self.invulnerable:
@@ -83,7 +98,7 @@ class BramblesWall(DefaultMonster):
         if self.spawn_next:
             self.spawn_next -= 1
             if not self.spawn_next and self.number:
-                wall = BramblesWall(self, self.number - 1)
+                wall = Brambles(self, self.number - 1)
                 t = Thread(target=wall.move, args=())
                 t.daemon = True
                 self.env.monsters.append(wall)

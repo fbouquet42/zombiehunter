@@ -23,7 +23,7 @@ class   Ent(DefaultMonster):
         Ent.img_possessed = Ent.tools.set_imgs(Ent.env.img_folder + 'monsters/', Ent.name + '_possessed', Ent.dimensions)
         Ent.thorns = Ent.env.mod.bullets.Thorns.build_class(Ent.env)
         Ent.vines = Ent.env.mod.monsters.Vines.build_class()
-        Ent.wall = Ent.env.mod.monsters.BramblesWall.build_class(Ent.env)
+        Ent.brambles = Ent.env.mod.monsters.Brambles.build_class(Ent.env)
         return Ent
 
     def next_spell(self):
@@ -39,12 +39,20 @@ class   Ent(DefaultMonster):
         self.cradling = 0
         self.spelling = False
         self.next_spell()
-        #self.spell_type = [self.thorns_spell, self.brambles_wall_spell, self.vines_spell]
-        self.spell_type = [self.brambles_wall_spell, self.brambles_wall_spell, self.brambles_wall_spell]
+        self.spell_type = [self.thorns_spell, self.brambles_wall_spell, self.vines_spell, self.brambles_circle_spell]
+
+    def brambles_circle_spell(self):
+        self.cradling = 16
+        for i in range(0, 8):
+            circle = self.brambles(self, 0, direction=i)
+            t = Thread(target=circle.move, args=())
+            t.daemon = True
+            self.env.monsters.append(circle)
+            t.start()
 
     def brambles_wall_spell(self):
         self.cradling = 40
-        wall = self.wall(self, 10)
+        wall = self.brambles(self, 10)
         t = Thread(target=wall.move, args=())
         t.daemon = True
         self.env.monsters.append(wall)

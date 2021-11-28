@@ -13,7 +13,7 @@ from .necromancer import Necromancer
 from .undead import Undead
 from .harpy import Harpy
 from .vines import Vines
-from .brambles_wall import BramblesWall
+from .brambles import Brambles
 from .ent import Ent
 from .piranha import Piranha
 from .tentacle import Tentacle

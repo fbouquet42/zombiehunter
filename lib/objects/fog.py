@@ -23,6 +23,6 @@ class   Fog:
 
     def update(self):
         self.time += 1
-        if self.time > 488:
+        if self.time > 466:
             self.disappear = True
 

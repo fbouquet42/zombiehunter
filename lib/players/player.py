@@ -126,7 +126,7 @@ class Player:
             self.tools.move(self, direction, rapidity=rapidity if not self.stoned and not self.fixed else (self.rapidity - 9))
         elif rapidity:
             self.tools.move(self, direction, rapidity=rapidity if not self.stoned else (self.rapidity - 8))
-        elif self.shadow:
+        elif self.shadow or self.rage:
             self.tools.move(self, direction, rapidity=(self.rapidity + 5))
         else:
             self.tools.move(self, direction)
