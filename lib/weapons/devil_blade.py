@@ -8,7 +8,7 @@ class   DevilBlade(DefaultWeapon):
     def build_class(cls, env):
         cls.tools = env.mod.tools
         cls.dimensions = env.player_dimensions
-        cls.img = cls.tools.set_imgs(env.img_folder + 'weapons/', cls.name, cls.dimensions)
+        cls.img = cls.tools.set_imgs(env.img_folder + 'weapons/', cls.name + '_equipped', cls.dimensions)
         cls.img_slash = cls.tools.set_imgs(env.img_folder + 'weapons/', cls.name + '_slash', cls.dimensions)
 
         env.mod.bullets.DevilSlash.pre_build(env)

@@ -95,7 +95,7 @@ class   Wave3(DefaultWave):
         self.title = env.mod.tools.load_img(env, 'waves/wave_3', env.height, env.height)
         self.looting_title = env.mod.tools.load_img(env, 'waves/looting_wave_3', env.height, env.height)
         self.cross = env.mod.objects.Cross.build_class(env, 'waves/cross_wave_3')
-        self.weapons = [env.mod.weapons.Abaddon, env.mod.weapons.Aguni]
+        self.weapons = [env.mod.weapons.DragonHead, env.mod.weapons.DevilBlade]
         self.times = [80, 230, 185]
         self.nb = [2, 1, 1]
         self.next = [0, self.random(1), self.random(2)]
