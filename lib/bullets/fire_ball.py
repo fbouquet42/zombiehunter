@@ -28,6 +28,7 @@ class   FireBall(DefaultBullet):
         ret = False
         for player in self.env.players:
             if player is not self.player and player.affected(self):
+                player.inflamed += 8
                 player.hitted(attack = self.attack // 2 if self.from_player else self.attack)
                 ret = True
         for monster in self.env.monsters:

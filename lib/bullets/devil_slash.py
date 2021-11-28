@@ -21,7 +21,7 @@ class   DevilSlash(DefaultBullet):
 
     def __init__(self, x, y, direction):
         super().__init__(x, y, direction)
-        self.hitbox = set_hitbox_bullet(self.env, self, 0.77)
+        self.hitbox = set_hitbox_bullet(self.env, self, 0.74)
         self.tools.move(self, self.direction)
         self.hitbox.update_coords(self)
         self.lifetime = 2
