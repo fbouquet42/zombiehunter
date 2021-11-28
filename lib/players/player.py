@@ -29,20 +29,20 @@ class Player:
 #        env.mod.weapons.Abaddon.build_class(env)
 #        env.mod.weapons.Aguni.build_class(env)
         if self.name == 'jack':
-#            return env.mod.weapons.Crossbow(env, self)
+            return env.mod.weapons.Crossbow(env, self)
 #            env.mod.weapons.DragonHead.build_class(env)
 #            return env.mod.weapons.DragonHead(env, self)
 #            return env.mod.weapons.Aguni(env, self)
 #            return env.mod.weapons.Abaddon(env, self)
 #            return env.mod.weapons.SubmachineGun(env, self)
             #env.mod.weapons.MagicWand.build_class(env)
-            env.mod.weapons.DevilBlade.build_class(env)
+#            env.mod.weapons.DevilBlade.build_class(env)
 #            return env.mod.weapons.ShadowDaggers(env, self)
-            return env.mod.weapons.DevilBlade(env, self)
+#            return env.mod.weapons.DevilBlade(env, self)
         if self.name == 'baltazar':
-            env.mod.weapons.DragonHead.build_class(env)
-            return env.mod.weapons.DragonHead(env, self)
-            #return env.mod.weapons.SubmachineGun(env, self)
+#            env.mod.weapons.DragonHead.build_class(env)
+#            return env.mod.weapons.DragonHead(env, self)
+            return env.mod.weapons.SubmachineGun(env, self)
 
     def undead(self, env):
         obj = env.mod.monsters.Undead(env, self)

@@ -2,8 +2,8 @@ from threading import Thread
 
 class   DefaultWeapon:
 
-    xp = 799
-    level_up = 800
+    xp = 0
+    level_up = 750
     tier_up = False
 
     def build_class(env):

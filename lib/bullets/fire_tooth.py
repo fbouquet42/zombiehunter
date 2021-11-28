@@ -7,11 +7,11 @@ import time
 from . import set_hitbox_bullet
 from . import DefaultBullet
 
-class   FireBall(DefaultBullet):
+class   FireTooth(DefaultBullet):
     rapidity = 31
     attack = 10
     from_player=True
-    name = "dragon_ball"
+    name = "fire_tooth"
 
     @classmethod
     def pre_build(cls, env):

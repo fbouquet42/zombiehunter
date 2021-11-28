@@ -12,7 +12,7 @@ class   DragonHead(DefaultWeapon):
         cls.img_breathe = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_breathe', cls.dimensions)
         cls.img_suffocate = cls.tools.set_imgs(env.img_folder + 'weapons/', 'dragon_head_suffocate', cls.dimensions)
 
-        env.mod.bullets.FireBall.pre_build(env)
+        env.mod.bullets.FireTooth.pre_build(env)
         env.mod.bullets.Tooth.pre_build(env)
 
     def __init__(self, env, player):
@@ -26,7 +26,7 @@ class   DragonHead(DefaultWeapon):
         self.wants_to_breathe = 0
         self.breathing = 0
 
-        self.fire_ball = env.mod.bullets.FireBall.build_class(env, player, self)
+        self.fire_tooth = env.mod.bullets.FireTooth.build_class(env, player, self)
         self.tooth = env.mod.bullets.Tooth.build_class(env, player, self)
         self.smoke_cloud = env.mod.bullets.SmokeCloud.build_class(env, player, self)
 
@@ -57,7 +57,7 @@ class   DragonHead(DefaultWeapon):
         else:
             self.cooldown = self.delay
         if self.breathing:
-            self._shoot(env, player, self.fire_ball)
+            self._shoot(env, player, self.fire_tooth)
         else:
             self._shoot(env, player, self.tooth)
 

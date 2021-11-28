@@ -65,6 +65,9 @@ class Piranha(DefaultMonster):
                 self.hitbox.update_coords(self)
         self._target_hitted()
 
+    def set_on_fire(self, n):
+        pass
+
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:

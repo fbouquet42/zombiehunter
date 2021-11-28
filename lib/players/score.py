@@ -21,7 +21,7 @@ class   Score:
         self.list.append('dead')
         self.img.append(player.img_dead[0])
         self.kills.append(0)
-        self.values.append(-150)
+        self.values.append(-99)
 
     def load_img(self, env, name, dimensions):
         img = pygame.image.load(env.img_folder + 'monsters/' + name + '.png')

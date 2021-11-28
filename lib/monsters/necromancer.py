@@ -66,6 +66,8 @@ class   Necromancer(DefaultMonster):
         self.tools.display(env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def update(self):
@@ -75,6 +77,7 @@ class   Necromancer(DefaultMonster):
             self.stoned = False
         if self.injured:
             self.injured -= 1
+        self._perform_fire()
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

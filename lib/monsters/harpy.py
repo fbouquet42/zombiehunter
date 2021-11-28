@@ -48,6 +48,7 @@ class Harpy(DefaultMonster):
         self.rapidity = self.rapidity_onflight
         self.ultimatum = self.ultimatum_onflight
         self.gradient = self.gradient_max
+        self.inflamed = 0
 
     def _on_ground(self):
         if not self.lives:
@@ -117,6 +118,8 @@ class Harpy(DefaultMonster):
         self.tools.display(env, img, self.x, self.y, fitting - (self.list_dimensions[8] - self.dimensions) // 2)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+        elif self.lives and self.inflamed:
+            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def update(self):
@@ -129,6 +132,12 @@ class Harpy(DefaultMonster):
             self.stoned = False
         if self.injured:
             self.injured -= 1
+        self._perform_fire()
+        if self.lives and self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5
         if not self.lives:
             if self.degeneration:
                 self.degeneration -= 1
@@ -147,8 +156,3 @@ class Harpy(DefaultMonster):
                 self._gradient_fly((self.gradient_max - self.gradient) // 4 + 1)
             else:
                 self._gradient_fly((self.gradient) // 4 + 1)
-        if self.lives and self.poisoned:
-            self.poisoned -= 1
-            if not self.poisoned % 20:
-                self.lives -= 1
-                self.injured += 5
