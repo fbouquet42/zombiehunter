@@ -20,7 +20,7 @@ def _init(env):
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_2', env.height, env.height)
     env.titles.append(title)
-    env.mod.weapons.Devourer.build_class(env)
+    env.mod.monsters.Devourer.build_class()
     env.mod.weapons.DragonHead.build_class(env)
     env.mod.weapons.DevilBlade.build_class(env)
     env.mod.monsters.Necromancer.build_class()

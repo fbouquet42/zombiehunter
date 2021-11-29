@@ -8,10 +8,8 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 
 class   Devourer(DefaultMonster):
-    lives = 70
-    eyeless = 30
+    lives = 130
     name = "devourer"
-    turn = 30
     hunt = True
     id_nb = 18
     attack = 2
@@ -19,17 +17,12 @@ class   Devourer(DefaultMonster):
 
     @classmethod
     def build_class(cls):
-        cls.sniff = int(cls.dimensions * 1.5)
+        #cls.sniff = int(cls.dimensions * 1.5)
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
-        cls.img_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_night', cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
-        cls.img_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured_night', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
-        cls.img_eyeless = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless', cls.dimensions)
-        cls.img_eyeless_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_night', cls.dimensions)
-        cls.img_eyeless_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_injured', cls.dimensions)
-        cls.img_eyeless_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_injured_night', cls.dimensions)
+        cls.img_starved = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_starved', cls.dimensions)
         return cls
 
     def __init__(self, env, x, y):
@@ -39,90 +32,63 @@ class   Devourer(DefaultMonster):
         self.limitx = env.width - self.half
         self.limity = env.height - self.half
 
-        self.rapidity = randint(5, 9)
+        self.rapidity = randint(7, 9)
+        self.starved = False
 
-        self.random = randint(0, 12)
-        self.wait = self.turn
+        self.cooldown = randint(185, 310)
 
 
-    def _no_eye(self, direction, distance):
-        if distance is None:
-            return None
-        self.hunt = distance < self.sniff
-        if self.hunt:
-            return direction
-        elif not self.wait:
-            self.random = randint(0, 12)
-            self.wait = self.turn
-        else:
-            self.wait -= 1
-        return self.random
+    def _stay_calm(self):
+        calm = randint(55, 135)
+        if self.cooldown < calm:
+            self.cooldown = calm
 
-    def move(self):
-        self.tick = self.env.mod.tools.Tick()
-        while self.lives:
-            if not self.stoned:
-                direction, distance = self._sniff_fresh_flesh()
-                if self.lives <= self.eyeless:
-                    direction = self._no_eye(direction, distance)
+    def _walk(self):
+        self._stay_calm()
+        self.rapidity = randint(4, 6)
+        self.starved = False
 
-                if direction is not None and direction < 8:
-                    self.direction = direction
-                    self.tools.move(self, direction, self.rapidity + self.env.furious)
-                    self.hitbox.update_coords(self)
+    def _run(self):
+        self.rapidity = randint(14, 16)
+        self.starved = True
 
-                if self.lives <= self.eyeless:
-                    self.tools.limits(self, self.limitx, self.limity)
-            self._target_hitted()
-            if self._quit():
-                return
+    def hitted(self, attack=1):
+        if self.invulnerable:
+            return None, None
+        if self.lives:
+            if self.starved:
+                self._walk()
+            else:
+                self._stay_calm()
+            self.injured = 12
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            return self.id_nb, attack
+        return None, None
 
-        self.hunt = True
-        while self.degeneration:
-            if self.env.walking_dead:
-                self._action()
-            if self._quit():
-                return
-
-    def _display_day(self, env, fitting):
+    def display(self, env):
+        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
             if self.env.walking_dead:
                 img = self.img_possessed[self.direction]
             else:
                 img = self.img_dead[self.direction]
-        elif self.lives > self.eyeless and self.injured:
-            img = self.img_injured[self.direction]
-        elif self.lives > self.eyeless:
-            img = self.img[self.direction]
         elif self.injured:
-            img = self.img_eyeless_injured[self.direction]
+            img = self.img_injured[self.direction]
+        elif self.starved:
+            img = self.img_starved[self.direction]
         else:
-            img = self.img_eyeless[self.direction]
+            img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
         elif self.lives and self.inflamed:
             self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
-
-    def _display_night(self, env, fitting):
-        if not self.lives:
-            return
-        elif self.lives > self.eyeless and self.injured:
-            img = self.img_injured_night[self.direction]
-        elif self.lives > self.eyeless:
-            img = self.img_night[self.direction]
-        elif self.injured:
-            img = self.img_eyeless_injured_night[self.direction]
-        else:
-            img = self.img_eyeless_night[self.direction]
-        self.tools.display(self.env, img, self.x, self.y, fitting)
-        if self.lives and self.inflamed:
-            self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
-
-    def display(self, env):
-        fitting = 0.23 * self.dimensions if self.direction % 2 else 0
-        if env.night:
-            self._display_night(env, fitting)
-        else:
-            self._display_day(env, fitting)
         self._debug()
+
+    def update(self):
+        super().update()
+        if self.cooldown and not self.starved:
+            self.cooldown -= 1
+            if not self.cooldown:
+                self._run()
