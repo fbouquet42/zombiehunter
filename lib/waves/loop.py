@@ -20,7 +20,7 @@ def _init(env):
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_2', env.height, env.height)
     env.titles.append(title)
-    env.mod.monsters.GiantSpider.build_class()
+    env.mod.weapons.Devourer.build_class(env)
     env.mod.weapons.DragonHead.build_class(env)
     env.mod.weapons.DevilBlade.build_class(env)
     env.mod.monsters.Necromancer.build_class()
@@ -28,7 +28,6 @@ def _init(env):
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_3', env.height, env.height)
     env.titles.append(title)
-    env.mod.monsters.FlyQueen.build_class()
     env.mod.weapons.MagicWand.build_class(env)
     env.mod.weapons.ShadowDaggers.build_class(env)
     env.mod.monsters.Villager.build_class()
@@ -38,7 +37,7 @@ def _init(env):
     env.titles.remove(title)
 
 def loop(env):
-    buff = 2
+    buff = 0
     _init(env)
     while True:
         if env.retry:
