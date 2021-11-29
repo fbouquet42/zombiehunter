@@ -34,6 +34,7 @@ class Enyo(DefaultMonster):
         self.rapidity = 11
 
         self.big_boss = big_boss
+        self.spelling = False
 
     def hitted(self, attack=1):
         if self.lives and not self.spelling:

@@ -33,6 +33,7 @@ class Pemphredo(DefaultMonster):
         self.hitbox = set_hitbox_monster(self.env, self, 0.46)
         self.rapidity = 13
         self.big_boss = big_boss
+        self.spelling = False
 
     def hitted(self, attack=1):
         if self.lives and not self.spelling:
