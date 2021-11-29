@@ -14,7 +14,7 @@ class   Score:
         self.img_total = player.img[0]
         self.list = ['zombie', 'cyclops', 'jack_lantern', 'daemon', 'minion', 'necromancer', 'harpy', 'ent', 'nyx', 'tentacle', 'piranha', 'kraken', 'dark_knight', 'villager', 'garou', 'alchemist', 'fly', 'fly_queen', 'giant_spider', 'graeae']
         self.kills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        self.values = [1, 3.5, 2.5, 0.135, 2, 7.5, 3, 0.1, 0.12, 0.5, 3, 0.125, 11, 1.5, 3, 3.5, 2, 3, 0.115, 0.135]
+        self.values = [1, 4, 2.5, 0.54, 2, 7.5, 3, 0.4, 0.48, 0.5, 3, 0.5, 11, 1.5, 2.5, 4, 3, 3, 0.115, 0.54]
         self.img = []
         for name in self.list:
             self.load_img(env, name, dimensions)

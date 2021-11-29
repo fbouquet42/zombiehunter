@@ -361,7 +361,7 @@ class   Wave12(DefaultWave):
             else:
                 self.next[i] -= 1
         self.add.process(env)
-        if not self.objective.lives:
+        if not self.objective.splited_lives:
             env.background = env.background_basic
             return False
         return True

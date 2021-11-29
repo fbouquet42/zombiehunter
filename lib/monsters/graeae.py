@@ -4,6 +4,9 @@ import time
 
 from . import DefaultMonster
 from . import set_hitbox_monster
+from . import Deino
+from . import Enyo
+from . import Pemphredo
 
 class Graeae(DefaultMonster):
     name = "graeae"
@@ -12,6 +15,7 @@ class Graeae(DefaultMonster):
     rapidity = 7
     attack = 3
     id_nb = 19
+    splited_lives = 3
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -21,7 +25,9 @@ class Graeae(DefaultMonster):
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
 #        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
 
+        self.blood = env.mod.objects.Blood.build_class(env, self.dimensions)
         self.spelling = False
+        self.splited = [Deino.build_class(env), Enyo.build_class(env), Pemphredo.build_class(env)]
         #self.next_spell()
         #self.spell_type = [self.fire_spell , self.star_spell]
 
@@ -42,6 +48,13 @@ class Graeae(DefaultMonster):
             self._target_hitted()
             if self._quit():
                 return
+        self.env.objects.append(self.blood(self.x, self.y))
+        for monster_type in self.splited:
+            monster = monster_type(self, self.x, self.y)
+            t = Thread(target=monster.move, args=())
+            t.daemon = True
+            self.env.monsters.insert(0, monster)
+            t.start()
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
