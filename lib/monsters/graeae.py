@@ -8,7 +8,7 @@ from . import set_hitbox_monster
 class Graeae(DefaultMonster):
     name = "graeae"
     degeneration = 600
-    lives = 1350
+    lives = 13
     rapidity = 7
     attack = 3
     id_nb = 19
