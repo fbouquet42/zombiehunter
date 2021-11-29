@@ -274,10 +274,10 @@ class   Wave8(DefaultWave):
 class   Wave9(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_9', env.height, env.height)
-        self.objective = 21
-        self.times = [82, 187, 212, 1180, 235, 1320, 102, 125]
+        self.objective = 19
+        self.times = [84, 187, 212, 1180, 235, 1320, 144, 201]
         self.nb = [3, 1, 1, 1, 2, 1, 2, 2]
-        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), self.random(6) // 2, 0]
+        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), self.random(6), 0]
         self.add = AdditionalSpawn((0, 2, 833), (0, 3, 822))
 
     def process(self, env):
@@ -292,6 +292,10 @@ class   Wave9(DefaultWave):
         if self.objective > 0:
             return True
         return False
+
+
+#self.times = [144, 187, 212, 1280, 166, 1520, 144, 401]
+#self.nb = [3, 1, 1, 1, 2, 1, 1, 1]
 
 class   Wave10(DefaultWave):
     def __init__(self, env):
@@ -338,3 +342,26 @@ class   Wave11(DefaultWave):
         if self.objective > 0:
             return True
         return False
+
+class   Wave12(DefaultWave):
+    def __init__(self, env):
+        self.title = env.mod.tools.load_img(env, 'waves/wave_12', env.height, env.height)
+        self.times = [102, 277, 212, 1480, 277, 1920, 122, 433]
+        self.nb = [2, 1, 1, 1, 2, 1, 1, 1]
+        self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, self.random(6), self.random(7)]
+        self.add = AdditionalSpawn((0, 1, 1222), (0, 1, 1444))
+        env.background = env.background_swamp
+        self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Graeae)
+#        self.objective.lives = 0
+
+    def process(self, env):
+        for i, value in enumerate(self.next):
+            if not value:
+                self.spawn(env, i)
+            else:
+                self.next[i] -= 1
+        self.add.process(env)
+        if not self.objective.lives:
+            env.background = env.background_basic
+            return False
+        return True

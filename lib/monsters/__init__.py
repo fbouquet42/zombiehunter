@@ -26,5 +26,6 @@ from .alchemist import Alchemist
 from .fly import Fly
 from .fly_queen import FlyQueen
 from .giant_spider import GiantSpider
+from .graeae import Graeae
 
 tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Fly, FlyQueen, GiantSpider]
