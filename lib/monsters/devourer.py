@@ -35,7 +35,7 @@ class   Devourer(DefaultMonster):
         self.rapidity = randint(7, 9)
         self.starved = False
 
-        self.cooldown = randint(185, 310)
+        self.cooldown = randint(135, 220)
 
 
     def _stay_calm(self):
