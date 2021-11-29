@@ -38,11 +38,12 @@ def _init(env):
     env.titles.remove(title)
 
 def loop(env):
-    buff = 0
+    buff = 2
     _init(env)
     while True:
-        if not env.retry:
+        if env.retry:
             i = buff
+            env.retry = False
         elif env.debug:
             i = env.debug_wave - 1
         else:

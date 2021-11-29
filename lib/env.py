@@ -123,7 +123,7 @@ class Env:
         self.furious = 0
         self.walking_dead = 0
         self.night = False
-        self.retry = 1
+        self.retry = False
 
     def usage(self):
         print("usage: python3 main.py [-debug [wave_nb]]")

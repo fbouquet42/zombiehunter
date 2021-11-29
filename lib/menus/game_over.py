@@ -70,7 +70,9 @@ def game_over(env):
         env.furious = 0
         env.walking_dead = 0
         env.night = False
+        env.retry = True
         for player in env.players:
+            player.reset_bad_effect()
             player.lives = player.max_lives
             player.score.total = 0
             player.score.i = 0

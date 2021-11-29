@@ -68,14 +68,10 @@ class Player:
         self.name = name
 
         self.img = self.tools.set_imgs(env.img_folder + 'players/', self.name, self.dimensions)
-        self.img_abaddon = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon', self.dimensions)
-        self.img_abaddon_tier2 = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon_tier2', self.dimensions)
         self.img_enraged = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_enraged', self.dimensions)
         self.img_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_night', self.dimensions)
         self.img_enraged_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_enraged_night', self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured', self.dimensions)
-        self.img_abaddon_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon_injured', self.dimensions)
-        self.img_abaddon_tier2_injured = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_abaddon_tier2_injured', self.dimensions)
         self.img_injured_night = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_injured_night', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_dead', self.dimensions)
         self.img_possessed = self.tools.set_imgs(env.img_folder + 'players/', self.name + '_possessed', self.dimensions)
@@ -141,15 +137,9 @@ class Player:
         elif self.rage:
             img = self.img_enraged[self.direction]
         elif self.injured:
-            if self.abaddon:
-                img = self.img_abaddon_injured[self.direction]
-            else:
-                img = self.img_injured[self.direction]
+            img = self.img_injured[self.direction]
         else:
-            if self.abaddon:
-                img = self.img_abaddon[self.direction]
-            else:
-                img = self.img[self.direction]
+            img = self.img[self.direction]
         if not self.possessed:
             self.tools.display(env, img, self.x, self.y, fitting)
         if self.lives and self.inflamed:
@@ -176,6 +166,13 @@ class Player:
             self._display_day(env, fitting)
         if env.debug and self.lives:
             self.tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
+    def reset_bad_effect(self):
+        self.stoned = False
+        self.poisoned = 0
+        self.inflamed = 0
+        self.injured = 0
+        self.possessed = False
 
     def update(self):
         if self.stoned and not self.env.stoned:

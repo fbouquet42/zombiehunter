@@ -62,6 +62,13 @@ class Brambles(DefaultMonster):
             self.lives = 0 if self.lives < 0 else self.lives
         return None, None
 
+    def affected(self, bullet):
+        if not self.lives:
+            return False
+        if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
+            return True
+        return False
+
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:

@@ -167,12 +167,12 @@ class DefaultMonster:
         self.injured = 0
 
     def set_on_fire(self, n, player):
-        if not self.invulnerable:
+        if not self.invulnerable and self.lives:
             self.inflamed = n
             self.master_of_flames = player
 
     def _perform_fire(self):
-        if self.lives and self.inflamed:
+        if self.inflamed:
             self.inflamed -= 1
             if self.inflamed == 0:
                 if randint(0, 6):
