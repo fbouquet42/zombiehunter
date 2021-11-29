@@ -36,6 +36,14 @@ class Graeae(DefaultMonster):
     def next_spell(self):
         self.spell = randint(430, 720)
 
+    def hitted(self, attack=1):
+        if self.lives and not self.spelling:
+            self.injured = 14
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            return self.id_nb, attack
+        return None, None
+
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:

@@ -34,6 +34,14 @@ class Pemphredo(DefaultMonster):
         self.rapidity = 13
         self.big_boss = big_boss
 
+    def hitted(self, attack=1):
+        if self.lives and not self.spelling:
+            self.injured = 14
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            return self.id_nb, attack
+        return None, None
+
     def _action(self):
         if not self.stoned:
             if self.direction_blocked:
