@@ -252,8 +252,8 @@ class   Wave7(DefaultWave):
 class   Wave8(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_8', env.height, env.height)
-        self.objective = 42
-        self.times = [72, 177, 212, 1180, 235, 1320, 81]
+        self.objective = 41
+        self.times = [72, 177, 212, 1180, 235, 1320, 88]
         self.nb = [3, 1, 1, 1, 2, 1, 3]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), 0]
         self.add = AdditionalSpawn((0, 2, 788), (1, 4, 599))
@@ -275,8 +275,8 @@ class   Wave9(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_9', env.height, env.height)
         self.objective = 19
-        self.times = [84, 187, 212, 1180, 235, 1320, 144, 201]
-        self.nb = [3, 1, 1, 1, 2, 1, 2, 2]
+        self.times = [84, 187, 212, 1180, 235, 1320, 144, 301]
+        self.nb = [3, 1, 1, 1, 2, 1, 1, 2]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5), self.random(6), 0]
         self.add = AdditionalSpawn((0, 2, 833), (0, 3, 822))
 
