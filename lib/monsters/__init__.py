@@ -24,10 +24,11 @@ from .garou import Garou
 from .villager import Villager
 from .alchemist import Alchemist
 from .fly import Fly
+from .witch import Witch
 from .devourer import Devourer
 from .enyo import Enyo
 from .deino import Deino
 from .pemphredo import Pemphredo
 from .graeae import Graeae
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Fly, Devourer, Devourer]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, Devourer]

@@ -31,6 +31,7 @@ def _init(env):
     env.mod.weapons.MagicWand.build_class(env)
     env.mod.weapons.ShadowDaggers.build_class(env)
     env.mod.monsters.Villager.build_class()
+    env.mod.monsters.Witch.build_class()
     env.mod.monsters.Alchemist.build_class(env)
     env.mod.monsters.Ent.build_class()
     env.mod.monsters.Piranha.build_class()
