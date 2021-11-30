@@ -53,6 +53,8 @@ class   Wave1(DefaultWave):
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
         self.add = AdditionalSpawn((0, 1, 799), (0, 1, 899))
+        #gargamel test
+        env.mod.tools.spawn_boss(env, env.mod.monsters.Gargamel)
 
     def process(self, env):
         for i, value in enumerate(self.next):
