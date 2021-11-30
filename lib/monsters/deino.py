@@ -30,7 +30,7 @@ class Deino(DefaultMonster):
         self.target = self.env.players[0]
         self.direction_blocked = 6
 
-        self.hitbox = set_hitbox_monster(self.env, self)
+        self.hitbox = set_hitbox_monster(self.env, self, 0.33)
         self.rapidity = 5
 
         self.big_boss = big_boss
