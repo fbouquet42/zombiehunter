@@ -47,7 +47,7 @@ class   DefaultWave:
 
 class   Wave1(DefaultWave):
     def __init__(self, env):
-        self.title = env.mod.tools.load_img(env, 'waves/wave_1', env.height, env.height)
+        self.title = env.mod.tools.load_img(env, 'waves/gargamel', env.height, env.height)
         self.objective = 70
         self.times = [45, 178]
         self.nb = [3, 1]
