@@ -18,12 +18,23 @@ class   Witch(DefaultMonster):
         cls.bullet  = cls.env.mod.bullets.DoubleBullet.build_class(cls.env)
         return cls
 
+    def _next_spell(self):
+        self.will_spell = randint(110, 230)
+
+    def frogifying(self):
+        if len(self.env.zombies):
+            self.env.zombies[randint(0, len(self.env.zombies) - 1)].frogified()
+
     def __init__(self, env, x, y):
         self._father_init(x, y)
         self.hitbox = set_hitbox_monster(env, self)
+        self.env = env
 
         self.rapidity = randint(6, 10)
 
+        self.spelling = 0
+        self._next_spell()
+        self.spell_type = [self.frogifying]
         self.walking_dead = False
 
     def display(self, env):
@@ -43,3 +54,28 @@ class   Witch(DefaultMonster):
         elif self.lives and self.inflamed:
             self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
+
+    def update(self):
+        if self.invulnerable:
+            self.invulnerable -= 1
+        if self.stoned and not self.env.stoned:
+            self.stoned = False
+        if self.injured:
+            self.injured -= 1
+        if not self.lives and self.degeneration:
+            self.degeneration -= 1
+        self._perform_fire()
+        if self.lives and self.poisoned:
+            self.poisoned -= 1
+            if not self.poisoned % 20:
+                self.lives -= 1
+                self.injured += 5
+        if self.spelling:
+            self.spelling -= 1
+            if not self.spelling:
+                self.spell_type[randint(0, len(self.spell_type) - 1)]()
+                self._next_spell()
+        if self.will_spell:
+            self.will_spell -= 1
+            if not self.will_spell:
+                self.spelling = 5

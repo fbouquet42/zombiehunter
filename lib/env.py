@@ -75,6 +75,8 @@ class Env:
         self.walking_dead = 0
         #Nyx
         self.night = False
+        #Witch
+        self.zombies = []
 
         ###Data
         self.players = []

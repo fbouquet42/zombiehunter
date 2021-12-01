@@ -21,8 +21,14 @@ class Zombie(DefaultMonster):
         cls.img_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured_night', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
+        cls.frogified_lights = cls.env.mod.objects.Frogified.build_class(cls.env, cls.dimensions)
         return cls
 
+
+    def frogified(self):
+        self.register = False
+        self.env.zombies.remove(self)
+        self.env.objects.append(self.frogified_lights(self.x, self.y))
 
     def __init__(self, env, x, y, direction_summoning=9):
         if direction_summoning == 9:
@@ -39,6 +45,10 @@ class Zombie(DefaultMonster):
         if direction_summoning < 8:
             self.direction = direction_summoning
             self.direction_blocked = 6
+
+        #witch
+        self.env.zombies.append(self)
+        self.register = True
 
     def _display_day(self, env, fitting):
         if not self.lives:
@@ -88,6 +98,9 @@ class Zombie(DefaultMonster):
         self._target_hitted()
 
     def update(self):
+        if not self.lives and self.register:
+            self.env.zombies.remove(self)
+            self.register = False
         if self.direction_blocked:
             self.direction_blocked -= 1
         if self.invulnerable:
