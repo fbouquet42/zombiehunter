@@ -1,9 +1,11 @@
 
 #Python Lib
+from threading import Thread
 from random import randint
 
 #Current Module
 from . import DefaultMonster
+from . import Frog
 from . import set_hitbox_monster
 
 
@@ -21,6 +23,7 @@ class Zombie(DefaultMonster):
         cls.img_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured_night', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
+        cls.frog = Frog.build_class()
         cls.frogified_lights = cls.env.mod.objects.Frogified.build_class(cls.env, cls.dimensions)
         return cls
 
@@ -29,6 +32,13 @@ class Zombie(DefaultMonster):
         self.register = False
         self.env.zombies.remove(self)
         self.env.objects.append(self.frogified_lights(self.x, self.y))
+        self.degeneration = 0
+        self.lives = 0
+        frog = self.frog(self.direction, self.x, self.y)
+        t = Thread(target=frog.move, args=())
+        t.daemon = True
+        self.env.monsters.append(frog)
+        t.start()
 
     def __init__(self, env, x, y, direction_summoning=9):
         if direction_summoning == 9:
