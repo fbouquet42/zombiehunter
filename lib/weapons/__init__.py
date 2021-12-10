@@ -1,3 +1,7 @@
+from .automatic_default import AutomaticDefault
+from .riffle import Riffle
+from .tommy_gun import TommyGun
+
 from .default import DefaultWeapon
 from .submachine_gun_up import SubmachineGunUp
 from .submachine_gun import SubmachineGun

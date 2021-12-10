@@ -24,7 +24,6 @@ class Zombie(DefaultMonster):
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.frog = Frog.build_class()
-        cls.frogified_lights = cls.env.mod.objects.Frogified.build_class(cls.env, cls.dimensions)
         return cls
 
 

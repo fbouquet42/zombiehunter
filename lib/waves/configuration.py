@@ -303,7 +303,7 @@ class   Wave10(DefaultWave):
     def __init__(self, env):
         self.title = env.mod.tools.load_img(env, 'waves/wave_10', env.height, env.height)
         self.objective = 28
-        self.times = [144, 187, 212, 1280, 166, 1520, 144, 401, 199]
+        self.times = [144, 97, 212, 1280, 166, 1520, 144, 401, 199]
         self.nb = [3, 1, 1, 1, 2, 1, 1, 1, 3]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, self.random(6), self.random(7), 0]
         self.add = AdditionalSpawn((0, 2, 833))
