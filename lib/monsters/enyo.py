@@ -1,9 +1,11 @@
 
 #Python Lib
+from threading import Thread
 from random import randint
 
 #Current Module
 from . import DefaultMonster
+from . import PestilenceMedium
 from . import set_hitbox_monster
 
 
@@ -20,6 +22,7 @@ class Enyo(DefaultMonster):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
+        cls.pestilence = PestilenceMedium.build_class(env)
         return cls
 
 
@@ -31,10 +34,12 @@ class Enyo(DefaultMonster):
         self.direction_blocked = 6
 
         self.hitbox = set_hitbox_monster(self.env, self, 0.46)
-        self.rapidity = 11
+        self.rapidity = 10
 
         self.big_boss = big_boss
         self.spelling = False
+
+        self.sweat = 9
 
     def hitted(self, attack=1):
         if self.lives and not self.spelling:
@@ -101,3 +106,12 @@ class Enyo(DefaultMonster):
             if not self.poisoned % 20:
                 self.lives -= 1
                 self.injured += 5
+        if self.lives:
+            self.sweat -= 1
+            if not self.sweat:
+                p = self.pestilence(self.x, self.y, self.direction)
+                t = Thread(target=p.drip, args=())
+                t.daemon = True
+                self.env.monsters.insert(0, p)
+                t.start()
+                self.sweat = 9

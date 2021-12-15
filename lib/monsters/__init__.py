@@ -28,6 +28,7 @@ from .fly import Fly
 from .witch import Witch
 from .devourer import Devourer
 from .pestilence import Pestilence
+from .pestilence_medium import PestilenceMedium
 from .enyo import Enyo
 from .deino import Deino
 from .pemphredo_ghost import PemphredoGhost

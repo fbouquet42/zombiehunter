@@ -78,9 +78,7 @@ class Pemphredo(DefaultMonster):
             if self._quit():
                 return
 
-        self.big_boss.splited_lives -= 1
-
-        ghost = self.ghost(self.x, self.y)
+        ghost = self.ghost(self.x, self.y, self.big_boss)
         t = Thread(target=ghost.move, args=())
         t.daemon = True
         self.env.monsters.append(ghost)
