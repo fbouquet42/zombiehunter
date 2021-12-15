@@ -7,3 +7,4 @@ from .frogified import Frogified
 from .fog import Fog
 from .summoning_vial import SummoningVial
 from .invulnerable_vial import InvulnerableVial
+from .scimitar import Scimitar
