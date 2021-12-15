@@ -117,6 +117,7 @@ class Env:
         self.monsters.clear()
         for player in self.players:
             player.destroy = True
+        self.zombies.clear()
         self.players.clear()
         self.bullets.clear()
         self.objects.clear()

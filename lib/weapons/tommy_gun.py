@@ -17,11 +17,11 @@ class   TommyGun(AutomaticDefault):
 
     def _loading(self):
         if self.how_much:
-            self.next_shoot = 5
+            self.next_shoot = 6
             self.how_much -= 1
         else:
-            self.next_shoot = randint(85, 170)
-            self.how_much = randint(4, 7)
+            self.next_shoot = randint(33, 77)
+            self.how_much = randint(1, 2)
 
     def __init__(self):
         self.how_much = 0

@@ -3,7 +3,8 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   MagneticBullet(DefaultBullet):
-    rapidity = 24
+    #rapidity = 24
+    rapidity = 29
     name = "magnetic_bullet"
     attack=6
 
