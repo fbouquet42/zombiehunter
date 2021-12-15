@@ -13,6 +13,7 @@ class   Witch(DefaultMonster):
     def build_class(cls):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
+        cls.img_spelling = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_spelling', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.bullet  = cls.env.mod.bullets.DoubleBullet.build_class(cls.env)
@@ -44,6 +45,8 @@ class   Witch(DefaultMonster):
                 img = self.img_possessed[self.direction]
             else:
                 img = self.img_dead[self.direction]
+        elif self.spelling:
+            img = self.img_spelling[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
@@ -70,6 +73,9 @@ class   Witch(DefaultMonster):
             if not self.poisoned % 20:
                 self.lives -= 1
                 self.injured += 5
+
+        if not self.lives:
+            return
         if self.spelling:
             self.spelling -= 1
             if not self.spelling:

@@ -87,10 +87,11 @@ class   JackLantern(DefaultMonster):
                 return
 
         if self.mushroom:
-            self.env.zombies.remove(self)
             self.weapon = self.riffle()
             self.rapidity = self.rapidity_buffer
             self.mushroom = False
+        else:
+            self.env.zombies.remove(self)
 
         while self.degeneration:
             if self.env.walking_dead:
