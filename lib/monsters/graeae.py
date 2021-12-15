@@ -4,6 +4,7 @@ import time
 
 from . import DefaultMonster
 from . import set_hitbox_monster
+from . import Pestilence
 from . import Deino
 from . import Enyo
 from . import Pemphredo
@@ -11,7 +12,7 @@ from . import Pemphredo
 class Graeae(DefaultMonster):
     name = "graeae"
     degeneration = 150
-    lives = 13
+    lives = 80
     rapidity = 7
     attack = 3
     id_nb = 19
@@ -26,11 +27,13 @@ class Graeae(DefaultMonster):
 #        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
 
         self.blood = env.mod.objects.Blood.build_class(env, self.dimensions)
+        self.pestilence = Pestilence.build_class(env)
         self.spelling = False
         self.splited = [Deino.build_class(env), Enyo.build_class(env), Pemphredo.build_class(env)]
         #self.next_spell()
         #self.spell_type = [self.fire_spell , self.star_spell]
 
+        self.sweat = 60
         self.hitbox = set_hitbox_monster(env, self, 0.7)
 
     def next_spell(self):
@@ -61,7 +64,7 @@ class Graeae(DefaultMonster):
             monster = monster_type(self, self.x, self.y)
             t = Thread(target=monster.move, args=())
             t.daemon = True
-            self.env.monsters.insert(0, monster)
+            self.env.monsters.append(monster)
             t.start()
 
     def display(self, env):
@@ -77,6 +80,18 @@ class Graeae(DefaultMonster):
         self.tools.display(env, img, self.x, self.y, fitting)
         self._debug()
 
+    def update(self):
+        super().update()
 
-    def _perform_fire(self):
+        if self.lives:
+            self.sweat -= 1
+            if not self.sweat:
+                p = self.pestilence(self.x, self.y, self.direction)
+                t = Thread(target=p.drip, args=())
+                t.daemon = True
+                self.env.monsters.insert(0, p)
+                t.start()
+                self.sweat = 20
+
+    def set_on_fire(self, n):
         pass

@@ -32,7 +32,8 @@ class   Thorns(DefaultBullet):
         for player in self.env.players:
             if player.affected(self):
                 player.hitted(attack=self.attack)
-                player.poisoned = self.poison
+                if player.lives:
+                    player.poisoned = self.poison
         for monster in self.env.monsters:
             if not monster.forest and monster.affected(self):
                 monster.hitted(attack=self.attack)

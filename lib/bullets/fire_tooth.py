@@ -9,7 +9,7 @@ from . import DefaultBullet
 
 class   FireTooth(DefaultBullet):
     rapidity = 31
-    attack = 10
+    attack = 20
     from_player=True
     name = "fire_tooth"
 

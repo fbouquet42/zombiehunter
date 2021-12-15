@@ -25,6 +25,9 @@ class   SmokeCloud(DefaultBullet):
         self.img = self.img_set[randint(0, 2)]
         self.img_night = self.img
 
+    def display(self, env):
+        self.tools.display(env, self.img[self.direction], self.x, self.y, self.fitting)
+
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while True:

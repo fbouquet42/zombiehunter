@@ -12,7 +12,7 @@ class   TommyGun(AutomaticDefault):
         cls.tools = env.mod.tools
         cls.dimensions = env.player_dimensions
         cls.img = cls.tools.set_imgs(env.img_folder + 'weapons/', cls.name, cls.dimensions)
-        cls.bullet = env.mod.bullets.MagneticBullet.build_class(env)
+        cls.bullet = env.mod.bullets.Spore.build_class(env)
         return cls
 
     def _loading(self):
@@ -21,7 +21,7 @@ class   TommyGun(AutomaticDefault):
             self.how_much -= 1
         else:
             self.next_shoot = randint(33, 77)
-            self.how_much = randint(1, 2)
+            self.how_much = randint(0, 2)
 
     def __init__(self):
         self.how_much = 0

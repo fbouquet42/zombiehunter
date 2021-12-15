@@ -27,6 +27,7 @@ from .alchemist import Alchemist
 from .fly import Fly
 from .witch import Witch
 from .devourer import Devourer
+from .pestilence import Pestilence
 from .enyo import Enyo
 from .deino import Deino
 from .pemphredo import Pemphredo

@@ -2,10 +2,10 @@
 from . import set_hitbox_bullet
 from . import DefaultBullet
 
-class   MagneticBullet(DefaultBullet):
+class   Spore(DefaultBullet):
     #rapidity = 24
     rapidity = 28
-    name = "magnetic_bullet"
+    name = "spore"
     attack=6
 
     @classmethod
