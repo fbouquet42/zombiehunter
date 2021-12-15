@@ -65,7 +65,7 @@ class Piranha(DefaultMonster):
                 self.hitbox.update_coords(self)
         self._target_hitted()
 
-    def set_on_fire(self, n):
+    def set_on_fire(self, n, player):
         pass
 
     def display(self, env):

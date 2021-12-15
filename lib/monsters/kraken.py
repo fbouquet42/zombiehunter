@@ -221,7 +221,7 @@ class Kraken(DefaultMonster):
                 t.start()
                 self._next_spell_nyx()
 
-    def set_on_fire(self, n):
+    def set_on_fire(self, n, player):
         pass
 
     def update(self):

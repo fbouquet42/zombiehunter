@@ -68,7 +68,7 @@ class   Ent(DefaultMonster):
             t.start()
 
     def thorns_spell(self):
-        if not self.spelling:
+        if not self.thorny:
             self.thorny = self.max_thorny
         timer = (self.max_thorny - self.thorny) // 2
         if self.target is not None:
@@ -158,6 +158,6 @@ class   Ent(DefaultMonster):
         elif self.spell:
             self.spell -= 1
             if not self.spell:
+                self.spelling = True
                 self.spell_type[randint(0, len(self.spell_type) - 1)]()
                 self.next_spell()
-                self.spelling = True

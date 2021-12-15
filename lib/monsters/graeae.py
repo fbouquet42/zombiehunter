@@ -93,5 +93,5 @@ class Graeae(DefaultMonster):
                 t.start()
                 self.sweat = 20
 
-    def set_on_fire(self, n):
+    def set_on_fire(self, n, player):
         pass

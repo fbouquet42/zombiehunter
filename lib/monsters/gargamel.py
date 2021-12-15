@@ -65,5 +65,5 @@ class Gargamel(DefaultMonster):
         self._debug()
 
 
-    def set_on_fire(self, n):
+    def set_on_fire(self, n, player):
         pass
