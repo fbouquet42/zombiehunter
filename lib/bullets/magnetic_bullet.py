@@ -4,7 +4,7 @@ from . import DefaultBullet
 
 class   MagneticBullet(DefaultBullet):
     #rapidity = 24
-    rapidity = 29
+    rapidity = 28
     name = "magnetic_bullet"
     attack=6
 

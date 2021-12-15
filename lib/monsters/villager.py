@@ -84,6 +84,7 @@ class Villager(DefaultMonster):
             self.injured -= 1
         if not self.lives and self.degeneration:
             self.degeneration -= 1
+        self._perform_fire()
         if self.lives and self.poisoned:
             self.poisoned -= 1
             if not self.poisoned % 20:

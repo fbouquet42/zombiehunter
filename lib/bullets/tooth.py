@@ -4,7 +4,7 @@ from . import DefaultBullet
 
 class   Tooth(DefaultBullet):
     rapidity = 34
-    attack=10
+    attack=20
     from_player = True
     name = "tooth"
 
