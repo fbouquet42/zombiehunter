@@ -84,4 +84,4 @@ class   Witch(DefaultMonster):
         if self.will_spell:
             self.will_spell -= 1
             if not self.will_spell:
-                self.spelling = 5
+                self.spelling = 6

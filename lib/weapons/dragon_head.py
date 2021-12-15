@@ -20,7 +20,7 @@ class   DragonHead(DefaultWeapon):
         self.env = env
         self.player = player
 
-        self.delay = 6
+        self.delay = 9
         self.cooldown = 0
         self.suffocating = 0
         self.breathing = False
