@@ -15,17 +15,19 @@ class Gargamel(DefaultMonster):
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
-
+        self.dimensions = int(self.dimensions * 3.25)
+        self.half = self.dimensions // 2
         self.img = self.tools.set_imgs(env.img_folder + 'monsters/', self.name, self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_injured', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
+        self.img_weapon = self.tools.set_imgs(env.img_folder + 'weapons/', 'scimitar', self.dimensions)
 #        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
 
         self.spelling = False
         #self.next_spell()
         #self.spell_type = [self.fire_spell , self.star_spell]
 
-        self.hitbox = set_hitbox_monster(env, self, 0.7)
+        self.hitbox = set_hitbox_monster(env, self, 0.25)
 
     def next_spell(self):
         self.spell = randint(430, 720)
@@ -62,6 +64,8 @@ class Gargamel(DefaultMonster):
         else:
             img = self.img[self.direction]
         self.tools.display(env, img, self.x, self.y, fitting)
+        if self.lives:
+            self.tools.display(self.env, self.img_weapon[self.direction], self.x, self.y, fitting)
         self._debug()
 
 

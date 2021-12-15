@@ -9,6 +9,7 @@ from . import PestilenceMedium
 from . import set_hitbox_monster
 
 
+#idea: move like a cyclops but not exactly when out of range take a random point on map
 class Enyo(DefaultMonster):
     lives = 80
     name = "enyo"

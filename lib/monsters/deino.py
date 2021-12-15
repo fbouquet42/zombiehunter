@@ -6,7 +6,7 @@ from random import randint
 from . import DefaultMonster
 from . import set_hitbox_monster
 
-
+#idea: throw things
 class Deino(DefaultMonster):
     lives = 80
     name = "deino"
