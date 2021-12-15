@@ -30,6 +30,7 @@ from .devourer import Devourer
 from .pestilence import Pestilence
 from .enyo import Enyo
 from .deino import Deino
+from .pemphredo_ghost import PemphredoGhost
 from .pemphredo import Pemphredo
 from .graeae import Graeae
 from .gargamel import Gargamel

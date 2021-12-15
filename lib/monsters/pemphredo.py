@@ -1,9 +1,11 @@
 
 #Python Lib
+from threading import Thread
 from random import randint
 
 #Current Module
 from . import DefaultMonster
+from . import PemphredoGhost
 from . import set_hitbox_monster
 
 
@@ -20,6 +22,7 @@ class Pemphredo(DefaultMonster):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
+        cls.ghost = PemphredoGhost.build_class(env)
         return cls
 
 
@@ -57,9 +60,7 @@ class Pemphredo(DefaultMonster):
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
-        if not self.lives:
-            img = self.img_dead[self.direction]
-        elif self.injured:
+        if self.injured:
             img = self.img_injured[self.direction]
         else:
             img = self.img[self.direction]
@@ -78,6 +79,13 @@ class Pemphredo(DefaultMonster):
                 return
 
         self.big_boss.splited_lives -= 1
+
+        ghost = self.ghost(self.x, self.y)
+        t = Thread(target=ghost.move, args=())
+        t.daemon = True
+        self.env.monsters.append(ghost)
+        self.degeneration = 0
+        t.start()
 
         while self.degeneration:
             if self._quit():
