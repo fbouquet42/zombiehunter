@@ -34,7 +34,5 @@ class   Scimitar:
         else:
             self.recall += 1
             if self.recall // self.interval > 3:
-                self.monster.x = self.x
-                self.monster.y = self.y
-                self.monster.have_weapon = True
+                self.monster.recall(self.x, self.y)
                 self.disappear = True

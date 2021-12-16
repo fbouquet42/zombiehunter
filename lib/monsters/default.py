@@ -38,6 +38,28 @@ class DefaultMonster:
         DefaultMonster.tools = env.mod.tools
         return DefaultMonster
 
+
+    def _random_spawn(self):
+        pos = randint(0, 7)
+        if pos < 3:
+            y = randint(-70, 0)
+            y -= self.dimensions
+        elif pos > 4:
+            y = self.env.height + randint(0, 70)
+        else:
+            y = randint(0, self.env.height)
+
+        if pos == 0 or pos == 3 or pos == 5:
+            x = randint(-70, 0)
+            x -= self.dimensions
+        elif pos == 2 or pos == 4 or pos == 7:
+            x = self.env.width + randint(0, 70)
+        else:
+            x = randint(0, self.env.width)
+
+        self.x = x
+        self.y = y
+
     def _father_init(self, x, y):
         self.x = x + self.env.width + 200 if x > -100 else x
         self.y = y + self.env.height + 200 if y > -100 else y

@@ -14,14 +14,16 @@ class Gargamel(DefaultMonster):
     id_nb = 20
 
     def __init__(self, env, x, y):
-        self._father_init(x, y)
         self.dimensions = int(self.dimensions * 3.25)
         self.half = self.dimensions // 2
+        self._random_spawn()
+        self.target = self.env.players[0]
         self.img = self.tools.set_imgs(env.img_folder + 'monsters/', self.name, self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_injured', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
         self.img_weapon = self.tools.set_imgs(env.img_folder + 'weapons/', 'scimitar', self.dimensions)
         self.scimitar = env.mod.objects.Scimitar.build_class(env, self)
+        self.void = env.mod.objects.Void.build_class(env, self.dimensions)
 #        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
 
         self.have_weapon = True
@@ -72,6 +74,12 @@ class Gargamel(DefaultMonster):
             self.tools.display(self.env, self.img_weapon[direction], self.x, self.y, fitting)
         self._debug()
 
+    def recall(self, x, y):
+        self.env.objects.append(self.void(self.x, self.y, expired=False))
+        self.x = x
+        self.y = y
+        self.have_weapon = True
+        self.env.objects.append(self.void(self.x, self.y, expired=True))
 
     def set_on_fire(self, n, player):
         pass
@@ -79,6 +87,8 @@ class Gargamel(DefaultMonster):
     def update(self):
         super().update()
 
+        if not self.lives:
+            return
         if self.spell:
             self.spell -= 1
             if not self.spell:
