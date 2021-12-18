@@ -1,17 +1,17 @@
 import pygame
 from . import set_hitbox
 
-class   Scimitar:
+class   Spear:
     disappear = False
 
     @classmethod
     def build_class(cls, env, monster):
         cls.monster = monster
         cls.dimensions = monster.dimensions
-        cls.img = pygame.transform.scale(pygame.image.load(env.img_folder + 'objects/'  + 'scimitar_object.png'), (cls.dimensions, cls.dimensions))
+        cls.img = pygame.transform.scale(pygame.image.load(env.img_folder + 'objects/'  + 'spear_object.png'), (cls.dimensions, cls.dimensions))
         cls.img_recall = []
         for i in range(1, 5):
-            cls.img_recall.append(pygame.transform.scale(pygame.image.load(env.img_folder + 'objects/'  + 'scimitar_object_' + str(i) + '.png'), (cls.dimensions, cls.dimensions)))
+            cls.img_recall.append(pygame.transform.scale(pygame.image.load(env.img_folder + 'objects/'  + 'spear_object_' + str(i) + '.png'), (cls.dimensions, cls.dimensions)))
         cls.env = env
         return cls
 
@@ -35,5 +35,5 @@ class   Scimitar:
             self.recall += 1
             if self.recall // self.interval > 3:
                 self.monster.recall(self.x, self.y)
-                self.monster.have_scimitar = True
+                self.monster.have_spear = True
                 self.disappear = True

@@ -9,3 +9,4 @@ from .summoning_vial import SummoningVial
 from .invulnerable_vial import InvulnerableVial
 from .void import Void
 from .scimitar import Scimitar
+from .spear import Spear

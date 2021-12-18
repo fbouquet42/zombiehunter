@@ -21,24 +21,31 @@ class Gargamel(DefaultMonster):
         self.img = self.tools.set_imgs(env.img_folder + 'monsters/', self.name, self.dimensions)
         self.img_injured = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_injured', self.dimensions)
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
-        self.img_weapon = self.tools.set_imgs(env.img_folder + 'weapons/', 'scimitar', self.dimensions)
+        self.img_scimitar = self.tools.set_imgs(env.img_folder + 'weapons/', 'scimitar', self.dimensions)
+        self.img_spear = self.tools.set_imgs(env.img_folder + 'weapons/', 'spear', self.dimensions)
         self.scimitar = env.mod.objects.Scimitar.build_class(env, self)
+        self.spear = env.mod.objects.Spear.build_class(env, self)
         self.void = env.mod.objects.Void.build_class(env, self.dimensions)
-#        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
+#        self.img_scimitar_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_scimitar_spelling', self.dimensions)
 
-        self.have_weapon = True
-        self.spelling = False
-        self.spell = 99
-        #self.spell_type = [self.fire_spell , self.star_spell]
+        self.have_scimitar = True
+        self.have_spear = True
+        self.spear_spell = 110
+        self.scimitar_spell = 99
+        #self.scimitar_spell_type = [self.fire_scimitar_spell , self.star_scimitar_spell]
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
 
-    def next_spell(self):
-        if self.have_weapon:
-            self.spell = randint(43, 72)
+    def next_scimitar_spell(self):
+        if self.have_scimitar:
+            self.scimitar_spell = randint(43, 72)
+
+    def next_spear_spell(self):
+        if self.have_spear:
+            self.spear_spell = randint(66, 102)
 
     def hitted(self, attack=1):
-        if self.lives and not self.spelling:
+        if self.lives:
             self.injured = 14
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
@@ -51,9 +58,9 @@ class Gargamel(DefaultMonster):
             direction, _ = self._sniff_fresh_flesh()
             if direction is not None:
                 self.direction = direction
-                if not self.spelling:
-                    self.tools.move(self, direction, self.rapidity)
-                    self.hitbox.update_coords(self)
+                #if not self.spelling:
+                self.tools.move(self, direction, self.rapidity)
+                self.hitbox.update_coords(self)
             self._target_hitted()
             if self._quit():
                 return
@@ -63,22 +70,23 @@ class Gargamel(DefaultMonster):
         direction = self.direction
         if not self.lives:
             img = self.img_dead[direction]
-        #elif self.spelling:
-        #    img = self.img_spelling[self.direction]
+        #elif self.scimitar_spelling:
+        #    img = self.img_scimitar_spelling[self.direction]
         elif self.injured:
             img = self.img_injured[direction]
         else:
             img = self.img[direction]
         self.tools.display(env, img, self.x, self.y, fitting)
-        if self.lives and self.have_weapon:
-            self.tools.display(self.env, self.img_weapon[direction], self.x, self.y, fitting)
+        if self.lives and self.have_scimitar:
+            self.tools.display(self.env, self.img_scimitar[direction], self.x, self.y, fitting)
+        if self.lives and self.have_spear:
+            self.tools.display(self.env, self.img_spear[direction], self.x, self.y, fitting)
         self._debug()
 
     def recall(self, x, y):
         self.env.objects.append(self.void(self.x, self.y, expired=False))
         self.x = x
         self.y = y
-        self.have_weapon = True
         self.env.objects.append(self.void(self.x, self.y, expired=True))
 
     def set_on_fire(self, n, player):
@@ -89,10 +97,17 @@ class Gargamel(DefaultMonster):
 
         if not self.lives:
             return
-        if self.spell:
-            self.spell -= 1
-            if not self.spell:
-                self.have_weapon = False
+        if self.scimitar_spell:
+            self.scimitar_spell -= 1
+            if not self.scimitar_spell:
+                self.have_scimitar = False
                 self.env.objects.append(self.scimitar(self.x, self.y))
         else:
-            self.next_spell()
+            self.next_scimitar_spell()
+        if self.spear_spell:
+            self.spear_spell -= 1
+            if not self.spear_spell:
+                self.have_spear = False
+                self.env.objects.append(self.spear(self.x, self.y))
+        else:
+            self.next_spear_spell()
