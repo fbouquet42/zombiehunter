@@ -21,8 +21,8 @@ class DarkKnight(DefaultMonster):
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.img_halberd = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'halberd', cls.dimensions)
-        cls.img_dark_halberd = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'dark_halberd', cls.dimensions)
-        cls.img_dark_halberd_injured = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'dark_halberd_injured', cls.dimensions)
+        cls.img_dark_halberd = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'dark_halberd_injured', cls.dimensions)
+#        cls.img_dark_halberd_injured = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'dark_halberd_injured', cls.dimensions)
         cls.img_helmet = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'helmet', cls.dimensions)
         cls.img_helmet_injured = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'helmet_injured', cls.dimensions)
         return cls
@@ -52,7 +52,7 @@ class DarkKnight(DefaultMonster):
         elif self.lives < self.without_helmet:
             if self.injured:
                 img = self.img_injured[self.direction]
-                self.tools.display(self.env, self.img_dark_halberd_injured[self.direction], self.x, self.y, fitting)
+                self.tools.display(self.env, self.img_dark_halberd[self.direction], self.x, self.y, fitting)
             else:
                 img = self.img[self.direction]
                 self.tools.display(self.env, self.img_dark_halberd[self.direction], self.x, self.y, fitting)
