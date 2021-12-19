@@ -12,7 +12,7 @@ class   Score:
         self.half = player.half
         self.tools = player.tools
         self.img_total = player.img[0]
-        self.list = ['zombie', 'cyclops', 'jack_lantern', 'daemon', 'minion', 'necromancer', 'harpy', 'ent', 'nyx', 'tentacle', 'piranha', 'kraken', 'dark_knight', 'villager', 'garou', 'alchemist', 'fly', 'witch', 'devourer', 'graeae', 'gargamel', 'vampire']
+        self.list = ['zombie', 'cyclops', 'jack_lantern', 'daemon', 'minion', 'necromancer', 'harpy', 'ent', 'nyx', 'tentacle', 'piranha', 'kraken', 'dark_knight', 'villager', 'garou', 'alchemist', 'fly', 'witch', 'devourer', 'graeae', 'gargamel_score', 'vampire']
         self.kills = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.values = [1, 4, 2.5, 0.135, 2, 7.5, 3, 0.09, 0.125, 0.5, 3, 0.12, 11, 1.5, 2.5, 4, 3, 2, 0.045, 0.135, 0.13, 4]
         self.img = []
