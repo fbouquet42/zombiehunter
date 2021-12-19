@@ -8,6 +8,14 @@ from random import randint
 from . import set_hitbox_monster
 
 #Monster idea
+#medium
+#gargamel can call sheeps mercenary, and throws his weapons
+#rat king ? dark knight redesign ? variation ?
+#flies can lay
+#move devourer as special
+#vampire pig ? wave 11 ? dont follow the player...can transform in bat and throw things
+
+#maggots?
 #1200 (2400) madness -- spider -- octopus -- rat king -- dog (dammage zone) -- millipede -- virus -- display something on target
 
 class DefaultMonster:

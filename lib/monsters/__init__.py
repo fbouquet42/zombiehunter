@@ -26,6 +26,7 @@ from .villager import Villager
 from .alchemist import Alchemist
 from .fly import Fly
 from .witch import Witch
+from .vampire import Vampire
 from .devourer import Devourer
 from .pestilence import Pestilence
 from .pestilence_medium import PestilenceMedium
@@ -36,4 +37,4 @@ from .pemphredo import Pemphredo
 from .graeae import Graeae
 from .gargamel import Gargamel
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, Devourer]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, Vampire]
