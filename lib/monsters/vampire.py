@@ -33,6 +33,7 @@ class Vampire(DefaultMonster):
         cls.img_bat = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'bat', int(cls.dimensions * cls._resize))
         cls.img_bat_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'bat' + '_injured', int(cls.dimensions * cls._resize))
         cls.metamorphosis = cls.env.mod.objects.VampireMetamorphosis.build_class(cls.env, cls.dimensions)
+        cls.fear = cls.env.mod.bullets.Fear.build_class()
         return cls
 
 
@@ -128,3 +129,9 @@ class Vampire(DefaultMonster):
             self.ultimatum -= 1
             if not self.ultimatum:
                 self._fly()
+            elif self.ultimatum == 25:
+                zone = self.fear(self.x, self.y, self.direction)
+                t = Thread(target=zone.scares, args=())
+                t.daemon = True
+                self.env.bullets.append(zone)
+                t.start()

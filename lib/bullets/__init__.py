@@ -11,6 +11,7 @@ from .fire_tooth import FireTooth
 from .tooth import Tooth
 from .devil_slash import DevilSlash
 from .double_bullet import DoubleBullet
+from .fear import Fear
 from .spore import Spore
 from .hell_star import HellStar
 from .rocket import Rocket
