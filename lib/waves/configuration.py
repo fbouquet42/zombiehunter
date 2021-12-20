@@ -7,7 +7,7 @@ class   AdditionalSpawn:
     def random(self, nb):
         return randint(nb, nb * 3)
 
-    def __init__(self, dark_knight, fly=None):
+    def __init__(self, dark_knight, fly=None, devourer=None):
         self.dark_min, self.dark_max, self.dark_time = dark_knight
         self.dark_next = self.random(self.dark_time)
         if fly is not None:
@@ -15,6 +15,12 @@ class   AdditionalSpawn:
             self.fly_next = self.random(self.fly_time)
         else:
             self.fly_next = -1
+
+        if devourer is not None:
+            self.devourer_min, self.devourer_max, self.devourer_time = devourer
+            self.devourer_next = self.random(self.devourer_time)
+        else:
+            self.devourer_next = -1
 
     def process(self, env):
         if not self.dark_next:
@@ -29,6 +35,13 @@ class   AdditionalSpawn:
                 self.fly_next = self.random(self.fly_time)
             else:
                 self.fly_next -= 1
+
+        if self.devourer_next >= 0:
+            if not self.devourer_next:
+                env.mod.tools.spawn(env, env.mod.monsters.Devourer, randint(self.devourer_min, self.devourer_max))
+                self.devourer_next = self.random(self.devourer_time)
+            else:
+                self.devourer_next -= 1
 
 class   DefaultWave:
     def random(self, i):
@@ -53,7 +66,7 @@ class   Wave1(DefaultWave):
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
         #self.add = AdditionalSpawn((0, 1, 799), (0, 1, 899))
-        self.add = AdditionalSpawn((0, 1, 110), (0, 1, 899))
+        self.add = AdditionalSpawn((0, 1, 220), (0, 1, 899), (0, 1, 99))
         #gargamel test
         env.mod.tools.spawn_boss(env, env.mod.monsters.Gargamel)
 

@@ -5,7 +5,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   Fear(DefaultBullet):
-    lifetime = 6
+    lifetime = 8
     attack = 2
     name = "fear"
 

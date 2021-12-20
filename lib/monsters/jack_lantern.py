@@ -20,26 +20,26 @@ class   JackLantern(DefaultMonster):
         cls.tommy_gun = cls.env.mod.weapons.TommyGun.build_class(cls.env)
         return cls
 
-    def frogified(self):
-        self.env.zombies.remove(self)
-        self.env.objects.append(self.frogified_lights(self.x, self.y))
-        self.weapon = self.tommy_gun()
-        self.mushroom = True
+#    def frogified(self):
+#        self.env.zombies.remove(self)
+#        self.env.objects.append(self.frogified_lights(self.x, self.y))
+#        self.weapon = self.tommy_gun()
+#        self.mushroom = True
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
         self.hitbox = set_hitbox_monster(env, self)
 
         self.rapidity = randint(5, 8)
-        self.rapidity_buffer = self.rapidity
+#        self.rapidity_buffer = self.rapidity
 
         self.weapon = self.riffle()
         #self.weapon = self.tommy_gun()
 
         #witch
-        self.mushroom = False
-        self.became_vegetable = 60
-        self.env.zombies.append(self)
+#        self.mushroom = False
+#        self.became_vegetable = 60
+#        self.env.zombies.append(self)
 
     def _display_day(self, env, fitting):
         if not self.lives:
@@ -86,12 +86,12 @@ class   JackLantern(DefaultMonster):
             if self._quit():
                 return
 
-        if self.mushroom:
-            self.weapon = self.riffle()
-            self.rapidity = self.rapidity_buffer
-            self.mushroom = False
-        else:
-            self.env.zombies.remove(self)
+#        if self.mushroom:
+#            self.weapon = self.riffle()
+#            self.rapidity = self.rapidity_buffer
+#            self.mushroom = False
+#        else:
+#            self.env.zombies.remove(self)
 
         while self.degeneration:
             if self.env.walking_dead:
@@ -100,11 +100,11 @@ class   JackLantern(DefaultMonster):
                 return
 
     def update(self):
-        if self.rapidity > 1 and self.mushroom:
-            self.became_vegetable -= 1
-            if not self.became_vegetable:
-                self.rapidity -= 1
-                self.became_vegetable = 60
+#        if self.rapidity > 1 and self.mushroom:
+#            self.became_vegetable -= 1
+#            if not self.became_vegetable:
+#                self.rapidity -= 1
+#                self.became_vegetable = 60
         if self.invulnerable:
             self.invulnerable -= 1
         if self.injured:
