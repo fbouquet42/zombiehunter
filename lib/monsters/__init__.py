@@ -35,6 +35,7 @@ from .deino import Deino
 from .pemphredo_ghost import PemphredoGhost
 from .pemphredo import Pemphredo
 from .graeae import Graeae
+from .lamb import Lamb
 from .gargamel import Gargamel
 
 tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, Vampire]

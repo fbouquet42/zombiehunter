@@ -79,7 +79,7 @@ class Deino(DefaultMonster):
             img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
-            self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
+            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
         elif self.lives and self.inflamed:
             self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
