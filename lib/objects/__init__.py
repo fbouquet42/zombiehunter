@@ -3,6 +3,7 @@ from .hitbox import set_hitbox
 from .cross import Cross
 from .weapon import Weapon
 from .blood import Blood
+from .vampire_metamorphosis import VampireMetamorphosis
 from .frogified import Frogified
 from .fog import Fog
 from .summoning_vial import SummoningVial

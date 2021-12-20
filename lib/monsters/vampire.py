@@ -32,14 +32,17 @@ class Vampire(DefaultMonster):
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.img_bat = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'bat', int(cls.dimensions * cls._resize))
         cls.img_bat_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', 'bat' + '_injured', int(cls.dimensions * cls._resize))
+        cls.metamorphosis = cls.env.mod.objects.VampireMetamorphosis.build_class(cls.env, cls.dimensions)
         return cls
 
 
     def _fly(self):
+        self.env.objects.append(self.metamorphosis(self.x, self.y))
         self.target = Target(self.env, self.dimensions)
         self.hitbox = self.bat_hitbox
 
     def _land(self):
+        self.env.objects.append(self.metamorphosis(self.x, self.y))
         self.ultimatum = 100
         self.vampire_hitbox.update_coords(self)
         self.hitbox = self.vampire_hitbox
@@ -83,7 +86,8 @@ class Vampire(DefaultMonster):
             if self._quit():
                 return
 
-        self._land()
+        if not self.ultimatum:
+            self._land()
         while self.degeneration:
             if self.env.walking_dead:
                 super()._action()
