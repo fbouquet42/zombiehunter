@@ -39,6 +39,7 @@ class Harpy(DefaultMonster):
         self.hitbox = self.list_hitbox[self.shadow]
         self.dimensions = self.list_dimensions[self.shadow]
         self.potion_effect = False
+        self.inflamed = 0
 
     def _fly(self):
         if not self.lives:
@@ -48,7 +49,6 @@ class Harpy(DefaultMonster):
         self.rapidity = self.rapidity_onflight
         self.ultimatum = self.ultimatum_onflight
         self.gradient = self.gradient_max
-        self.inflamed = 0
 
     def _on_ground(self):
         if not self.lives:

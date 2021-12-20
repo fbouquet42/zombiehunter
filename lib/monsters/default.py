@@ -14,6 +14,7 @@ from . import set_hitbox_monster
 #flies can lay
 #move devourer as special
 #vampire pig ? wave 11 ? dont follow the player...can transform in bat and throw things
+#fear for vampire
 
 #maggots?
 #1200 (2400) madness -- spider -- octopus -- rat king -- dog (dammage zone) -- millipede -- virus -- display something on target
