@@ -5,7 +5,6 @@ from random import randint
 
 #Current Module
 from . import DefaultMonster
-from . import Frog
 from . import set_hitbox_monster
 
 

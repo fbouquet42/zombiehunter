@@ -5,9 +5,8 @@ class   Scimitar:
     disappear = False
 
     @classmethod
-    def build_class(cls, env, monster):
-        cls.monster = monster
-        cls.dimensions = monster.dimensions
+    def build_class(cls, env, dimensions):
+        cls.dimensions = dimensions
         cls.img = pygame.transform.scale(pygame.image.load(env.img_folder + 'objects/'  + 'scimitar_object.png'), (cls.dimensions, cls.dimensions))
         cls.img_recall = []
         for i in range(1, 5):
@@ -15,9 +14,10 @@ class   Scimitar:
         cls.env = env
         return cls
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, monster):
         self.x = x
         self.y = y
+        self.monster = monster
         self.ultimatum = 144
         self.recall = 0
         self.interval = 6

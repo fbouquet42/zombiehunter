@@ -18,6 +18,7 @@ class Lamb(DefaultMonster):
         cls.env = env
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
+        cls.dead = cls.env.mod.objects.DeadLamb.build_class(cls.env, cls.dimensions)
         return cls
 
 
@@ -29,7 +30,6 @@ class Lamb(DefaultMonster):
         self.hitbox = set_hitbox_monster(self.env, self)
         self.rapidity = randint(6, 9)
 
-
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
@@ -38,6 +38,7 @@ class Lamb(DefaultMonster):
                 return
 
         self.degeneration = 0
+        self.env.objects.append(self.dead(self))
 
     def display(self, env):
         if not self.lives:

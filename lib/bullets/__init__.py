@@ -24,3 +24,4 @@ from .magic_ball import MagicBall
 from .sonic_ball import SonicBall
 from .shadow_daggers import ShadowDaggers
 from .assassination import Assassination
+from .lambs_procession import LambsProcession

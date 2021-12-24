@@ -11,3 +11,4 @@ from .invulnerable_vial import InvulnerableVial
 from .void import Void
 from .scimitar import Scimitar
 from .spear import Spear
+from .dead_lamb import DeadLamb

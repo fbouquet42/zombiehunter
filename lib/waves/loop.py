@@ -11,6 +11,7 @@ def _init(env):
     env.mod.monsters.DefaultMonster.build_class(env)
     env.mod.monsters.Zombie.build_class()
     env.mod.monsters.Vampire.build_class()
+    env.mod.monsters.AbstractGargamel.build_class()
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_1', env.height, env.height)
     env.titles.append(title)
