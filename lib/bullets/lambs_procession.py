@@ -15,7 +15,8 @@ class   LambsProcession(DefaultBullet):
         return cls
 
     def _next_lamb(self):
-        self.will_summon = randint(70, 140)
+        self.will_summon = randint(130, 220)
+        self.number = randint(2, 5)
 
     def __init__(self, x, y, gargamel):
         super().__init__(x, y, 0)
@@ -34,7 +35,11 @@ class   LambsProcession(DefaultBullet):
                 t.daemon = True
                 self.env.monsters.append(monster)
                 t.start()
-                self._next_lamb()
+                if self.number:
+                    self.will_summon = 8
+                    self.number -= 1
+                else:
+                    self._next_lamb()
             if not self.gargamel.lives:
                 return self._dead()
             self.will_summon -= 1

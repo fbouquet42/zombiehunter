@@ -1,5 +1,6 @@
 from .hitbox import set_hitbox_monster
 from .default import DefaultMonster
+from .target import Target
 
 from .frog import Frog
 from .zombie import Zombie
