@@ -14,10 +14,10 @@ class   Spear:
         cls.env = env
         return cls
 
-    def __init__(self, x, y, monster):
+    def __init__(self, x, y, weapon):
         self.x = x
         self.y = y
-        self.monster = monster
+        self.weapon = weapon
         self.ultimatum = 144
         self.recall = 0
         self.interval = 6
@@ -34,6 +34,6 @@ class   Spear:
         else:
             self.recall += 1
             if self.recall // self.interval > 3:
-                self.monster.recall(self.x, self.y)
-                self.monster.have_spear = True
+                self.weapon.recall(self.x, self.y)
+                self.weapon.have_spear = True
                 self.disappear = True

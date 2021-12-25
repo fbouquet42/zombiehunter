@@ -39,5 +39,6 @@ from .graeae import Graeae
 from .lamb import Lamb
 from .abstract_gargamel import AbstractGargamel
 from .gargamel import Gargamel
+#from .gargamel_hungry import GargamelHungry
 
 tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, Vampire]

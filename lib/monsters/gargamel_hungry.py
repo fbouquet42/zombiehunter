@@ -6,26 +6,26 @@ from . import AbstractGargamel
 from . import set_hitbox_monster
 
 #2 phase, and sheep procession
-class Gargamel(AbstractGargamel):
-    lives = 200
+class GargamelHungry(AbstractGargamel):
+    lives = 880
+    shield_lives = 60
 
     def __init__(self, env, x, y):
         self._random_spawn()
         self.target = self.env.players[0]
 
-        self.have_scimitar = True
-        self.have_spear = True
-        self.spear_spell = 110
-        self.scimitar_spell = 99
-        #self.scimitar_spell_type = [self.fire_scimitar_spell , self.star_scimitar_spell]
+        self.set_weapons()
+
+        self.weapon_left = pass
+        self.weapon_right = pass
+
+        #self.left_spell = pass
+        #self.right_spell = pass
+
+        self.left_types = []
+        self.right_types = []
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
-
-        procession = self.procession(self.x, self.y, self)
-        t = Thread(target=procession.spawn, args=())
-        t.daemon = True
-        self.env.bullets.append(procession)
-        t.start()
         
     def next_scimitar_spell(self):
         if self.have_scimitar:
@@ -40,12 +40,10 @@ class Gargamel(AbstractGargamel):
         direction = self.direction
         if not self.lives:
             img = self.img_dead[direction]
-        #elif self.scimitar_spelling:
-        #    img = self.img_scimitar_spelling[self.direction]
         elif self.injured:
-            img = self.img_injured[direction]
+            img = self.img_hungry_injured[direction]
         else:
-            img = self.img[direction]
+            img = self.img_hungry[direction]
         self.tools.display(env, img, self.x, self.y, fitting)
         if self.lives and self.have_scimitar:
             self.tools.display(self.env, self.img_scimitar[direction], self.x, self.y, fitting)

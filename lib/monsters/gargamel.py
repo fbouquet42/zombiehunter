@@ -8,14 +8,14 @@ from . import Target
 
 #2 phase, and sheep procession
 class Gargamel(AbstractGargamel):
-    lives = 80
+    lives = 880
 
     def __init__(self, env, x, y):
+        self.set_weapons()
         self._random_spawn()
         self.target = self.env.players[0]
 
-        self.have_scimitar = True
-        self.scimitar_spell = 99
+        self.weapon = self.scimitar(110)
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
 
@@ -30,10 +30,6 @@ class Gargamel(AbstractGargamel):
 
         self.env.background = self.env.background_butchery
 
-    def next_scimitar_spell(self):
-        if self.have_scimitar:
-            self.scimitar_spell = randint(43, 72)
-
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         direction = self.direction
@@ -46,8 +42,8 @@ class Gargamel(AbstractGargamel):
         else:
             img = self.img[direction]
         self.tools.display(env, img, self.x, self.y, fitting)
-        if self.lives and self.have_scimitar:
-            self.tools.display(self.env, self.img_scimitar[direction], self.x, self.y, fitting)
+        if self.lives and self.weapon.in_hand:
+            self.tools.display(self.env, self.weapon.img[direction], self.x, self.y, fitting)
         self._debug()
 
     def _get_direction_to_target(self):
@@ -97,10 +93,6 @@ class Gargamel(AbstractGargamel):
                 self.injured += 5
         if not self.lives:
             return
-        if self.scimitar_spell:
-            self.scimitar_spell -= 1
-            if not self.scimitar_spell:
-                self.have_scimitar = False
-                self.env.objects.append(self.scimitar(self.x, self.y, self))
-        else:
-            self.next_scimitar_spell()
+        self.weapon.update()
+        if self.weapon.free:
+            self.weapon = self.scimitar()
