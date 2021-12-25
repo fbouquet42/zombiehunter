@@ -15,11 +15,11 @@ class GargamelHungry(AbstractGargamel):
         self._random_spawn()
         self.target = self.env.players[0]
 
-        self.weapon_left = self.scimitar(110)
-        self.weapon_right = self.nothing(self.weapon_left)
+        self.weapon_right = self.scimitar(110)
+        self.weapon_left = self.nothing(self.weapon_right)
 
-        self.left_weapons_types = [self.scimitar]
-        self.right_weapons_types = [self.spear]
+        self.right_weapons_types = [self.scimitar, self.shield]
+        self.left_weapons_types = [self.spear]
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
 
@@ -36,6 +36,16 @@ class GargamelHungry(AbstractGargamel):
 
         self.delay = 14
 
+    def hitted(self, attack=1):
+        if self.weapon_right.protect(attack):
+            return self.id_nb, attack / 2
+        if self.lives:
+            self.injured = 14
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            return self.id_nb, attack
+        return None, None
+
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         direction = self.direction
@@ -50,9 +60,9 @@ class GargamelHungry(AbstractGargamel):
             img = self.img_hungry[direction]
         self.tools.display(env, img, self.x, self.y, fitting)
         if self.lives and self.weapon_left.in_hand:
-            self.tools.display(self.env, self.weapon_left.img[direction], self.x, self.y, fitting)
+            self.tools.display(self.env, self.weapon_left.get_img()[direction], self.x, self.y, fitting)
         if self.lives and self.weapon_right.in_hand:
-            self.tools.display(self.env, self.weapon_right.img[direction], self.x, self.y, fitting)
+            self.tools.display(self.env, self.weapon_right.get_img()[direction], self.x, self.y, fitting)
         self._debug()
 
     def _get_direction_to_target(self):

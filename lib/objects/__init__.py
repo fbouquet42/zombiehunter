@@ -12,3 +12,4 @@ from .void import Void
 from .scimitar import Scimitar
 from .spear import Spear
 from .dead_lamb import DeadLamb
+from .shield_dead import ShieldDead

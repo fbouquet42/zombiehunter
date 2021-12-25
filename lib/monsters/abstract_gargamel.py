@@ -14,6 +14,9 @@ class GargamelWeapon(object):
     def set_monster(cls, monster):
         cls.monster = monster
 
+    def protect(self, attack):
+        return False
+
     def _next_spell(self):
         self.spell = randint(self.mi, self.ma)
         
@@ -29,6 +32,9 @@ class GargamelWeapon(object):
         self.free = True
         self.monster.recall(x, y)
 
+    def get_img(self):
+        return self.img
+
     def _perform(self):
         pass
 
@@ -38,6 +44,43 @@ class GargamelWeapon(object):
             if not self.spell:
                 self.in_hand = False
                 self._perform()
+
+class GargamelShield(GargamelWeapon):
+    mi = 88
+    ma = 132
+    lives = 60
+    injured = 0
+
+    @classmethod
+    def build_class(cls):
+        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'shield', cls.dimensions)
+        cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'shield_injured', cls.dimensions)
+        cls.dead = cls.env.mod.objects.ShieldDead.build_class(cls.env, cls.dimensions)
+        return cls
+
+    def protect(self, attack):
+        if self.lives <= 0:
+            return False
+        self.injured = 10
+        self.lives -= attack
+        if self.lives <= 0:
+            self.in_hand = False
+            self.env.objects.append(self.dead(self.monster))
+        return True
+
+    def get_img(self):
+        if self.injured:
+            return self.img_injured
+        else:
+            return self.img
+    def update(self):
+        if self.injured:
+            self.injured -= 1
+        if not self.in_hand and self.spell:
+            self.spell -= 1
+            if not self.spell:
+                self.free = True
+                self.env.objects.append(self.dead(self.monster))
 
 class GargamelScimitar(GargamelWeapon):
     mi = 43
@@ -95,6 +138,7 @@ class AbstractGargamel(DefaultMonster):
         cls.nothing = GargamelNothing
         cls.scimitar = GargamelScimitar.build_class()
         cls.spear = GargamelSpear.build_class()
+        cls.shield = GargamelShield.build_class()
 
         cls.void = cls.env.mod.objects.Void.build_class(cls.env, cls.dimensions)
 

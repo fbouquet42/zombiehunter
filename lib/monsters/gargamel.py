@@ -32,6 +32,14 @@ class Gargamel(AbstractGargamel):
 
         self.delay = 14
 
+    def hitted(self, attack=1):
+        if self.lives:
+            self.injured = 14
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+            return self.id_nb, attack
+        return None, None
+
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         direction = self.direction
