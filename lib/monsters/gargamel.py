@@ -30,6 +30,8 @@ class Gargamel(AbstractGargamel):
 
         self.env.background = self.env.background_butchery
 
+        self.delay = 14
+
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         direction = self.direction
@@ -75,6 +77,8 @@ class Gargamel(AbstractGargamel):
                 return
 
         self.env.titles.remove(self.title)
+        for lamb in self.env.lambs:
+            lamb.lives = 0
         self.env.background = self.env.background_basic
         self.degeneration = 0
 
@@ -92,6 +96,11 @@ class Gargamel(AbstractGargamel):
                 self.lives -= 1
                 self.injured += 5
         if not self.lives:
+            self.delay -= 1
+            if not self.delay:
+                if len(self.env.lambs):
+                    self.env.lambs[0].lives = 0
+                self.delay = 14
             return
         self.weapon.update()
         if self.weapon.free:

@@ -34,7 +34,8 @@ class Lamb(DefaultMonster):
 
         self.hitbox = set_hitbox_monster(self.env, self)
         self.rapidity = randint(3, 7)
-        self.delay = 0
+
+        self.env.lambs.append(self)
 
     def _get_direction_to_target(self):
         x, y, _ = self.tools.process_distance(self.target, self)
@@ -42,12 +43,13 @@ class Lamb(DefaultMonster):
 
     def _action(self):
         if not self.stoned:
-            if not self.delay:
+            if self.gargamel.lives:
                 direction, distance = self._sniff_fresh_flesh()
                 if distance > self.sniff:
                     self.target = self.gargamel
                     direction = self._get_direction_to_target()
             else:
+                self.target = self.gargamel.target_when_dead
                 direction = self._get_direction_to_target()
 
             if direction is not None:
@@ -64,6 +66,7 @@ class Lamb(DefaultMonster):
             if self._quit():
                 return
 
+        self.env.lambs.remove(self)
         self.degeneration = 0
         self.env.objects.append(self.dead(self))
 
@@ -81,15 +84,3 @@ class Lamb(DefaultMonster):
         elif self.lives and self.inflamed:
             self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
-
-    def update(self):
-        super().update()
-        if self.delay:
-            self.delay -= 1
-            if not self.delay:
-                self.lives = 0
-            return
-
-        if not self.gargamel.lives:
-            self.delay = randint(11, 99)
-            self.target = self.gargamel.target_when_dead

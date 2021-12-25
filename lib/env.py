@@ -78,6 +78,8 @@ class Env:
         self.night = False
         #Witch
         self.zombies = []
+        #Gargamel
+        self.lambs = []
 
         ###Data
         self.players = []
@@ -119,6 +121,7 @@ class Env:
         for player in self.players:
             player.destroy = True
         self.zombies.clear()
+        self.lambs.clear()
         self.players.clear()
         self.bullets.clear()
         self.objects.clear()
