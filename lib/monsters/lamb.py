@@ -14,7 +14,12 @@ class Lamb(DefaultMonster):
     degeneration = 1
 
     @classmethod
+    def set_gargamel(cls, gargamel):
+        cls.gargamel = gargamel
+
+    @classmethod
     def build_class(cls, env):
+        cls.sniff = int(cls.env.height * 0.4)
         cls.env = env
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
@@ -28,7 +33,29 @@ class Lamb(DefaultMonster):
         self.target = self.env.players[0]
 
         self.hitbox = set_hitbox_monster(self.env, self)
-        self.rapidity = randint(6, 9)
+        self.rapidity = randint(3, 7)
+        self.delay = 0
+
+    def _get_direction_to_target(self):
+        x, y, _ = self.tools.process_distance(self.target, self)
+        return self._determine_direction(x, y)
+
+    def _action(self):
+        if not self.stoned:
+            if not self.delay:
+                direction, distance = self._sniff_fresh_flesh()
+                if distance > self.sniff:
+                    self.target = self.gargamel
+                    direction = self._get_direction_to_target()
+            else:
+                direction = self._get_direction_to_target()
+
+            if direction is not None:
+                self.direction = direction
+                self.tools.move(self, direction, self.rapidity + self.env.furious)
+                self.hitbox.update_coords(self)
+
+        self._target_hitted()
 
     def move(self):
         self.tick = self.env.mod.tools.Tick()
@@ -54,3 +81,15 @@ class Lamb(DefaultMonster):
         elif self.lives and self.inflamed:
             self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
+
+    def update(self):
+        super().update()
+        if self.delay:
+            self.delay -= 1
+            if not self.delay:
+                self.lives = 0
+            return
+
+        if not self.gargamel.lives:
+            self.delay = randint(11, 99)
+            self.target = self.gargamel.target_when_dead

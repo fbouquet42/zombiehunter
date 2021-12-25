@@ -79,8 +79,9 @@ class AbstractGargamel(DefaultMonster):
 
         cls.title = cls.env.mod.tools.load_img(cls.env, 'waves/gargamel_will_be_back', cls.env.height, cls.env.height)
 
-    def set_weapons(self):
+    def set_dependencies(self):
         GargamelWeapon.set_monster(self)
+        Lamb.set_gargamel(self)
 
     def hitted(self, attack=1):
         if self.lives:

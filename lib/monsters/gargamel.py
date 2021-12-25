@@ -8,10 +8,10 @@ from . import Target
 
 #2 phase, and sheep procession
 class Gargamel(AbstractGargamel):
-    lives = 880
+    lives = 80
 
     def __init__(self, env, x, y):
-        self.set_weapons()
+        self.set_dependencies()
         self._random_spawn()
         self.target = self.env.players[0]
 
