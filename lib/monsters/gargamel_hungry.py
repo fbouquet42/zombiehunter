@@ -8,23 +8,22 @@ from . import Target
 
 #2 phase, and sheep procession
 class GargamelHungry(AbstractGargamel):
-    lives = 880
+    lives = 70
 
     def __init__(self, env, x, y):
-        self.set_weapons()
+        self.set_dependencies()
         self._random_spawn()
         self.target = self.env.players[0]
 
         self.weapon_left = self.scimitar(110)
-        self.weapon_right = self.scimitar(110)
+        self.weapon_right = self.nothing(self.weapon_left)
 
-
-        self.weapons_left_list = []
-        self.weapons_right_list = []
+        self.left_weapons_types = [self.scimitar]
+        self.right_weapons_types = [self.spear]
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
 
-        procession = self.procession(self.x, self.y, self)
+        procession = self.procession(self.x, self.y, self, 405, 877)
         t = Thread(target=procession.spawn, args=())
         t.daemon = True
         self.env.bullets.append(procession)
@@ -35,20 +34,25 @@ class GargamelHungry(AbstractGargamel):
 
         self.env.background = self.env.background_butchery
 
+        self.delay = 14
+
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         direction = self.direction
         if not self.lives:
-            img = self.img_hungry[direction]
-        #elif self.scimitar_spelling:
-        #    img = self.img_scimitar_spelling[self.direction]
+            if self.env.walking_dead:
+                img = self.img_possessed[direction]
+            else:
+                img = self.img_dead[direction]
         elif self.injured:
-            img = self.img_injured[direction]
+            img = self.img_hungry_injured[direction]
         else:
-            img = self.img[direction]
+            img = self.img_hungry[direction]
         self.tools.display(env, img, self.x, self.y, fitting)
-        if self.lives and self.weapon.in_hand:
-            self.tools.display(self.env, self.weapon.img[direction], self.x, self.y, fitting)
+        if self.lives and self.weapon_left.in_hand:
+            self.tools.display(self.env, self.weapon_left.img[direction], self.x, self.y, fitting)
+        if self.lives and self.weapon_right.in_hand:
+            self.tools.display(self.env, self.weapon_right.img[direction], self.x, self.y, fitting)
         self._debug()
 
     def _get_direction_to_target(self):
@@ -68,18 +72,14 @@ class GargamelHungry(AbstractGargamel):
             if self._quit():
                 return
 
-        self.target = self.target_when_dead
-        self.env.titles.append(self.title)
-        while not self.affected(self.target):
-            direction = self._get_direction_to_target()
-            self.direction = direction
-            self.tools.move(self, direction, self.rapidity + self.env.furious)
-            self.hitbox.update_coords(self)
-            self._target_hitted()
+        while self.degeneration:
+            if self.env.walking_dead:
+                self._action()
             if self._quit():
                 return
 
-        self.env.titles.remove(self.title)
+        for lamb in self.env.lambs:
+            lamb.lives = 0
         self.env.background = self.env.background_basic
         self.degeneration = 0
 
@@ -97,7 +97,15 @@ class GargamelHungry(AbstractGargamel):
                 self.lives -= 1
                 self.injured += 5
         if not self.lives:
+            self.delay -= 1
+            if not self.delay:
+                if len(self.env.lambs):
+                    self.env.lambs[0].lives = 0
+                self.delay = 14
             return
-        self.weapon.update()
-        if self.weapon.free:
-            self.weapon = self.scimitar()
+        self.weapon_left.update()
+        self.weapon_right.update()
+        if self.weapon_left.free:
+            self.weapon_left = self.left_weapons_types[randint(0, len(self.left_weapons_types) - 1)]()
+        if self.weapon_right.free:
+            self.weapon_right = self.right_weapons_types[randint(0, len(self.right_weapons_types) - 1)]()

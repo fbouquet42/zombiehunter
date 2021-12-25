@@ -8,7 +8,7 @@ from . import Target
 
 #2 phase, and sheep procession
 class Gargamel(AbstractGargamel):
-    lives = 80
+    lives = 770
 
     def __init__(self, env, x, y):
         self.set_dependencies()
@@ -19,7 +19,7 @@ class Gargamel(AbstractGargamel):
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
 
-        procession = self.procession(self.x, self.y, self)
+        procession = self.procession(self.x, self.y, self, 215, 345)
         t = Thread(target=procession.spawn, args=())
         t.daemon = True
         self.env.bullets.append(procession)

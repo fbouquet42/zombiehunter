@@ -50,6 +50,27 @@ class GargamelScimitar(GargamelWeapon):
     def _perform(self):
         self.env.objects.append(self.obj(self.monster.x, self.monster.y, self))
 
+class GargamelNothing(GargamelWeapon):
+    def __init__(self, other_hand):
+        self.free = False
+        self.in_hand = False
+        self.other_hand = other_hand
+
+    def update(self):
+        if self.other_hand.free:
+            self.free = True
+
+class GargamelSpear(GargamelWeapon):
+    mi = 66
+    ma = 102
+    @classmethod
+    def build_class(cls):
+        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'spear', cls.dimensions)
+        cls.obj = cls.env.mod.objects.Spear.build_class(cls.env, cls.dimensions)
+        return cls
+    def _perform(self):
+        self.env.objects.append(self.obj(self.monster.x, self.monster.y, self))
+
 
 #2 phase, and sheep procession
 class AbstractGargamel(DefaultMonster):
@@ -66,12 +87,14 @@ class AbstractGargamel(DefaultMonster):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
+        cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.img_hungry = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_hungry', cls.dimensions)
         cls.img_hungry_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_hungry_injured', cls.dimensions)
-        cls.img_spear = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'spear', cls.dimensions)
+
         GargamelWeapon.build_abstract(cls.env, cls.dimensions)
+        cls.nothing = GargamelNothing
         cls.scimitar = GargamelScimitar.build_class()
-        cls.spear = cls.env.mod.objects.Spear.build_class(cls.env, cls.dimensions)
+        cls.spear = GargamelSpear.build_class()
 
         cls.void = cls.env.mod.objects.Void.build_class(cls.env, cls.dimensions)
 

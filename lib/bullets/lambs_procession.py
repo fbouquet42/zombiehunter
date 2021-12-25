@@ -15,12 +15,14 @@ class   LambsProcession(DefaultBullet):
         return cls
 
     def _next_lamb(self):
-        self.will_summon = randint(165, 305)
+        self.will_summon = randint(self.mi, self.ma)
         self.number = randint(2, 5)
 
-    def __init__(self, x, y, gargamel):
+    def __init__(self, x, y, gargamel, mi, ma):
         super().__init__(x, y, 0)
         self.gargamel = gargamel
+        self.mi = mi
+        self.ma = ma
         self._next_lamb()
 
     def display(self, env):

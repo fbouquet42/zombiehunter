@@ -60,15 +60,15 @@ class   DefaultWave:
 
 class   Wave1(DefaultWave):
     def __init__(self, env):
-        self.title = env.mod.tools.load_img(env, 'waves/gargamel', env.height, env.height)
+        self.title = env.mod.tools.load_img(env, 'waves/gargamel_hungry', env.height, env.height)
         self.objective = 70
         self.times = [45, 178]
         self.nb = [3, 1]
         self.next = [0, self.random(1)]
         #self.add = AdditionalSpawn((0, 1, 799), (0, 1, 899))
-        self.add = AdditionalSpawn((0, 1, 220), (0, 1, 899), (0, 1, 99))
+        self.add = AdditionalSpawn((0, 1, 799), (0, 1, 899), (0, 1, 990))
         #gargamel test
-        env.mod.tools.spawn_boss(env, env.mod.monsters.Gargamel)
+        env.mod.tools.spawn_boss(env, env.mod.monsters.GargamelHungry)
 
     def process(self, env):
         for i, value in enumerate(self.next):
