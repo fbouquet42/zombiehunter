@@ -18,7 +18,8 @@ class GargamelHungry(AbstractGargamel):
         self.weapon_right = self.scimitar(110)
         self.weapon_left = self.nothing(self.weapon_right)
 
-        self.right_weapons_types = [self.scimitar, self.shield]
+        self.right_weapons_types = [self.scimitar, self.shield, self.knife]
+        #self.right_weapons_types = [self.knife]
         self.left_weapons_types = [self.spear]
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
@@ -82,6 +83,7 @@ class GargamelHungry(AbstractGargamel):
             if self._quit():
                 return
 
+        self.env.background = self.env.background_basic
         while self.degeneration:
             if self.env.walking_dead:
                 self._action()
@@ -90,8 +92,6 @@ class GargamelHungry(AbstractGargamel):
 
         for lamb in self.env.lambs:
             lamb.lives = 0
-        self.env.background = self.env.background_basic
-        self.degeneration = 0
 
     def update(self):
         if self.invulnerable:

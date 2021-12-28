@@ -37,8 +37,9 @@ class Player:
 #            return env.mod.weapons.SubmachineGun(env, self)
             #env.mod.weapons.MagicWand.build_class(env)
 #            env.mod.weapons.DevilBlade.build_class(env)
-#            return env.mod.weapons.ShadowDaggers(env, self)
+            #return env.mod.weapons.ShadowDaggers(env, self)
 #            return env.mod.weapons.DevilBlade(env, self)
+#            return env.mod.weapons.MagicWand(env, self)
         if self.name == 'baltazar':
             #env.mod.weapons.MagicWand.build_class(env)
             #return env.mod.weapons.MagicWand(env, self)

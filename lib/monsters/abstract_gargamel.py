@@ -1,4 +1,5 @@
 from random import randint
+from threading import Thread
 
 from . import DefaultMonster
 from . import Lamb
@@ -73,6 +74,7 @@ class GargamelShield(GargamelWeapon):
             return self.img_injured
         else:
             return self.img
+
     def update(self):
         if self.injured:
             self.injured -= 1
@@ -102,6 +104,30 @@ class GargamelNothing(GargamelWeapon):
     def update(self):
         if self.other_hand.free:
             self.free = True
+
+class GargamelKnife(GargamelWeapon):
+    mi = 88
+    ma = 132
+
+    @classmethod
+    def build_class(cls):
+        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'knife', cls.dimensions)
+        cls.img_prepared = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'knife_throwing', cls.dimensions)
+        cls.bullet = cls.env.mod.bullets.ThrowingKnife.build_class(cls.env, cls.dimensions)
+        return cls
+
+    def get_img(self):
+        if self.spell < 33:
+            return self.img_prepared
+        else:
+            return self.img
+
+    def _perform(self):
+        bullet = self.bullet(self.monster.x, self.monster.y, self.monster.direction, self)
+        t = Thread(target=bullet.move, args=())
+        t.daemon = True
+        self.env.bullets.append(bullet)
+        t.start()
 
 class GargamelSpear(GargamelWeapon):
     mi = 66
@@ -139,6 +165,7 @@ class AbstractGargamel(DefaultMonster):
         cls.scimitar = GargamelScimitar.build_class()
         cls.spear = GargamelSpear.build_class()
         cls.shield = GargamelShield.build_class()
+        cls.knife = GargamelKnife.build_class()
 
         cls.void = cls.env.mod.objects.Void.build_class(cls.env, cls.dimensions)
 

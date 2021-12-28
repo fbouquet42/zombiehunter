@@ -35,5 +35,4 @@ class   Spear:
             self.recall += 1
             if self.recall // self.interval > 3:
                 self.weapon.recall(self.x, self.y)
-                self.weapon.have_spear = True
                 self.disappear = True
