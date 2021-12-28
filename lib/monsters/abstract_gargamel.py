@@ -105,6 +105,34 @@ class GargamelNothing(GargamelWeapon):
         if self.other_hand.free:
             self.free = True
 
+class GargamelSceptre(GargamelWeapon):
+    mi = 199
+    ma = 299
+
+    @classmethod
+    def build_class(cls, obj, lamb):
+        cls.obj = obj
+        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'sceptre', cls.dimensions)
+        cls.invocations = cls.env.mod.bullets.LambsInvocation.build_class(lamb)
+        return cls
+
+    def __init__(self, delay=0):
+        self.free = False
+        self.in_hand = True
+        if not delay:
+            self._next_spell()
+        else:
+            self.spell = delay
+        
+        invoc = self.invocations(self, self.monster)
+        t = Thread(target=invoc.spawn, args=())
+        t.daemon = True
+        self.env.bullets.append(invoc)
+        t.start()
+
+    def _perform(self):
+        self.env.objects.append(self.obj(self.monster.x, self.monster.y, self))
+
 class GargamelKnife(GargamelWeapon):
     mi = 88
     ma = 132
@@ -130,8 +158,8 @@ class GargamelKnife(GargamelWeapon):
         t.start()
 
 class GargamelSpear(GargamelWeapon):
-    mi = 66
-    ma = 102
+    mi = 84
+    ma = 122
     @classmethod
     def build_class(cls):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'spear', cls.dimensions)
@@ -160,16 +188,19 @@ class AbstractGargamel(DefaultMonster):
         cls.img_hungry = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_hungry', cls.dimensions)
         cls.img_hungry_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_hungry_injured', cls.dimensions)
 
+
+        cls.lamb = Lamb.build_class(cls.env)
         GargamelWeapon.build_abstract(cls.env, cls.dimensions)
         cls.nothing = GargamelNothing
         cls.scimitar = GargamelScimitar.build_class()
         cls.spear = GargamelSpear.build_class()
+        cls.sceptre = GargamelSceptre.build_class(cls.spear.obj, cls.lamb)
         cls.shield = GargamelShield.build_class()
         cls.knife = GargamelKnife.build_class()
 
         cls.void = cls.env.mod.objects.Void.build_class(cls.env, cls.dimensions)
 
-        cls.procession = cls.env.mod.bullets.LambsProcession.build_class(Lamb.build_class(cls.env))
+        cls.procession = cls.env.mod.bullets.LambsProcession.build_class(cls.lamb)
 
         cls.title = cls.env.mod.tools.load_img(cls.env, 'waves/gargamel_will_be_back', cls.env.height, cls.env.height)
 

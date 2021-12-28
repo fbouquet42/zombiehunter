@@ -20,7 +20,8 @@ class GargamelHungry(AbstractGargamel):
 
         self.right_weapons_types = [self.scimitar, self.shield, self.knife]
         #self.right_weapons_types = [self.knife]
-        self.left_weapons_types = [self.spear]
+        #self.left_weapons_types = [self.spear]
+        self.left_weapons_types = [self.sceptre]
 
         self.hitbox = set_hitbox_monster(env, self, 0.25)
 

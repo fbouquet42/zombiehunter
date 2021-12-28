@@ -12,4 +12,5 @@ from .void import Void
 from .scimitar import Scimitar
 from .spear import Spear
 from .dead_lamb import DeadLamb
+from .spawn_lamb import SpawnLamb
 from .shield_dead import ShieldDead
