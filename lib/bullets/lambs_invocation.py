@@ -17,6 +17,7 @@ class   LambsInvocation(DefaultBullet):
     def __init__(self, weapon, gargamel):
         self.alive = True
         self.weapon = weapon
+        self.arrival.set_weapon(weapon)
         self.gargamel = gargamel
         self.ultimatum = 1
 

@@ -15,6 +15,10 @@ class   SpawnLamb:
         cls.lamb = lamb
         return cls
 
+    @classmethod
+    def set_weapon(cls, weapon):
+        cls.weapon = weapon
+
     def __init__(self, gargamel):
         self.gargamel = gargamel
         self.x = randint(0, self.env.width - self.dimensions)
@@ -44,4 +48,4 @@ class   SpawnLamb:
                 t.start()
                 self.spawned = True
                 self.time = 16
-
+                self.weapon.spawned = 16

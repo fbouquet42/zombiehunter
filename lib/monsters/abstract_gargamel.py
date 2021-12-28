@@ -112,7 +112,8 @@ class GargamelSceptre(GargamelWeapon):
     @classmethod
     def build_class(cls, obj, lamb):
         cls.obj = obj
-        cls.img = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'sceptre', cls.dimensions)
+        cls.img_off = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'sceptre_off', cls.dimensions)
+        cls.img_on = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'sceptre', cls.dimensions)
         cls.invocations = cls.env.mod.bullets.LambsInvocation.build_class(lamb)
         return cls
 
@@ -129,9 +130,25 @@ class GargamelSceptre(GargamelWeapon):
         t.daemon = True
         self.env.bullets.append(invoc)
         t.start()
+        self.spawned = 0
 
     def _perform(self):
         self.env.objects.append(self.obj(self.monster.x, self.monster.y, self))
+
+    def get_img(self):
+        if self.spawned:
+            return self.img_on
+        else:
+            return self.img_off
+
+    def update(self):
+        if self.spawned:
+            self.spawned -= 1
+        if self.spell:
+            self.spell -= 1
+            if not self.spell:
+                self.in_hand = False
+                self._perform()
 
 class GargamelKnife(GargamelWeapon):
     mi = 88
