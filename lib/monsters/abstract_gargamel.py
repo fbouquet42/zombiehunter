@@ -150,6 +150,34 @@ class GargamelSceptre(GargamelWeapon):
                 self.in_hand = False
                 self._perform()
 
+class GargamelCatch(GargamelWeapon):
+    mi = 88
+    ma = 132
+
+    @classmethod
+    def build_class(cls):
+        cls.img_1 = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'lamb_shaking_1', cls.dimensions)
+        cls.img_2 = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'lamb_shaking_2', cls.dimensions)
+        cls.img_3 = cls.tools.set_imgs(cls.env.img_folder + 'weapons/', 'lamb_shaking_3', cls.dimensions)
+        cls.bullet = cls.env.mod.bullets.ThrowingLamb.build_class(cls.env, cls.dimensions)
+        return cls
+
+    def get_img(self):
+        shaking = (self.spell % 9) // 3
+        if not shaking:
+            return self.img_1
+        elif shaking == 1:
+            return self.img_2
+        else:
+            return self.img_3
+
+    def _perform(self):
+        bullet = self.bullet(self.monster.x, self.monster.y, self.monster.direction, self)
+        t = Thread(target=bullet.move, args=())
+        t.daemon = True
+        self.env.bullets.append(bullet)
+        t.start()
+
 class GargamelKnife(GargamelWeapon):
     mi = 88
     ma = 132

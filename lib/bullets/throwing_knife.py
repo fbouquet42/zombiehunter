@@ -5,6 +5,7 @@ from . import DefaultBullet
 class   ThrowingKnife(DefaultBullet):
     rapidity = 33
     name = "knife"
+    attack = 3
 
     @classmethod
     def build_class(cls, env, dimensions):
