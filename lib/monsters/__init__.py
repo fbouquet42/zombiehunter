@@ -27,7 +27,8 @@ from .villager import Villager
 from .alchemist import Alchemist
 from .fly import Fly
 from .witch import Witch
-from .vampire import Vampire
+from .vermine import Vermine
+from .mother_of_the_vermine import MotherOfTheVermine
 from .devourer import Devourer
 from .pestilence import Pestilence
 from .pestilence_medium import PestilenceMedium
@@ -41,4 +42,4 @@ from .abstract_gargamel import AbstractGargamel
 from .gargamel import Gargamel
 from .gargamel_hungry import GargamelHungry
 
-tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, Vampire]
+tab = [Zombie, Cyclops, JackLantern, Necromancer, Harpy, Ent, Villager, Alchemist, Witch, MotherOfTheVermine]

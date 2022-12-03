@@ -188,8 +188,9 @@ class DefaultMonster:
 
 
     def _debug(self):
-        if self.env.debug and (self.lives or self.env.walking_dead) and self.hunt:
-            pygame.draw.line(self.env.GameWindow, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
+        if self.env.debug and (self.lives or self.env.walking_dead):
+            if self.hunt:
+                pygame.draw.line(self.env.GameWindow, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
             self.tools.display(self.env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
 
 

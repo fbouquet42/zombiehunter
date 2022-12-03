@@ -27,7 +27,7 @@ def _init(env):
     env.mod.weapons.DevilBlade.build_class(env)
     env.mod.monsters.Necromancer.build_class()
     env.mod.monsters.Harpy.build_class()
-    env.mod.monsters.Vampire.build_class()
+    env.mod.monsters.MotherOfTheVermine.build_class()
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_3', env.height, env.height)
     env.titles.append(title)
