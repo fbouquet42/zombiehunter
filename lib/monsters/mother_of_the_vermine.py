@@ -107,7 +107,7 @@ class   MotherOfTheVermine(DefaultMonster):
                     self.singing = 110
             elif self.singing:
                 self.singing -= 1
-                if not self.singing % 22:
+                if not self.singing % 25:
                     self.spawn_vermine()
                 if not self.singing:
                     self.next_song()
