@@ -8,6 +8,7 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Garou
 
+#IDEA: villager flew away and give a lot of points if they are still alive when hitted
 class Villager(DefaultMonster):
     lives = 10
     name = "villager"
