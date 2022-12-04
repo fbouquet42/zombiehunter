@@ -8,6 +8,7 @@ from random import randint
 from . import set_hitbox_monster
 
 #Monster idea
+#monture ?
 #medium
 #gargamel can call sheeps mercenary, and throws his weapons
 #rat king ? dark knight redesign ? variation ?

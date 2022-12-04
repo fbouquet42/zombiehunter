@@ -11,6 +11,8 @@ from .fire_tooth import FireTooth
 from .tooth import Tooth
 from .devil_slash import DevilSlash
 from .double_bullet import DoubleBullet
+from .poisoned_gas import PoisonedGas
+from .poisoned_gas_large import PoisonedGasLarge
 from .fear import Fear
 from .spore import Spore
 from .hell_star import HellStar
