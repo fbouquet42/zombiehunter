@@ -6,6 +6,7 @@ from .vermine_squeeze import VermineSqueeze
 from .blood import Blood
 from .vampire_metamorphosis import VampireMetamorphosis
 from .frogified import Frogified
+from .frogified_large import FrogifiedLarge
 from .fog import Fog
 from .summoning_vial import SummoningVial
 from .invulnerable_vial import InvulnerableVial

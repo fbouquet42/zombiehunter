@@ -17,7 +17,6 @@ def _init(env):
     env.mod.monsters.Devourer.build_class()
     env.mod.monsters.DarkKnight.build_class()
     env.mod.monsters.Fly.build_class()
-    env.mod.monsters.Cyclops.build_class()
     env.mod.monsters.JackLantern.build_class()
     env.titles.remove(title)
     title = env.mod.tools.load_img(env, 'waves/loading_2', env.height, env.height)
@@ -37,6 +36,7 @@ def _init(env):
     env.mod.monsters.Alchemist.build_class(env)
     env.mod.monsters.Ent.build_class()
     env.mod.monsters.Piranha.build_class()
+    env.mod.monsters.Cyclops.build_class()
     env.titles.remove(title)
 
 def loop(env):

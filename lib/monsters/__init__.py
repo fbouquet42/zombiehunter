@@ -5,6 +5,7 @@ from .target import Target
 from .frog import Frog
 from .zombie import Zombie
 from .dark_knight import DarkKnight
+from .carnivorous import Carnivorous
 from .cyclops import Cyclops
 from .jack_lantern import JackLantern
 from .minion import Minion

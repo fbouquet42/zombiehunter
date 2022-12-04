@@ -44,6 +44,7 @@ class DefaultMonster:
         DefaultMonster.img_inflamed = env.mod.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed', DefaultMonster.dimensions)
         DefaultMonster.img_inflamed_large = env.mod.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed_large', DefaultMonster.dimensions)
         DefaultMonster.frogified_lights = env.mod.objects.Frogified.build_class(env, DefaultMonster.dimensions)
+        DefaultMonster.frogified_lights_large = env.mod.objects.FrogifiedLarge.build_class(env, DefaultMonster.dimensions)
         DefaultMonster.half = DefaultMonster.dimensions // 2
         DefaultMonster.tools = env.mod.tools
         return DefaultMonster

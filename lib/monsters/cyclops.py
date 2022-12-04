@@ -2,10 +2,13 @@
 #Python Lib
 import time
 from random import randint
+from threading import Thread
 
 #Current Module
 from . import DefaultMonster
 from . import set_hitbox_monster
+
+from . import Carnivorous
 
 class   Cyclops(DefaultMonster):
     lives = 70
@@ -30,7 +33,20 @@ class   Cyclops(DefaultMonster):
         cls.img_eyeless_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_night', cls.dimensions)
         cls.img_eyeless_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_injured', cls.dimensions)
         cls.img_eyeless_injured_night = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_eyeless_injured_night', cls.dimensions)
+        cls.carnivorous = Carnivorous.build_class()
         return cls
+
+    def frogified(self):
+        self.register = False
+        self.env.zombies.remove(self)
+        self.env.objects.append(self.frogified_lights_large(self.x, self.y))
+        self.degeneration = 0
+        self.lives = 0
+        carnivorous = self.carnivorous(self.direction, self.x, self.y)
+        t = Thread(target=carnivorous.move, args=())
+        t.daemon = True
+        self.env.monsters.append(carnivorous)
+        t.start()
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
@@ -44,6 +60,7 @@ class   Cyclops(DefaultMonster):
         self.random = randint(0, 12)
         self.wait = self.turn
 
+        self.in_center = False
 
     def _no_eye(self, direction, distance):
         if distance is None:
@@ -58,6 +75,11 @@ class   Cyclops(DefaultMonster):
             self.wait -= 1
         return self.random
 
+    def _center_reached(self):
+        if self.x < -self.half or self.y < -self.half or self.y > self.limity or self.x > self.limitx:
+            return False
+        return True
+
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
@@ -70,6 +92,13 @@ class   Cyclops(DefaultMonster):
                     self.direction = direction
                     self.tools.move(self, direction, self.rapidity + self.env.furious)
                     self.hitbox.update_coords(self)
+
+                #witch
+                if not self.in_center and self._center_reached():
+                    self.in_center = True
+                    self.env.zombies.append(self)
+                    self.register = True
+                #
 
                 if self.lives <= self.eyeless:
                     self.tools.limits(self, self.limitx, self.limity)
