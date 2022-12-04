@@ -25,11 +25,11 @@ class   MotherOfTheVermine(DefaultMonster):
         return cls
 
     def next_song(self):
-        self.song = randint(115, 220)
+        self.song = randint(155, 270)
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
-        self.hitbox = set_hitbox_monster(env, self, 0.48)
+        self.hitbox = set_hitbox_monster(env, self, 0.28)
 
         self.rapidity = randint(5, 10)
 

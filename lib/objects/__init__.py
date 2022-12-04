@@ -2,6 +2,7 @@ from .hitbox import set_hitbox
 
 from .cross import Cross
 from .weapon import Weapon
+from .vermine_squeeze import VermineSqueeze
 from .blood import Blood
 from .vampire_metamorphosis import VampireMetamorphosis
 from .frogified import Frogified

@@ -12,7 +12,7 @@ from . import Pemphredo
 class Graeae(DefaultMonster):
     name = "graeae"
     degeneration = 150
-    lives = 10
+    lives = 10 #how much ?
     rapidity = 7
     attack = 3
     id_nb = 19

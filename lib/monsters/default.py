@@ -217,9 +217,6 @@ class DefaultMonster:
                     self.master_of_flames.weapon.xp += self.master_of_flames.score.values[id_nb] * value
                 self.injured += 6
 
-    def scares(self, duration):
-        pass
-
     def update(self):
         if self.invulnerable:
             self.invulnerable -= 1
