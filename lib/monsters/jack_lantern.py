@@ -17,7 +17,7 @@ class   JackLantern(DefaultMonster):
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         cls.riffle = cls.env.mod.weapons.Riffle.build_class(cls.env)
-        cls.tommy_gun = cls.env.mod.weapons.TommyGun.build_class(cls.env)
+#        cls.tommy_gun = cls.env.mod.weapons.TommyGun.build_class(cls.env)
         return cls
 
 #    def frogified(self):

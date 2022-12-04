@@ -4,7 +4,7 @@ from . import DefaultBullet
 
 class   Spore(DefaultBullet):
     #rapidity = 24
-    rapidity = 28
+    rapidity = 27
     name = "spore"
     attack=6
 
