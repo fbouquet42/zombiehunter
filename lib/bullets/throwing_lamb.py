@@ -1,0 +1,64 @@
+#Current Module
+from . import set_hitbox_bullet
+from . import DefaultBullet
+
+class   ThrowingLamb(DefaultBullet):
+    rapidity = 23
+    name = "lamb_projectile"
+    attack = 3
+
+    @classmethod
+    def build_class(cls, env, weapon_dimensions):
+        #cls.weapon_dimensions = weapon_dimensions
+        cls.imgs = []
+        cls.imgs.append(env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + "_1", cls.dimensions))
+        cls.imgs.append(env.mod.tools.set_imgs(env.img_folder + "bullets/", cls.name + "_2", cls.dimensions))
+        cls.dimensions_ratio = (weapon_dimensions - cls.dimensions) // 2
+        cls.limitx = env.width + cls.dimensions
+        cls.limity = env.height + cls.dimensions
+        return cls
+
+    def __init__(self, x, y, direction, weapon):
+        super().__init__(x, y, direction)
+        self.x += self.dimensions_ratio
+        self.y += self.dimensions_ratio
+        self.hitbox = set_hitbox_bullet(self.env, self, 0.20)
+        self.weapon = weapon
+        self.tools.move(self, self.direction)
+        self.ultimatum = 0
+
+    def _limits_reached(self):
+        if self.x < -self.dimensions or self.y < -self.dimensions or self.y > self.limity or self.x > self.limitx:
+            return True
+        return False
+
+    def _target_hitted(self):
+        ret = False
+        for player in self.env.players:
+            if player.affected(self):
+                player.hitted(attack=self.attack)
+                ret = True
+        return ret
+
+    def _dead(self):
+        self.weapon.free = True
+        self.alive = False
+
+    def display(self, env):
+        number = (self.ultimatum // 3) % len(self.imgs)
+        self.tools.display(env, self.imgs[number][self.direction], self.x, self.y, self.fitting)
+        if env.debug:
+            self.tools.display(env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+
+    def move(self):
+        self.tick = self.env.mod.tools.Tick()
+        while True:
+            self.tools.move(self, self.direction)
+            if self._limits_reached():
+                return self._dead()
+            self.hitbox.update_coords(self)
+            if self._target_hitted():
+                return self._dead()
+            self.ultimatum += 1
+            if self._quit():
+                return

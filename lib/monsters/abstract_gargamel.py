@@ -242,6 +242,7 @@ class AbstractGargamel(DefaultMonster):
         cls.sceptre = GargamelSceptre.build_class(cls.spear.obj, cls.lamb)
         cls.shield = GargamelShield.build_class()
         cls.knife = GargamelKnife.build_class()
+        cls.catch = GargamelCatch.build_class()
 
         cls.void = cls.env.mod.objects.Void.build_class(cls.env, cls.dimensions)
 

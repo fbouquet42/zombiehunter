@@ -29,3 +29,4 @@ from .assassination import Assassination
 from .lambs_procession import LambsProcession
 from .lambs_invocation import LambsInvocation
 from .throwing_knife import ThrowingKnife
+from .throwing_lamb import ThrowingLamb
