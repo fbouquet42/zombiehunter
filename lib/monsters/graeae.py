@@ -9,6 +9,8 @@ from . import Deino
 from . import Enyo
 from . import Pemphredo
 
+#wand with diamonds and bolts ? tempests ?
+
 class Graeae(DefaultMonster):
     name = "graeae"
     degeneration = 150

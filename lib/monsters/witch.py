@@ -5,8 +5,6 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Flower
 
-#2 montures ? semi-invisible ? little diamonds around wand ?
-
 class   Witch(DefaultMonster):
     name = "witch"
     lives = 160

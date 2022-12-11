@@ -7,20 +7,19 @@ from random import randint
 from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Garou
+from . import Target
 
 #IDEA: villager flew away and give a lot of points if they are still alive when hitted
 class Villager(DefaultMonster):
-    lives = 10
+    lives = 1
     name = "villager"
     id_nb = 13
-    degeneration = 350
+    attack = 0
 
     @classmethod
     def build_class(cls):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
-        cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
-        cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
-        cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
+        cls.img_delivered = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_delivered', cls.dimensions)
         cls.img_transforming = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_transforming', cls.dimensions)
         cls.garou = Garou.build_class()
         return cls
@@ -42,10 +41,17 @@ class Villager(DefaultMonster):
         self.follow = True
         self.random = randint(0, 12)
 
+        self.target_when_dead = Target(self.env, self.dimensions)
+        self.target_when_dead.set_coords(self.x, self.y)
+
     def _center_reached(self):
         if self.x < -self.half or self.y < -self.half or self.y > self.limity or self.x > self.limitx:
             return False
         return True
+
+    def _get_direction_to_target(self):
+        x, y, _ = self.tools.process_distance(self.target, self)
+        return self._determine_direction(x, y)
 
     def move(self):
         self.tick = self.env.mod.tools.Tick()
@@ -70,9 +76,16 @@ class Villager(DefaultMonster):
             if self._quit():
                 return
 
-        while self.degeneration:
-            if self.env.walking_dead:
-                self._action()
+        if not self.degeneration:
+            return
+
+        self.target = self.target_when_dead
+        self.env.objects.append(self.deliverance_effect(self.x, self.y))
+        while not self.affected(self.target):
+            direction = self._get_direction_to_target()
+            self.direction = direction
+            self.tools.move(self, direction, self.rapidity + self.env.furious)
+            self.hitbox.update_coords(self)
             if self._quit():
                 return
 
@@ -115,12 +128,7 @@ class Villager(DefaultMonster):
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
-            if self.env.walking_dead:
-                img = self.img_possessed[self.direction]
-            else:
-                img = self.img_dead[self.direction]
-        elif self.injured:
-            img = self.img_injured[self.direction]
+            img = self.img_delivered[self.direction]
         elif self.transforming:
             img = self.img_transforming[self.direction]
         else:

@@ -8,14 +8,11 @@ from random import randint
 from . import set_hitbox_monster
 
 #Monster idea
-#monture ?
+#rebalance waves (garou + all next waves)
 #medium
 #gargamel can call sheeps mercenary, and throws his weapons
 #rat king ? dark knight redesign ? variation ?
 #flies can lay
-#move devourer as special
-#vampire pig ? wave 11 ? dont follow the player...can transform in bat and throw things
-#fear for vampire
 
 #maggots?
 #1200 (2400) madness -- spider -- octopus -- rat king -- dog (dammage zone) -- millipede -- virus -- display something on target
@@ -43,6 +40,7 @@ class DefaultMonster:
         DefaultMonster.img_invulnerable_large = env.mod.tools.set_imgs(env.img_folder + 'monsters/', 'invulnerable_large', DefaultMonster.dimensions)
         DefaultMonster.img_inflamed = env.mod.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed', DefaultMonster.dimensions)
         DefaultMonster.img_inflamed_large = env.mod.tools.set_imgs(env.img_folder + 'bullets/', 'inflamed_large', DefaultMonster.dimensions)
+        DefaultMonster.deliverance_effect = env.mod.objects.Deliverance.build_class(env, DefaultMonster.dimensions)
         DefaultMonster.frogified_lights = env.mod.objects.Frogified.build_class(env, DefaultMonster.dimensions)
         DefaultMonster.frogified_lights_large = env.mod.objects.FrogifiedLarge.build_class(env, DefaultMonster.dimensions)
         DefaultMonster.half = DefaultMonster.dimensions // 2
