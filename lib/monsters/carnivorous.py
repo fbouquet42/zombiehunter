@@ -15,6 +15,7 @@ class   Carnivorous(DefaultMonster):
     attack = 2
     degeneration = 400
     rapidity = 0
+    forest = True
 
     @classmethod
     def build_class(cls):

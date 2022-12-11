@@ -7,16 +7,19 @@ from threading import Thread
 #Current Module
 from . import DefaultMonster
 from . import set_hitbox_monster
+from . import FlowerBush
 
 
-class Brambles(DefaultMonster):
-    lives = 40
-    name = "brambles"
+class Flower(DefaultMonster):
+    lives = 10
+    name = "flower"
 #    id_nb = 9
     degeneration = 200
-    lifetime = 330
+    lifetime = 130
     rooted = True
     forest = True
+    hunt = False
+    attack = 0
 
     @classmethod
     def build_class(cls, env):
@@ -24,34 +27,21 @@ class Brambles(DefaultMonster):
         cls.img = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name, cls.dimensions)
         cls.img_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_injured', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
+        cls.img_bloom = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_bloom', cls.dimensions)
+
+        cls.bush = FlowerBush.build_class(env, cls.img_dead)
+
+        #built in carnivorous.py
+        cls.gas = cls.env.mod.bullets.PoisonedGas
+        cls.large_gas = cls.env.mod.bullets.PoisonedGasLarge
         return cls
 
-    def __init__(self, monster, number, direction=None):
-        self.monster = monster
-        self.x = monster.x
-        self.y = monster.y
-        self.number = number
+    def __init__(self, target):
+        self.x = target.x
+        self.y = target.y
+        self.direction = target.direction
         self.hitbox = set_hitbox_monster(self.env, self)
-        self.spawn_next = 4
-
-        if direction is None:
-            self.direction = monster.direction
-            self.rapidity = int(self.hitbox.dimensions * 0.9)
-            self._action()
-        else:
-            self.target = None
-            self.direction = direction
-            self.rapidity = int(self.monster.hitbox.dimensions * 1.2)
-            self.tools.move(self, self.direction, self.rapidity)
-            self.hitbox.update_coords(self)
-            self._target_hitted()
-
-
-    def _debug(self):
-        if self.env.debug and self.lives:
-            if self.target is not None and self.spawn_next:
-                pygame.draw.line(self.env.GameWindow, (255, 0, 0), (self.target.x + self.target.half, self.target.y + self.target.half), (self.x + self.half, self.y + self.half))
-            self.tools.display(self.env, self.hitbox.img, self.hitbox.x, self.hitbox.y)
+        self.bloom = 0
 
     def hitted(self, attack=1):
         if self.invulnerable:
@@ -62,17 +52,12 @@ class Brambles(DefaultMonster):
             self.lives = 0 if self.lives < 0 else self.lives
         return None, None
 
-    def affected(self, bullet):
-        if not self.lives:
-            return False
-        if self.hitbox.x <= (bullet.hitbox.x + bullet.hitbox.dimensions) and bullet.hitbox.x <= (self.hitbox.x + self.hitbox.dimensions) and self.hitbox.y <= (bullet.hitbox.y + bullet.hitbox.dimensions) and bullet.hitbox.y <= (self.hitbox.y + self.hitbox.dimensions):
-            return True
-        return False
-
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
         if not self.lives:
             img = self.img_dead[self.direction]
+        elif self.bloom:
+            img = self.img_bloom[self.direction]
         elif self.injured:
             img = self.img_injured[self.direction]
         else:
@@ -88,7 +73,6 @@ class Brambles(DefaultMonster):
     def move(self):
         self.tick = self.env.mod.tools.Tick()
         while self.lives:
-            self._target_hitted()
             if self._quit():
                 return
 
@@ -96,17 +80,37 @@ class Brambles(DefaultMonster):
             if self._quit():
                 return
 
+    def spawn_gas(self):
+        if not randint(0, 4):
+            gas = self.large_gas(self.x, self.y, randint(0, 7), self)
+        else:
+            gas = self.gas(self.x, self.y, randint(0, 7), self)
+        t = Thread(target=gas.move, args=())
+        t.daemon = True
+        self.env.bullets.append(gas)
+        t.start()
+
+    def spawn_bush(self):
+        bush = self.bush(self)
+        t = Thread(target=bush.move, args=())
+        t.daemon = True
+        self.env.monsters.append(bush)
+        t.start()
+        self.lives = 0
+        self.degeneration = 0
+
     def update(self):
         super().update()
         if self.lifetime:
             self.lifetime -= 1
             if not self.lifetime:
+                if randint(0, 2):
+                    self.bloom = 10
+                else:
+                    self.spawn_bush()
+        if self.bloom:
+            self.bloom -= 1
+            if ((self.bloom + 1) % 2):
+                self.spawn_gas()
+            if not self.bloom:
                 self.lives = 0
-        if self.spawn_next:
-            self.spawn_next -= 1
-            if not self.spawn_next and self.number:
-                wall = Brambles(self, self.number - 1)
-                t = Thread(target=wall.move, args=())
-                t.daemon = True
-                self.env.monsters.append(wall)
-                t.start()

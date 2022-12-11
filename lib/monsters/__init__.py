@@ -27,6 +27,8 @@ from .garou import Garou
 from .villager import Villager
 from .alchemist import Alchemist
 from .fly import Fly
+from .flower_bush import FlowerBush
+from .flower import Flower
 from .witch import Witch
 from .vermine import Vermine
 from .mother_of_the_vermine import MotherOfTheVermine

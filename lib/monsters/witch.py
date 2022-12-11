@@ -3,6 +3,9 @@ from random import randint
 
 from . import DefaultMonster
 from . import set_hitbox_monster
+from . import Flower
+
+#2 montures ? semi-invisible ?
 
 class   Witch(DefaultMonster):
     name = "witch"
@@ -17,19 +20,20 @@ class   Witch(DefaultMonster):
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
         #cls.spore  = cls.env.mod.bullets.Spore.build_class(cls.env)
+        cls.flower  = Flower.build_class(cls.env)
         return cls
 
     def _next_spell(self):
         self.will_spell = randint(220, 460)
 
-"""
-    def throw_spore(self):
-        spore = self.spore(self.x, self.y, self.direction)
-        t = Thread(target=spore.move, args=())
+    def spawn_flower(self):
+        if self.target is None:
+            return
+        flower = self.flower(self.target)
+        t = Thread(target=flower.move, args=())
         t.daemon = True
-        self.env.bullets.append(spore)
+        self.env.monsters.append(flower)
         t.start()
-"""
 
     def frogifying(self):
         if len(self.env.zombies):
@@ -44,7 +48,8 @@ class   Witch(DefaultMonster):
 
         self.spelling = 0
         self._next_spell()
-        self.spell_type = [self.frogifying]
+        #self.spell_type = [self.frogifying, self.spawn_flower]
+        self.spell_type = [self.spawn_flower]
         self.walking_dead = False
 
     def display(self, env):
