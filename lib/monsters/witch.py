@@ -6,7 +6,7 @@ from . import set_hitbox_monster
 
 class   Witch(DefaultMonster):
     name = "witch"
-    lives = 30
+    lives = 50
     id_nb = 17
 
     @classmethod
@@ -16,18 +16,20 @@ class   Witch(DefaultMonster):
         cls.img_spelling = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_spelling', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
-        cls.spore  = cls.env.mod.bullets.Spore.build_class(cls.env)
+        #cls.spore  = cls.env.mod.bullets.Spore.build_class(cls.env)
         return cls
 
     def _next_spell(self):
         self.will_spell = randint(220, 460)
 
+"""
     def throw_spore(self):
         spore = self.spore(self.x, self.y, self.direction)
         t = Thread(target=spore.move, args=())
         t.daemon = True
         self.env.bullets.append(spore)
         t.start()
+"""
 
     def frogifying(self):
         if len(self.env.zombies):
@@ -42,7 +44,7 @@ class   Witch(DefaultMonster):
 
         self.spelling = 0
         self._next_spell()
-        self.spell_type = [self.frogifying, self.throw_spore]
+        self.spell_type = [self.frogifying]
         self.walking_dead = False
 
     def display(self, env):
