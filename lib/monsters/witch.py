@@ -5,12 +5,14 @@ from . import DefaultMonster
 from . import set_hitbox_monster
 from . import Flower
 
-#2 montures ? semi-invisible ?
+#2 montures ? semi-invisible ? little diamonds around wand ?
 
 class   Witch(DefaultMonster):
     name = "witch"
-    lives = 50
+    lives = 160
+    lives_dismount = 60
     id_nb = 17
+    cloud_speed = 6
 
     @classmethod
     def build_class(cls):
@@ -24,6 +26,11 @@ class   Witch(DefaultMonster):
         cls.img_invisible = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_invisible', cls.dimensions)
         cls.img_dead = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_dead', cls.dimensions)
         cls.img_possessed = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_possessed', cls.dimensions)
+        cls.img_mounting = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_mounting', cls.dimensions)
+        cls.img_mounting_injured = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_mounting_injured', cls.dimensions)
+        cls.img_mounting_spelling = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_mounting_spelling', cls.dimensions)
+        cls.img_mounting_cloud = cls.tools.set_imgs(cls.env.img_folder + 'monsters/', cls.name + '_mounting_cloud', cls.dimensions)
+        cls.dismount_effect = cls.env.mod.objects.DismountEffect.build_class(cls.env, cls.dimensions)
         cls.spore  = cls.env.mod.bullets.Spore.build_class(cls.env)
         cls.flower  = Flower.build_class(cls.env)
         return cls
@@ -58,7 +65,8 @@ class   Witch(DefaultMonster):
 
     def __init__(self, env, x, y):
         self._father_init(x, y)
-        self.hitbox = set_hitbox_monster(env, self)
+        self.hitbox = set_hitbox_monster(env, self, 0.46)
+        self.hitbox_small = set_hitbox_monster(env, self)
         self.env = env
 
         self.rapidity = randint(6, 10)
@@ -66,11 +74,12 @@ class   Witch(DefaultMonster):
         self.spelling = 0
         self.sneaking = False
         self.rushing = True
-        #self.spell_type = [self.frogifying, self.spawn_flower, self.to_sneak]
-        self.spell_type = [self.to_sneak]
+        self.mounting = True
+        self.clouding = 0
+        self.spell_type = [self.frogifying, self.spawn_flower]
+        #self.spell_type = [self.to_sneak]
         self._next_spell()
         self.walking_dead = False
-
 
     def hitted(self, attack=1):
         if self.invulnerable:
@@ -83,8 +92,14 @@ class   Witch(DefaultMonster):
             self.injured = self.injured_gradient
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
-            if not self.lives:
-                return self.id_nb, 1
+            if self.mounting and self.lives < self.lives_dismount:
+                self.mounting = False
+                self.reset_bad_effect()
+                self.invulnerable += 140
+                self.clouding = 90
+                self.rapidity += self.cloud_speed
+                self.hitbox = self.hitbox_small
+            return self.id_nb, attack
         return None, None
 
     def _action(self):
@@ -114,14 +129,25 @@ class   Witch(DefaultMonster):
                 img = self.img_possessed[self.direction]
             else:
                 img = self.img_dead[self.direction]
+        elif self.clouding:
+            img = self.img_mounting_cloud[self.direction]
         elif self.sneaking:
             img = self.img_invisible[self.direction]
         elif self.spelling:
-            img = self.img_spelling[self.direction]
+            if self.mounting:
+                img = self.img_mounting_spelling[self.direction]
+            else:
+                img = self.img_spelling[self.direction]
         elif self.injured:
-            img = self.img_injured[self.direction]
+            if self.mounting:
+                img = self.img_mounting_injured[self.direction]
+            else:
+                img = self.img_injured[self.direction]
         else:
-            img = self.img[self.direction]
+            if self.mounting:
+                img = self.img_mounting[self.direction]
+            else:
+                img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
         if self.lives and self.invulnerable:
             self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
@@ -138,6 +164,9 @@ class   Witch(DefaultMonster):
 
         self.sneaking = False
         self.rushing = True
+        if self.clouding:
+            self.clouding = False
+            self.rapidity -= self.cloud_speed
 
         while self.degeneration:
             if self.env.walking_dead:
@@ -163,6 +192,14 @@ class   Witch(DefaultMonster):
 
         if not self.lives:
             return
+        if self.clouding:
+            self.clouding -= 1
+            if not self.clouding:
+                self.rapidity -= self.cloud_speed
+                self.env.objects.append(self.dismount_effect(self.x, self.y))
+                self.spell_type.append(self.to_sneak)
+            return
+
         if self.spelling:
             self.spelling -= 1
             if not self.spelling:

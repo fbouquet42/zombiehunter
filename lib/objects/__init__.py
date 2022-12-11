@@ -5,6 +5,7 @@ from .weapon import Weapon
 from .vermine_squeeze import VermineSqueeze
 from .blood import Blood
 from .vampire_metamorphosis import VampireMetamorphosis
+from .dismount_effect import DismountEffect
 from .frogified import Frogified
 from .frogified_large import FrogifiedLarge
 from .fog import Fog
