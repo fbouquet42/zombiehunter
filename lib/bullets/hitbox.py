@@ -12,7 +12,10 @@ class HitboxBullet:
 
 def set_hitbox_bullet(env, bullet, resize=0.12):
     hitbox = HitboxBullet(bullet, resize)
-    img = pygame.image.load(env.img_folder + "hitbox.png")
-    img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
+    if env.debug:
+        img = pygame.image.load(env.img_folder + "hitbox.png")
+        img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
+    else:
+        img = None
     hitbox.img = img
     return hitbox

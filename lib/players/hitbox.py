@@ -12,7 +12,10 @@ class _HitboxPlayer:
 
 def set_hitbox_player(env, player, resize=0.24):
     hitbox = _HitboxPlayer(player, resize)
-    img = pygame.image.load(env.img_folder + "hitbox.png")
-    img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
+    if env.debug:
+        img = pygame.image.load(env.img_folder + "hitbox.png")
+        img = pygame.transform.scale(img, (hitbox.dimensions, hitbox.dimensions))
+    else:
+        img = None
     hitbox.img = img
     return hitbox
