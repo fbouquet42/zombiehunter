@@ -7,6 +7,9 @@ from random import randint
 #Current Module
 from . import set_hitbox_monster
 
+#Game ideas
+# Trophes ?
+
 #Monster idea
 #rebalance waves (garou + all next waves)
 #medium

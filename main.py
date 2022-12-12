@@ -13,8 +13,8 @@ env = Env(sys.argv, pwd)
 
 clock = pygame.time.Clock()
 
-#music = pygame.mixer.Sound('/Users/fbouquet/Prog/zhworkinprogress/music/alt236-soundtracks-the-dreamlands.wav')
-#music.play()
+music = pygame.mixer.Sound('/Users/fbouquet/Prog/zhworkinprogress/music/alt236-soundtracks-the-dreamlands.wav')
+music.play()
 
 #Welcome Menu
 env.mod.menus.welcome(env)

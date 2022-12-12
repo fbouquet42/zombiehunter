@@ -69,10 +69,11 @@ class   Witch(DefaultMonster):
 
         self.rapidity = randint(6, 10)
 
+        self.attack = 2
+        self.mounting = True
         self.spelling = 0
         self.sneaking = False
         self.rushing = True
-        self.mounting = True
         self.clouding = 0
         self.spell_type = [self.frogifying, self.spawn_flower]
         #self.spell_type = [self.to_sneak]
@@ -90,10 +91,11 @@ class   Witch(DefaultMonster):
             self.injured = self.injured_gradient
             self.lives -= attack
             self.lives = 0 if self.lives < 0 else self.lives
-            if self.mounting and self.lives < self.lives_dismount:
+            if self.mounting and self.lives <= self.lives_dismount:
                 self.mounting = False
+                self.attack = 1
                 self.reset_bad_effect()
-                self.invulnerable += 140
+                self.invulnerable += 111
                 self.clouding = 90
                 self.rapidity += self.cloud_speed
                 self.hitbox = self.hitbox_small
@@ -119,6 +121,12 @@ class   Witch(DefaultMonster):
                 self.tools.move(self, self.direction, rapidity + self.env.furious)
                 self.hitbox.update_coords(self)
         self._target_hitted()
+
+    def affected(self, bullet):
+        if self.clouding:
+            return False
+        else:
+            return super().affected(bullet)
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -147,10 +155,16 @@ class   Witch(DefaultMonster):
             else:
                 img = self.img[self.direction]
         self.tools.display(self.env, img, self.x, self.y, fitting)
-        if self.lives and self.invulnerable:
-            self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
+        if self.lives and not self.clouding and self.invulnerable:
+            if self.mounting:
+                self.tools.display(self.env, self.img_invulnerable_large[self.direction], self.x, self.y, fitting)
+            else:
+                self.tools.display(self.env, self.img_invulnerable[self.direction], self.x, self.y, fitting)
         elif self.lives and self.inflamed:
-            self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
+            if self.mounting:
+                self.tools.display(self.env, self.img_inflamed_large[self.direction], self.x, self.y, fitting)
+            else:
+                self.tools.display(self.env, self.img_inflamed[self.direction], self.x, self.y, fitting)
         self._debug()
 
     def move(self):
@@ -162,6 +176,7 @@ class   Witch(DefaultMonster):
 
         self.sneaking = False
         self.rushing = True
+
         if self.clouding:
             self.clouding = False
             self.rapidity -= self.cloud_speed

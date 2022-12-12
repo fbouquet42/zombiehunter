@@ -7,7 +7,6 @@ class   Vermine(DefaultMonster):
     name = "vermine"
     attack_on_suicide = 4
     lives = 10
-    id_nb = 23
     degeneration = 130
     target = None
     hunt = False
@@ -29,9 +28,19 @@ class   Vermine(DefaultMonster):
         self.x = father.x
         self.y = father.y
         self.hitbox = set_hitbox_monster(self.env, self, 0.24 * 0.9)
+        self.father = father
 
         self.rapidity = randint(10, 16)
         self.wait = self.turn
+
+    def hitted(self, attack=1):
+        if self.invulnerable:
+            return None, None
+        if self.lives:
+            self.injured = self.injured_gradient
+            self.lives -= attack
+            self.lives = 0 if self.lives < 0 else self.lives
+        return None, None
 
     def display(self, env):
         fitting = 0.23 * self.dimensions if self.direction % 2 else 0
@@ -99,6 +108,8 @@ class   Vermine(DefaultMonster):
 
     def update(self):
         super().update()
+        if not self.father.lives:
+                self.lives = 0
         if self.duration:
             self.duration -= 1
             if not self.duration:

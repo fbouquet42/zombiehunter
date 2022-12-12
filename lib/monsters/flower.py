@@ -101,6 +101,8 @@ class Flower(DefaultMonster):
 
     def update(self):
         super().update()
+        if not self.lives:
+            return
         if self.lifetime:
             self.lifetime -= 1
             if not self.lifetime:
