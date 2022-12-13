@@ -5,7 +5,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   ThrowingLamb(DefaultBullet):
-    rapidity = 23
+    rapidity = 25
     name = "lamb"
     attack = 3
 
@@ -19,8 +19,8 @@ class   ThrowingLamb(DefaultBullet):
         cls.dimensions_ratio = (weapon_dimensions - cls.dimensions) // 2
         cls.limitx = env.width + cls.dimensions
         cls.limity = env.height + cls.dimensions
-        cls.max_travel = int(env.height * 0.22)
-        cls.max_bump = int(env.height * 0.11)
+        cls.max_travel = int(env.height * 0.26)
+        cls.max_bump = int(env.height * 0.24) + cls.max_travel
         return cls
 
     def __init__(self, x, y, direction, weapon):
@@ -54,8 +54,8 @@ class   ThrowingLamb(DefaultBullet):
             self.tools.move(self, self.direction)
         if not self.bumped and self.travelled_distance > self.max_travel:
             self.bumped = True
-            self.rapidity = int(self.rapidity * 0.7)
-        if not self.down and self.travelled_distance > self.max_travel:
+            self.rapidity = int(self.rapidity * 1.4)
+        if not self.down and self.travelled_distance > self.max_bump:
             self.down = True
 
     def _dead(self):

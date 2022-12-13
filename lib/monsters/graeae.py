@@ -9,7 +9,8 @@ from . import Deino
 from . import Enyo
 from . import Pemphredo
 
-#wand with diamonds and bolts ? tempests ?
+#wand with diamonds and bolts ? explodes on hit ? tempests ? cloud ? turning aoe ? multiple shot ? more effect on electricity ? heal ?
+#deino -> enyo -> pemphredo ? phase avec immunite ?
 
 class Graeae(DefaultMonster):
     name = "graeae"
@@ -28,6 +29,7 @@ class Graeae(DefaultMonster):
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
 #        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
 
+        self.bolt = env.mod.bullets.Bolt.build_class(env)
         self.blood = env.mod.objects.Blood.build_class(env, self.dimensions)
         self.pestilence = Pestilence.build_class(env)
         self.spelling = False
@@ -37,9 +39,17 @@ class Graeae(DefaultMonster):
 
         self.sweat = 60
         self.hitbox = set_hitbox_monster(env, self, 0.7)
+        self.next_spell()
+
+    def throw_bolt(self):
+        bolt = self.bolt(self.x, self.y, self.direction)
+        t = Thread(target=bolt.move, args=())
+        t.daemon = True
+        self.env.bullets.append(bolt)
+        t.start()
 
     def next_spell(self):
-        self.spell = randint(430, 720)
+        self.will_spell = randint(130, 220)
 
     def hitted(self, attack=1):
         if self.lives and not self.spelling:
@@ -94,6 +104,10 @@ class Graeae(DefaultMonster):
                 self.env.monsters.insert(0, p)
                 t.start()
                 self.sweat = 20
+            self.will_spell -= 1
+            if not self.will_spell:
+                self.throw_bolt()
+                self.next_spell()
 
     def set_on_fire(self, n, player):
         pass
