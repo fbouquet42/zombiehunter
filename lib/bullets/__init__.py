@@ -1,6 +1,7 @@
 from .hitbox import set_hitbox_bullet
 from .default import DefaultBullet
 
+from .lighting_skull import LightingSkull
 from .explosion import Explosion
 from .electric_overcharge import ElectricOvercharge
 from .bullet import Bullet

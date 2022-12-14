@@ -34,6 +34,7 @@ class Graeae(DefaultMonster):
 
         self.cloud_spawner = env.mod.objects.CloudSpawner.build_class(env)
         self.bolt = env.mod.bullets.Bolt.build_class(env)
+        self.skull = env.mod.bullets.LightingSkull.build_class(env)
         self.blood = env.mod.objects.Blood.build_class(env, self.dimensions)
         self.pestilence = Pestilence.build_class(env)
         self.spelling = False
@@ -44,8 +45,16 @@ class Graeae(DefaultMonster):
         self.sweat = 60
         self.hitbox = set_hitbox_monster(env, self, 0.7)
         self.next_spell()
+        self.spells = [self.throw_bolt, self.throw_skull]
 
         env.objects.append(self.cloud_spawner(self))
+
+    def throw_skull(self):
+        skull = self.skull(self.x, self.y, self.direction)
+        t = Thread(target=skull.move, args=())
+        t.daemon = True
+        self.env.bullets.append(skull)
+        t.start()
 
     def throw_bolt(self):
         bolt = self.bolt(self.x, self.y, self.direction)
@@ -112,7 +121,7 @@ class Graeae(DefaultMonster):
                 self.sweat = 20
             self.will_spell -= 1
             if not self.will_spell:
-                self.throw_bolt()
+                self.spells[randint(0, len(self.spells) - 1)]()
                 self.next_spell()
 
     def set_on_fire(self, n, player):
