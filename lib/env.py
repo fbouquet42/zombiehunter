@@ -22,7 +22,8 @@ class Env:
         self.background_butchery = self.mod.tools.load_img(self, 'background_butchery', self.width, self.height)
         self.background_shadows = self.mod.tools.load_img(self, 'background_shadows', self.width, self.height)
         self.background_night = self.mod.tools.load_img(self, 'background_night', self.width, self.height)
-        self.background_swamp = self.mod.tools.load_img(self, 'background_swamp', self.width, self.height)
+        #self.background_swamp = self.mod.tools.load_img(self, 'background_swamp', self.width, self.height)
+        self.background_rain = self.mod.tools.load_img(self, 'background_rain', self.width, self.height)
         self.background = self.background_basic
 
     def __init__(self, argv, pwd):

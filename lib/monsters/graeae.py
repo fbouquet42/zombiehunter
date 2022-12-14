@@ -11,6 +11,9 @@ from . import Pemphredo
 
 #wand with diamonds and bolts ? explodes on hit ? tempests ? cloud ? turning aoe ? multiple shot ? more effect on electricity ? heal ?
 #deino -> enyo -> pemphredo ? phase avec immunite ?
+#taille de baguettes qui grossit ?
+#pluie de one shot ?
+#pattern pour esquiver a la space invader ? horloge ?
 
 class Graeae(DefaultMonster):
     name = "graeae"
@@ -29,6 +32,7 @@ class Graeae(DefaultMonster):
         self.img_dead = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_dead', self.dimensions)
 #        self.img_spelling = self.tools.set_imgs(env.img_folder + 'monsters/', self.name + '_spelling', self.dimensions)
 
+        self.cloud_spawner = env.mod.objects.CloudSpawner.build_class(env)
         self.bolt = env.mod.bullets.Bolt.build_class(env)
         self.blood = env.mod.objects.Blood.build_class(env, self.dimensions)
         self.pestilence = Pestilence.build_class(env)
@@ -40,6 +44,8 @@ class Graeae(DefaultMonster):
         self.sweat = 60
         self.hitbox = set_hitbox_monster(env, self, 0.7)
         self.next_spell()
+
+        env.objects.append(self.cloud_spawner(self))
 
     def throw_bolt(self):
         bolt = self.bolt(self.x, self.y, self.direction)

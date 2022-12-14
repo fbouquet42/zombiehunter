@@ -366,7 +366,7 @@ class   Wave12(DefaultWave):
         self.nb = [2, 1, 1, 1, 2, 1, 1, 1]
         self.next = [0, self.random(1), self.random(2), self.random(3), self.random(4), self.random(5) // 2, self.random(6), self.random(7)]
         self.add = AdditionalSpawn((0, 1, 1222), (0, 1, 1444))
-        env.background = env.background_swamp
+        env.background = env.background_rain
         self.objective = env.mod.tools.spawn_boss(env, env.mod.monsters.Graeae)
 #        self.objective.lives = 0
 

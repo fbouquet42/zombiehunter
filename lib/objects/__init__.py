@@ -1,5 +1,7 @@
 from .hitbox import set_hitbox
 
+from .cloud import Cloud
+from .cloud_spawner import CloudSpawner
 from .cross import Cross
 from .weapon import Weapon
 from .vermine_squeeze import VermineSqueeze
