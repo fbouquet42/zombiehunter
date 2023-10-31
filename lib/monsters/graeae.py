@@ -14,6 +14,7 @@ from . import Pemphredo
 #taille de baguettes qui grossit ?
 #pluie de one shot ?
 #pattern pour esquiver a la space invader ? horloge ?
+#main qui s arrache ?
 
 class Graeae(DefaultMonster):
     name = "graeae"

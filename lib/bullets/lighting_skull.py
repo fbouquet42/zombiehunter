@@ -5,7 +5,7 @@ from . import set_hitbox_bullet
 from . import DefaultBullet
 
 class   LightingSkull(DefaultBullet):
-    rapidity = 29
+    rapidity = 27
     name = "lighting_skull"
     attack = 33
     switch_img = 4
