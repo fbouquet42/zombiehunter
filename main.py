@@ -19,6 +19,8 @@ music.play()
 #Welcome Menu
 env.mod.menus.welcome(env)
 
+#WIP
+
 #Start the game
 if not env.closed:
     env.start()
