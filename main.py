@@ -1,29 +1,10 @@
 #Python Lib
-import sys
-import os
-import pygame
-pygame.init()
+#import sys
 
 #Local Lib
-from lib import Env
+from lib import Game, PyGameEnv
 
-pwd = os.path.dirname(os.path.realpath(__file__))
-#Singleton should be very better
-env = Env(sys.argv, pwd)
-
-clock = pygame.time.Clock()
-
-music = pygame.mixer.Sound('/Users/fbouquet/Prog/zhworkinprogress/music/alt236-soundtracks-the-dreamlands.wav')
-music.play()
-
-#Welcome Menu
-env.mod.menus.welcome(env)
-
-#Start the game
-if not env.closed:
-    env.start()
-
-#loop game
+"""
 while not env.closed:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -41,6 +22,11 @@ while not env.closed:
     elif env.credits:
         env.mod.menus.credits(env)
     clock.tick(30)
+"""
+def main():
+    game = Game()
+    game.run()
 
-pygame.quit()
-quit()
+if __name__ == '__main__':
+    with PyGameEnv():
+        main()
